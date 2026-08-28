@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Navbar from '../components/Navbar';
-import './about.css';
+import './About.css';
 
 import recCollegeImg from '../assets/logo/college.png';
 import iccdsImg from '../assets/hero_bg.jpg';
