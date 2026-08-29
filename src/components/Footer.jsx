@@ -20,7 +20,7 @@ const socialLinks = [
   { icon: FiInstagram, label: 'Instagram', href: 'https://www.instagram.com/bic.rec', color: 'hover:text-pink-400' },
   { icon: FiLinkedin, label: 'LinkedIn', href: 'https://www.linkedin.com/company/bicrec/', color: 'hover:text-blue-400' },
   { icon: FiGithub, label: 'GitHub', href: '#', color: 'hover:text-gray-300' },
-  { icon: FiMail, label: 'Email', href: 'mailto:club.kbaclub@gmail.com', color: 'hover:text-accent' },
+  { icon: FiMail, label: 'Email', href: 'mailto:kbaclub@gmail.com', color: 'hover:text-accent' },
 ]
 
 export default function Footer() {
