@@ -166,8 +166,8 @@ const Home = () => {
                         <p className="hero-glow-text" style={{fontSize: "1.5rem", fontWeight: "bold", margin: 0}}>BIC REC</p>
                         <p>Blockchain Innovation Club<br />Rajalakshmi Engineering College<br />Chennai, Tamil Nadu, India</p>
                         <div className="footer-socials">
-                            <a href="#" target="_blank" rel="noopener noreferrer"><i className="fab fa-instagram" /></a>
-                            <a href="#" target="_blank" rel="noopener noreferrer"><i className="fab fa-linkedin" /></a>
+                            <a href="https://www.instagram.com/bic.rec?utm_source=ig_web_button_share_sheet&igsi=ZDNlZDc0MzIxNw==" target="_blank" rel="noopener noreferrer"><i className="fab fa-instagram" /></a>
+                            <a href="https://www.linkedin.com/company/bicrec" target="_blank" rel="noopener noreferrer"><i className="fab fa-linkedin" /></a>
                             <a href="#" target="_blank" rel="noopener noreferrer"><i className="fab fa-youtube" /></a>
                         </div>
                     </div>

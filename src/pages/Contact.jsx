@@ -1,21 +1,20 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { Mail, MapPin, Share2, Send, CheckCircle } from 'lucide-react'
-import { FiInstagram, FiLinkedin, FiGithub, FiMail } from 'react-icons/fi'
+import { FiInstagram, FiLinkedin, FiMail } from 'react-icons/fi'
 import PageTransition from '../components/PageTransition'
 import Button from '../components/ui/Button'
 
 const contactInfo = [
-  { icon: Mail, label: 'Email Us', value: 'club.bic.rec@gmail.com', color: 'text-primary', href: 'mailto:club.bic.rec@gmail.com' },
+  { icon: Mail, label: 'Email Us', value: 'kbaclub@rajalakshmil.edu.in', color: 'text-primary', href: 'mailto:kbaclub@rajalakshmil.edu.in' },
   { icon: MapPin, label: 'Location', value: 'Rajalakshmi Engineering College, Thandalam, Chennai – 602105', color: 'text-accent', href: null },
-  { icon: Share2, label: 'Follow Us', value: 'Find us on Instagram, LinkedIn & GitHub', color: 'text-emerald-400', href: null },
+  { icon: Share2, label: 'Follow Us', value: 'Find us on Instagram & LinkedIn', color: 'text-emerald-400', href: null },
 ]
 
 const socials = [
-  { icon: FiInstagram, label: 'Instagram', handle: '@bic.rec', href: '#', bg: 'from-pink-600 to-rose-600' },
-  { icon: FiLinkedin, label: 'LinkedIn', handle: 'Blockchain Innovation Club', href: '#', bg: 'from-blue-600 to-indigo-600' },
-  { icon: FiGithub, label: 'GitHub', handle: 'blockchain-club-rec', href: '#', bg: 'from-gray-600 to-gray-800' },
-  { icon: FiMail, label: 'Email', handle: 'club.bic.rec@gmail.com', href: 'mailto:club.bic.rec@gmail.com', bg: 'from-primary to-accent' },
+  { icon: FiInstagram, label: 'Instagram', handle: '@bic.rec', href: 'https://www.instagram.com/bic.rec?utm_source=ig_web_button_share_sheet&igsi=ZDNlZDc0MzIxNw==', bg: 'from-pink-600 to-rose-600' },
+  { icon: FiLinkedin, label: 'LinkedIn', handle: 'Blockchain Innovation Club', href: 'https://www.linkedin.com/company/bicrec', bg: 'from-blue-600 to-indigo-600' },
+  { icon: FiMail, label: 'Email', handle: 'kbaclub@rajalakshmil.edu.in', href: 'mailto:kbaclub@rajalakshmil.edu.in', bg: 'from-primary to-accent' },
 ]
 
 export default function Contact() {

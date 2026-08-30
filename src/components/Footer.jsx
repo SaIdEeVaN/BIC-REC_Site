@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { FiInstagram, FiLinkedin, FiGithub, FiMail } from 'react-icons/fi'
+import { FiInstagram, FiLinkedin, FiMail } from 'react-icons/fi'
 
 const quickLinks = [
   { name: 'Home', path: '/' },
@@ -17,10 +17,9 @@ const moreLinks = [
 ]
 
 const socialLinks = [
-  { icon: FiInstagram, label: 'Instagram', href: 'https://www.instagram.com/bic.rec', color: 'hover:text-pink-400' },
-  { icon: FiLinkedin, label: 'LinkedIn', href: 'https://www.linkedin.com/company/bicrec/', color: 'hover:text-blue-400' },
-  { icon: FiGithub, label: 'GitHub', href: '#', color: 'hover:text-gray-300' },
-  { icon: FiMail, label: 'Email', href: 'mailto:kbaclub@rajalakshmi.edu.in', color: 'hover:text-accent' },
+  { icon: FiInstagram, label: 'Instagram', href: 'https://www.instagram.com/bic.rec?utm_source=ig_web_button_share_sheet&igsi=ZDNlZDc0MzIxNw==', color: 'hover:text-pink-400' },
+  { icon: FiLinkedin, label: 'LinkedIn', href: 'https://www.linkedin.com/company/bicrec', color: 'hover:text-blue-400' },
+  { icon: FiMail, label: 'Email', href: 'mailto:kbaclub@rajalakshmil.edu.in', color: 'hover:text-accent' },
 ]
 
 export default function Footer() {

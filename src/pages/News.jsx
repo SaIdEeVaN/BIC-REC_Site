@@ -102,9 +102,8 @@ export default function News() {
             <h3 className="font-heading font-bold text-2xl text-text-primary mb-2">Stay in the Loop</h3>
             <p className="text-text-muted mb-6 text-sm">Follow us on social media to never miss an update.</p>
             <div className="flex flex-wrap gap-3 justify-center">
-              <Button href="#" variant="outline">📸 Instagram</Button>
-              <Button href="#" variant="outline">💼 LinkedIn</Button>
-              <Button href="#" variant="outline">🐙 GitHub</Button>
+              <Button href="https://www.instagram.com/bic.rec?utm_source=ig_web_button_share_sheet&igsi=ZDNlZDc0MzIxNw==" variant="outline">📸 Instagram</Button>
+              <Button href="https://www.linkedin.com/company/bicrec" variant="outline">💼 LinkedIn</Button>
             </div>
           </motion.div>
         </div>
