@@ -4,7 +4,7 @@
 const MONTHS = ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec']
 
 // FNV-1a, re-seeded per 8-hex chunk, so the same input always yields the same hash.
-export function hashHex(input, length = 40) {
+function hashHex(input, length = 40) {
   const str = String(input)
   let out = ''
   let seed = 0
@@ -30,7 +30,7 @@ export const pad2 = (n) => String(n).padStart(2, '0')
 export const blockNo = (n) => `block #${String(n).padStart(4, '0')}`
 
 // Parses the loose date strings in src/data ("January 15, 2026", "February 20–21, 2026", "Nov 2024").
-export function parseLooseDate(value) {
+function parseLooseDate(value) {
   if (value instanceof Date) return value
   const str = String(value).toLowerCase()
   const year = str.match(/\b(\d{4})\b/)

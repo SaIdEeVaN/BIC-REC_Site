@@ -1,6 +1,6 @@
 # status.md — BIC/REC neo-brutalist redesign
 
-Branch: `redesign/neo-brutalist`
+Branch: `main` (redesign/neo-brutalist merged via PR #1 on 2026-09-14)
 Spec: `bic_rec_design_system.md` (copied into repo as `DESIGN_SYSTEM.md`)
 Started: 2026-09-14
 
@@ -82,6 +82,23 @@ Rule: motion must obey DESIGN_SYSTEM.md — hard, mechanical, no blur/fade/round
 - [x] 3. Removed `college.png`, the 3 dead exports, the keywords meta tag, local `dist/` + `test-results/`; workflow bumped to `checkout@v7` + `setup-node@v7` (both verified `runs.using: node24`, inputs unchanged)
 - [x] 4. Lint 0 errors + 149 e2e passed (also on a clean `npm ci`); workflow drops the stale `--legacy-peer-deps` (clean install works without it); committed + pushed to `redesign/neo-brutalist`
   - Not verifiable locally: the workflow itself only runs on `main` — first real check is the next deploy after merging
+
+---
+
+# Task 5 — Delete unused / deprecated files on `main` (started 2026-09-14, after PR #1 merge)
+
+## To-do
+
+- [x] 1. Audit `main` with knip (unused files, exports, dependencies) + deprecation check: **0 unused files, 0 unused dependencies**, nothing deprecated left (Task 4 cleanup is on main). Only finding: 3 exports used solely inside their own file — `hashHex`, `parseLooseDate` (`src/lib/chain.js`), `SITE_URL` (`src/seo.js`)
+- [x] 2. Un-exported those 3 (they stay as internal helpers)
+- [x] 3. Lint 0 errors, knip clean (no unused files/exports/deps), 149 e2e passed
+- [x] 4. User said continue → committed + pushed to `main` (no deploy: workflow is disabled on GitHub)
+  - Still waiting on the user: re-enable the deploy workflow? delete merged `redesign/neo-brutalist`?
+
+Notes:
+- GitHub Actions: manual deploy run on `redesign/neo-brutalist` (2026-09-14 04:37 UTC) succeeded with `checkout@v7` / `setup-node@v7`, so the Node 24 workflow is proven.
+- The "Deploy to Firebase Hosting" workflow is **disabled_manually** on GitHub — that's why the PR #1 merge (07:17 UTC) did not deploy. Pushes to `main` won't deploy until it's re-enabled.
+- Branches: `origin/redesign/neo-brutalist` is fully merged into `main`; `origin/copilot/explain-repository-structure` is an unmerged, unrelated history from Aug 2026. Left untouched (branches, not files).
 
 ## Open items for the club (not blocking)
 

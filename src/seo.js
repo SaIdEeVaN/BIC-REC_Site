@@ -3,7 +3,7 @@
 // so keep this file free of browser-only or Vite-only code.
 import { events, getEventById } from './data/events.js'
 
-export const SITE_URL = 'https://bicrec.web.app'
+const SITE_URL = 'https://bicrec.web.app'
 
 const DEFAULT_DESCRIPTION =
   'A student-driven community dedicated to exploring Blockchain, Web3, and emerging technologies at Rajalakshmi Engineering College.'
