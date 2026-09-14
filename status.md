@@ -71,6 +71,18 @@ Rule: motion must obey DESIGN_SYSTEM.md — hard, mechanical, no blur/fade/round
 - Chart deviates from the dataviz defaults on purpose: square bar ends and no hairline grid (DESIGN_SYSTEM.md forbids radius and 1px rules).
 - [x] Committed + pushed to `redesign/neo-brutalist` (user asked: no new branches).
 
+---
+
+# Task 4 — Remove unnecessary / deprecated files (started 2026-09-14, branch `redesign/neo-brutalist`)
+
+## To-do
+
+- [x] 1. Audit tracked files: only `src/assets/logo/college.png` is unreferenced; dead exports `getCompletedEvents`, `eventTypes`, `eventTypeColors` (leftovers of the deleted Badge/EventCard UI); `<meta name="keywords">` ignored by search engines; local `dist/` + `test-results/` artifacts
+- [x] 2. Dependencies: none of the 15 direct packages is deprecated, none unused. **Deploy workflow is the deprecated part:** `actions/checkout@v4` and `actions/setup-node@v4` run on Node 20, which GitHub removes from runners on 2026-09-23. (`FirebaseExtended/action-hosting-deploy@v0` is fine — the moving `v0` tag already points at the Node 24 build.)
+- [x] 3. Removed `college.png`, the 3 dead exports, the keywords meta tag, local `dist/` + `test-results/`; workflow bumped to `checkout@v7` + `setup-node@v7` (both verified `runs.using: node24`, inputs unchanged)
+- [x] 4. Lint 0 errors + 149 e2e passed (also on a clean `npm ci`); workflow drops the stale `--legacy-peer-deps` (clean install works without it); committed + pushed to `redesign/neo-brutalist`
+  - Not verifiable locally: the workflow itself only runs on `main` — first real check is the next deploy after merging
+
 ## Open items for the club (not blocking)
 
 - `JoinUs.jsx` → `APPLY_URL` is still `'#'` (both "Join"/"Apply" buttons go nowhere until a form link is added).

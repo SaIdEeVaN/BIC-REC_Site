@@ -191,15 +191,3 @@ Refreshments will be provided. This event is free and open to all REC students.`
 export const getEventById = (id) => events.find(e => e.id === parseInt(id))
 export const getFeaturedEvents = () => events.slice(0, 3)
 export const getUpcomingEvents = () => events.filter(e => e.status === 'upcoming')
-export const getCompletedEvents = () => events.filter(e => e.status === 'completed')
-
-export const eventTypes = ['Workshop', 'Hackathon', 'Guest Lecture', 'Competition', 'Community Meetup', 'Technical Session']
-
-export const eventTypeColors = {
-  Workshop: 'primary',
-  Hackathon: 'accent',
-  'Guest Lecture': 'green',
-  Competition: 'orange',
-  'Community Meetup': 'purple',
-  'Technical Session': 'blue',
-}
