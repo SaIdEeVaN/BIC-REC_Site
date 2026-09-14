@@ -13,25 +13,27 @@ jobs:
 
     steps:
       # 1. Checkout your code
+      # (v5+ run on Node 24 — v4 used Node 20, which GitHub removes from runners on 2026-09-23)
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       # 2. Set up Node.js
       - name: Set up Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v7
         with:
           node-version: 22
           cache: 'npm'
 
       # 3. Install dependencies
       - name: Install dependencies
-        run: npm ci --legacy-peer-deps
+        run: npm ci
 
       # 4. Build the Vite project
       - name: Build
         run: npm run build
 
       # 5. Deploy to Firebase Hosting
+      # (the moving v0 tag points at v0.11.0+, which already runs on Node 24)
       - name: Deploy to Firebase
         uses: FirebaseExtended/action-hosting-deploy@v0
         with:

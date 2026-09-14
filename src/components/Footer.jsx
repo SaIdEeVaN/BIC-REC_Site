@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
-import { FiInstagram, FiLinkedin, FiMail } from 'react-icons/fi'
+import { sealedDate, shortHash } from '../lib/chain'
+import { SplitText } from './motion'
 
 const quickLinks = [
   { name: 'Home', path: '/' },
@@ -14,122 +15,70 @@ const moreLinks = [
   { name: 'Core Members', path: '/team/core' },
   { name: 'Achievements', path: '/achievements' },
   { name: 'News', path: '/news' },
+  { name: 'Resources', path: '/resources' },
 ]
 
 const socialLinks = [
-  { icon: FiInstagram, label: 'Instagram', href: 'https://www.instagram.com/bic.rec?utm_source=ig_web_button_share_sheet&igsi=ZDNlZDc0MzIxNw==', color: 'hover:text-pink-400' },
-  { icon: FiLinkedin, label: 'LinkedIn', href: 'https://www.linkedin.com/company/bicrec', color: 'hover:text-blue-400' },
-  { icon: FiMail, label: 'Email', href: 'mailto:kbaclub@rajalakshmil.edu.in', color: 'hover:text-accent' },
+  { label: 'Instagram', href: 'https://www.instagram.com/bic.rec?utm_source=ig_web_button_share_sheet&igsi=ZDNlZDc0MzIxNw==' },
+  { label: 'LinkedIn', href: 'https://www.linkedin.com/company/bicrec' },
+  { label: 'Email', href: 'mailto:kbaclub@rajalakshmil.edu.in' },
 ]
+
+const linkClass = 'text-[15px] font-extrabold uppercase decoration-[3px] underline-offset-[5px] hover:underline'
+
+function FooterNav({ title, links, children }) {
+  return (
+    <nav aria-label={title}>
+      <h2 className="meta">{title}</h2>
+      <ul className="mt-4 flex flex-col gap-2.5">
+        {links.map((l) => (
+          <li key={l.path}>
+            <Link to={l.path} className={linkClass}>{l.name}</Link>
+          </li>
+        ))}
+        {children && <li>{children}</li>}
+      </ul>
+    </nav>
+  )
+}
 
 export default function Footer() {
   return (
-    <footer className="relative bg-surface border-t border-border-subtle overflow-hidden">
-      {/* Grid background */}
-      <div className="absolute inset-0 bg-grid opacity-20" />
-      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[800px] h-[300px] bg-primary/5 rounded-full blur-3xl" />
-
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Main footer content */}
-        <div className="py-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
-          {/* Brand */}
-          <div className="lg:col-span-2">
-            <Link to="/" className="flex items-center gap-3 mb-4 group w-fit">
-              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary to-accent flex items-center justify-center font-heading font-bold text-white text-base shadow-lg shadow-primary/30 group-hover:shadow-primary/50 transition-shadow">
-                BIC
-              </div>
-              <div>
-                <div className="font-heading font-bold text-text-primary text-lg leading-tight">
-                  Blockchain Innovation Club
-                </div>
-                <div className="text-text-muted text-sm">Rajalakshmi Engineering College</div>
-              </div>
-            </Link>
-            <p className="text-text-muted text-sm leading-relaxed mb-4 max-w-xs">
-              Innovate. Decentralize. Build the Future.
-            </p>
-            <p className="text-text-muted text-xs mb-6">
-              In partnership with{' '}
-              <span className="text-primary font-semibold">Kerala Blockchain Association</span>
-            </p>
-            {/* Social icons */}
-            <div className="flex gap-3">
-              {socialLinks.map((s) => (
+    <footer className="on-ink border-t-3 border-bone bg-ink text-bone">
+      <div className="wrap section grid gap-12 md:grid-cols-2 lg:grid-cols-[1.6fr_1fr_1fr]">
+        <div className="md:col-span-2 lg:col-span-1">
+          <Link to="/" className="t-cta inline-block">
+            <SplitText text="BIC/REC" by="char" trigger="view" stagger={0.05} />
+          </Link>
+          <p className="t-body mt-5 max-w-[38ch]">
+            Blockchain Innovation Club, Rajalakshmi Engineering College. Innovate. Decentralize. Build the future.
+          </p>
+          <p className="meta mt-4">in partnership with kerala blockchain association</p>
+          <ul className="mt-7 flex flex-wrap gap-3">
+            {socialLinks.map((s) => (
+              <li key={s.label}>
                 <a
-                  key={s.label}
                   href={s.href}
-                  aria-label={s.label}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={`w-10 h-10 rounded-xl bg-surface-2 border border-border-subtle flex items-center justify-center text-text-muted transition-all hover:border-primary/40 hover:bg-primary/10 hover:scale-110 ${s.color}`}
+                  {...(s.href.startsWith('http') ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+                  className="block border-3 border-bone px-3 py-2 text-[13.5px] font-extrabold uppercase hover:bg-bone hover:text-ink"
                 >
-                  <s.icon size={16} />
+                  {s.label}
                 </a>
-              ))}
-            </div>
-          </div>
-
-          {/* Quick Links */}
-          <div>
-            <h4 className="font-heading font-semibold text-text-primary mb-4">Quick Links</h4>
-            <ul className="space-y-2.5">
-              {quickLinks.map((l) => (
-                <li key={l.path}>
-                  <Link
-                    to={l.path}
-                    className="text-text-muted text-sm hover:text-primary transition-colors flex items-center gap-1.5 group"
-                  >
-                    <span className="w-1 h-1 rounded-full bg-border-subtle group-hover:bg-primary transition-colors" />
-                    {l.name}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* More Links */}
-          <div>
-            <h4 className="font-heading font-semibold text-text-primary mb-4">Explore</h4>
-            <ul className="space-y-2.5">
-              {moreLinks.map((l) => (
-                <li key={l.path}>
-                  <Link
-                    to={l.path}
-                    className="text-text-muted text-sm hover:text-primary transition-colors flex items-center gap-1.5 group"
-                  >
-                    <span className="w-1 h-1 rounded-full bg-border-subtle group-hover:bg-primary transition-colors" />
-                    {l.name}
-                  </Link>
-                </li>
-              ))}
-              <li>
-                <Link
-                  to="/resources"
-                  className="text-text-muted text-sm hover:text-primary transition-colors flex items-center gap-1.5 group"
-                >
-                  <span className="w-1 h-1 rounded-full bg-border-subtle group-hover:bg-primary transition-colors" />
-                  Resources
-                </Link>
               </li>
-              <li>
-                <Link
-                  to="/join"
-                  className="text-accent text-sm hover:text-primary transition-colors flex items-center gap-1.5 group font-semibold"
-                >
-                  <span className="w-1 h-1 rounded-full bg-accent group-hover:bg-primary transition-colors" />
-                  Join the Club →
-                </Link>
-              </li>
-            </ul>
-          </div>
+            ))}
+          </ul>
         </div>
 
-        {/* Bottom bar */}
-        <div className="py-6 border-t border-border-subtle flex flex-col sm:flex-row items-center justify-between gap-3 text-text-muted text-xs">
-          <span>© 2026 Blockchain Innovation Club | Rajalakshmi Engineering College. All Rights Reserved.</span>
-          <span className="flex items-center gap-1">
-            Made with <span className="text-red-400">❤️</span> by the BIC Team
-          </span>
+        <FooterNav title="quick links" links={quickLinks} />
+        <FooterNav title="explore" links={moreLinks}>
+          <Link to="/join" className={`${linkClass} text-amber`}>Join the club</Link>
+        </FooterNav>
+      </div>
+
+      <div className="border-t-3 border-bone">
+        <div className="wrap flex flex-col gap-2 py-5 font-mono text-[12px] sm:flex-row sm:justify-between">
+          <span>© 2026 blockchain innovation club · rajalakshmi engineering college. all rights reserved.</span>
+          <span>head {shortHash('bic-rec')} · sealed {sealedDate(new Date())}</span>
         </div>
       </div>
     </footer>

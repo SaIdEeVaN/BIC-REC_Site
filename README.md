@@ -31,17 +31,19 @@
 
 ## About
 
-The BIC-REC website is the official online presence of the **Blockchain Innovation Club** at REC. It showcases the club's events, projects, achievements, team members, and resources — all wrapped in a modern, animated UI.
+The BIC-REC website is the official online presence of the **Blockchain Innovation Club** at REC. It showcases the club's events, projects, achievements, team members, and resources.
+
+The UI follows a **neo-brutalist design system** — hard geometry, 3px ink rules, hard offset shadows, and blockchain vocabulary (block numbers, hashes, sealed dates). The full spec lives in [`DESIGN_SYSTEM.md`](DESIGN_SYSTEM.md).
 
 ---
 
 ## ✨ Features
 
-- 🏠 **Home** — Animated hero with particle background and stats counter
-- 📅 **Events** — Full event listings with detail pages
+- 🏠 **Home** — Stacked hero, chain rail, stat bar and event ledger
+- 📅 **Events** — Filterable event ledger with detail pages
 - 🏆 **Achievements** — Club milestones and accomplishments
 - 👥 **Team** — Board members and core team profiles
-- 🖼️ **Gallery** — Photo gallery with lightbox viewer
+- 🖼️ **Gallery** — Photo frames by category
 - 📰 **News** — Latest club updates
 - 🔧 **Projects** — Blockchain projects by the club
 - 📚 **Resources** — Learning materials and links
@@ -56,12 +58,9 @@ The BIC-REC website is the official online presence of the **Blockchain Innovati
 |---|---|
 | [React 18](https://react.dev/) | UI Framework |
 | [Vite](https://vitejs.dev/) | Build tool & Dev server |
-| [Tailwind CSS](https://tailwindcss.com/) | Styling |
-| [Framer Motion](https://www.framer.com/motion/) | Animations |
-| [GSAP](https://greensock.com/gsap/) | Advanced animations |
+| [Tailwind CSS](https://tailwindcss.com/) | Styling (tokens in `tailwind.config.js`) |
 | [React Router v7](https://reactrouter.com/) | Client-side routing |
-| [tsParticles](https://particles.js.org/) | Particle background |
-| [Lucide React](https://lucide.dev/) | Icons |
+| Archivo + IBM Plex Mono | Typefaces (Google Fonts) |
 | [Firebase Hosting](https://firebase.google.com/products/hosting) | Deployment |
 
 ---
@@ -93,9 +92,34 @@ The site will be available at **http://localhost:5173**
 
 ```bash
 npm run dev       # Start dev server with hot reload
-npm run build     # Build for production (outputs to /dist)
+npm run build     # Build for production (outputs to /dist) + write per-page share tags
 npm run preview   # Preview the production build locally
+npm run lint      # ESLint
+npm run test:e2e  # Playwright: every page at 360/390/1280px — no sideways scroll, correct title + share tags
+npm run og-image  # Re-render public/og-image.png from scripts/og-image.html
 ```
+
+> First time running the Playwright tests? Install the browser once: `npx playwright install chromium`
+
+### Motion
+
+Animation uses [Motion](https://motion.dev) (`motion/react`) through a small kit in [`src/components/motion/`](src/components/motion/). It follows the design system: blocks shunt, slam, draw and decrypt — nothing fades or blurs.
+
+| Primitive | What it does |
+|---|---|
+| `SplitText` | Words/characters shunt up out of clipped slots (headings) |
+| `Wipe` | Content "unseals" from under a solid block |
+| `Slam` | A card drops from a long hard shadow onto its resting shadow |
+| `Scramble` | Mono text decrypts through hex glyphs (hashes, block numbers) |
+| `CountUp` / `Typewriter` | Number ticker / typed text with a hard block caret |
+| `Magnetic` | Buttons lean toward the mouse pointer |
+| `ScrollProgress` / `RouteShutter` | Amber scroll bar in the header / ink shutter on page change |
+
+Everything respects the OS "reduce motion" setting (`MotionConfig reducedMotion="user"` plus `useCanAnimate()`), which renders the final state immediately. Scroll-triggered animations must observe an element that isn't clipped at rest — see `useReveal` in `core.js`.
+
+### Page titles & share previews
+
+Titles and descriptions for every route live in [`src/seo.js`](src/seo.js). The app updates the tab title as you navigate, and `npm run build` writes a separate HTML file per route (e.g. `dist/events/2.html`) so link previews on WhatsApp, LinkedIn, etc. show the right page. Firebase serves those files via `cleanUrls` in `firebase.json`. New events in `src/data/events.js` are picked up automatically.
 
 ---
 
@@ -109,14 +133,13 @@ BIC-WEBSITE/
 ├── public/                       # Static assets
 ├── src/
 │   ├── assets/                   # Images and media
-│   ├── components/               # Reusable UI components
+│   ├── components/
+│   │   ├── kit/                  # Design-system primitives (Button, Chip, Ledger, TrackCards, ChainRail, ...)
 │   │   ├── Navbar.jsx
 │   │   ├── Footer.jsx
-│   │   ├── Hero.jsx
-│   │   ├── ParticleBackground.jsx
-│   │   ├── StatsCounter.jsx
-│   │   ├── Timeline.jsx
-│   │   └── PageTransition.jsx
+│   │   ├── EventRow.jsx
+│   │   └── MemberCell.jsx
+│   ├── lib/chain.js              # Block numbers, display hashes, sealed dates
 │   ├── pages/                    # Route-level page components
 │   │   ├── Home.jsx
 │   │   ├── Events.jsx
@@ -130,7 +153,8 @@ BIC-WEBSITE/
 │   │   ├── Resources.jsx
 │   │   ├── News.jsx
 │   │   ├── JoinUs.jsx
-│   │   └── Contact.jsx
+│   │   ├── Contact.jsx
+│   │   └── NotFound.jsx
 │   ├── data/                     # Static data files
 │   ├── App.jsx                   # Root component & routing
 │   ├── main.jsx                  # App entry point

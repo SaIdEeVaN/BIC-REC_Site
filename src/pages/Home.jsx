@@ -1,197 +1,167 @@
-import React, { useEffect, useState, useRef, useCallback } from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import AOS from 'aos';
-import 'aos/dist/aos.css';
-import Particles from "@tsparticles/react";
-import { loadSlim } from "@tsparticles/slim";
-import './Home.css';
-import Navbar from '../components/Navbar';
-import heroBg from '../assets/hero_bg.jpg';
-import { getFeaturedEvents } from '../data/events';
-
-const StatCounter = ({ target, suffix, label, start }) => {
-    const [count, setCount] = useState(0);
-    useEffect(() => {
-        if (!start) return;
-        let startTime = null;
-        const duration = 1800;
-        const step = (timestamp) => {
-            if (!startTime) startTime = timestamp;
-            const progress = Math.min((timestamp - startTime) / duration, 1);
-            setCount(Math.floor(progress * target));
-            if (progress < 1) requestAnimationFrame(step);
-        };
-        requestAnimationFrame(step);
-    }, [start, target]);
-    return (
-        <div className="stat-item">
-            <span className="stat-num">{count}{suffix}</span>
-            <span className="stat-label">{label}</span>
-        </div>
-    );
-};
+import { Link } from 'react-router-dom'
+import { motion } from 'motion/react'
+import { Button, ChainRail, Chip, InkCTA, Ledger, SectionHeading, StatBar, TrackCards } from '../components/kit'
+import { EASE, Magnetic, Scramble, Slam, SplitText, Typewriter, Wipe, useCanAnimate } from '../components/motion'
+import EventRow from '../components/EventRow'
+import { events, getFeaturedEvents, getUpcomingEvents } from '../data/events'
+import { blockNo, shortHash } from '../lib/chain'
 
 const stats = [
-    { value: 12, suffix: '+', label: 'Annual Events' },
-    { value: 60, suffix: '+', label: 'Active Members' },
-    { value: 2, suffix: '+', label: 'Years Active' },
-    { value: 15, suffix: '+', label: 'Workshops' },
-];
+  { value: '12+', label: 'annual events' },
+  { value: '60+', label: 'active members' },
+  { value: '2+', label: 'years active' },
+  { value: '15+', label: 'workshops' },
+]
 
 const pillars = [
-    { icon: 'fas fa-code', title: 'Technical Skills', desc: 'Workshops, hackathons and live projects to make you industry-ready.' },
-    { icon: 'fas fa-users', title: 'Strong Community', desc: 'A network of 60+ driven students who push each other to excel in Web3.' },
-    { icon: 'fas fa-link', title: 'Decentralized Future', desc: "Direct connection to the global blockchain and Web3 professional network." },
-];
+  { title: 'Technical skills', body: 'Workshops, hackathons and live projects to make you industry-ready.' },
+  { title: 'Strong community', body: 'A network of 60+ driven students who push each other to excel in Web3.' },
+  { title: 'Decentralized future', body: 'Direct connection to the global blockchain and Web3 professional network.' },
+]
 
-const Home = () => {
-    const [statsVisible, setStatsVisible] = useState(false);
-    const statsRef = useRef(null);
-    const location = useLocation();
-    const featuredEvents = getFeaturedEvents();
-    const particlesInit = useCallback(async (engine) => { await loadSlim(engine); }, []);
+const HERO_WORDS = ['Build.', 'Innovate.', 'Decentralize.']
 
-    useEffect(() => {
-        AOS.init({ duration: 900, easing: 'ease-out-quart', once: true, offset: 80 });
-        const observer = new IntersectionObserver(
-            ([entry]) => { if (entry.isIntersecting) setStatsVisible(true); },
-            { threshold: 0.3 }
-        );
-        if (statsRef.current) observer.observe(statsRef.current);
-        return () => observer.disconnect();
-    }, []);
+// Hero load sequence (seconds): eyebrow types 0 → words shunt up .15–.6 → lead unseals .7 →
+// buttons drop .9 → next-event card slams 1.05 → chain draws and a packet starts travelling.
 
-    const particlesOptions = {
-        particles: {
-            number: { value: 45, density: { enable: true, area: 1000 } },
-            color: { value: '#FFA300' },
-            shape: { type: 'circle' },
-            opacity: { value: 0.22, random: true },
-            size: { value: 2, random: true },
-            links: { enable: true, distance: 160, color: '#FFA300', opacity: 0.07, width: 1 },
-            move: { enable: true, speed: 1.0, direction: 'none', random: true, outModes: 'out' },
-        },
-        interactivity: {
-            events: { onHover: { enable: true, mode: 'grab' }, resize: true },
-            modes: { grab: { distance: 150, links: { opacity: 0.25 } } },
-        },
-        retina_detect: true,
-    };
+function Drop({ delay, children }) {
+  const canAnimate = useCanAnimate()
+  return (
+    <motion.div
+      style={{ originY: 0 }}
+      initial={canAnimate ? { scaleY: 0 } : false}
+      animate={{ scaleY: 1 }}
+      transition={{ duration: 0.45, ease: EASE, delay }}
+    >
+      {children}
+    </motion.div>
+  )
+}
 
-    return (
-        <div className="home-wrap">
-            <Navbar />
-            <div id="particles-js">
-                <Particles id="tsparticles" init={particlesInit} options={particlesOptions} />
-            </div>
-
-            {/* HERO */}
-            <section className="hero-section" id="home">
-                <div className="hero-visual-col" data-aos="fade-in" data-aos-duration="2000" style={{ backgroundImage: `url(${heroBg})` }} />
-                <div className="hero-inner">
-                    <div className="hero-text-col" data-aos="fade-right">
-                        <h1 className="hero-heading">BUILD.<br /><span className="hero-glow-text">INNOVATE.</span><br />DECENTRALIZE.</h1>
-                        <p className="hero-line1">Rajalakshmi Engineering College's premier Blockchain student chapter.</p>
-                        <p className="hero-line2">Empowering the next generation of Web3 pioneers.</p>
-                        <img src={heroBg} alt="Blockchain Tech Illustration" className="mob-chip-img" />
-                        <div className="hero-scroll-hint">
-                            <span className="scroll-label">SCROLL TO EXPLORE</span>
-                            <div className="scroll-mouse"><span className="scroll-dot" /></div>
-                        </div>
-                        <div className="hero-ctas">
-                            <Link to="/join" className="btn-hero-primary">Join Club Now</Link>
-                            <Link to="/events" className="btn-hero-secondary">Explore Events</Link>
-                        </div>
-                    </div>
-                    <div className="hero-grid-spacer" />
-                </div>
-            </section>
-
-            {/* PILLARS */}
-            <section className="pillars-section">
-                <div className="pillars-inner">
-                    <span className="section-label" data-aos="fade-up">About the Chapter</span>
-                    <h2 className="section-title" data-aos="fade-up" data-aos-delay="80">One Club. Endless Opportunities.</h2>
-                    <p className="section-sub" data-aos="fade-up" data-aos-delay="140">Founded at Rajalakshmi Engineering College, our Blockchain Innovation Club accelerates the journey from curious student to Web3 professional.</p>
-                    <div className="pillars-grid">
-                        {pillars.map((p, i) => (
-                            <div className="pillar-card" key={i} data-aos="fade-up" data-aos-delay={i * 120}>
-                                <div className="pillar-icon"><i className={p.icon} /></div>
-                                <h3>{p.title}</h3>
-                                <p>{p.desc}</p>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-            </section>
-
-            {/* STATS */}
-            <section className="stats-section" ref={statsRef}>
-                <div className="stats-inner">
-                    {stats.map((s, i) => (
-                        <StatCounter key={i} target={s.value} suffix={s.suffix} label={s.label} start={statsVisible} />
-                    ))}
-                </div>
-            </section>
-
-            {/* EVENTS */}
-            <section className="events-section" id="events">
-                <div className="events-inner">
-                    <span className="section-label" data-aos="fade-up">What We Run</span>
-                    <h2 className="section-title" data-aos="fade-up" data-aos-delay="80">Events That Define Us</h2>
-                    <div className="events-grid">
-                        {featuredEvents.map((ev, i) => (
-                            <div className="event-tile" key={i} data-aos="fade-up" data-aos-delay={i * 120}>
-                                <div className="event-img-wrap">
-                                    <img src={heroBg} alt={ev.title} />
-                                    <span className="ev-tag">{ev.type}</span>
-                                </div>
-                                <div className="event-body">
-                                    <h3>{ev.title}</h3>
-                                    <p>{ev.description}</p>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                    <div className="events-cta-wrap" data-aos="fade-up">
-                        <Link to="/events" className="btn-outline-gold">View All Events &nbsp;<i className="fas fa-arrow-right" /></Link>
-                    </div>
-                </div>
-            </section>
-
-            {/* FOOTER */}
-            <footer className="site-footer" id="contact">
-                <div className="footer-inner">
-                    <div className="footer-brand" data-aos="fade-right">
-                        <p className="hero-glow-text" style={{fontSize: "1.5rem", fontWeight: "bold", margin: 0}}>BIC REC</p>
-                        <p>Blockchain Innovation Club<br />Rajalakshmi Engineering College<br />Chennai, Tamil Nadu, India</p>
-                        <div className="footer-socials">
-                            <a href="https://www.instagram.com/bic.rec?utm_source=ig_web_button_share_sheet&igsi=ZDNlZDc0MzIxNw==" target="_blank" rel="noopener noreferrer"><i className="fab fa-instagram" /></a>
-                            <a href="https://www.linkedin.com/company/bicrec" target="_blank" rel="noopener noreferrer"><i className="fab fa-linkedin" /></a>
-                            <a href="#" target="_blank" rel="noopener noreferrer"><i className="fab fa-youtube" /></a>
-                        </div>
-                    </div>
-                    <div className="footer-contacts" data-aos="fade-up">
-                        <h4>Faculty Coordinators</h4>
-                        {[
-                            { name: 'Dr. N. Duraimurugan', email: 'duraimurugan.n@rajalakshmi.edu.in' }
-                        ].map((c, i) => (
-                            <div className="fc-row" key={i}>
-                                <strong>{c.name}</strong>
-                                <a href={`mailto:${c.email}`}><i className="fas fa-envelope" /> {c.email}</a>
-                            </div>
-                        ))}
-                    </div>
-                    <div className="footer-cta" data-aos="fade-left">
-                        <h4>Ready to level up?</h4>
-                        <p>Join the Blockchain Innovation Club and unlock a global community of Web3 professionals, resources, and opportunities.</p>
-                        <Link to="/join" className="btn-primary-gold">Become a Member</Link>
-                    </div>
-                </div>
-                <div className="footer-bar">&copy; 2026 Blockchain Innovation Club — Rajalakshmi Engineering College</div>
-            </footer>
+function NextEvent({ event }) {
+  return (
+    <Slam trigger="mount" delay={1.05} className="border-3 border-ink bg-bone shadow-ink">
+      <Link to={`/events/${event.id}`} className="group block p-6">
+        <p className="meta">
+          <Scramble text={`next event · ${blockNo(event.id)}`} trigger="mount" delay={1.2} />
+        </p>
+        <div className="mt-5 flex flex-wrap gap-2">
+          <Chip tone="pending">
+            <span aria-hidden="true" className="blink mr-1.5 inline-block h-[7px] w-[7px] bg-ink" />
+            Upcoming
+          </Chip>
+          <Chip>{event.type}</Chip>
         </div>
-    );
-};
+        <h2 className="t-card mt-4 decoration-[3px] underline-offset-[5px] group-hover:underline">{event.title}</h2>
+        <p className="mt-4 font-mono text-[12.5px]">
+          {event.date}
+          <br />
+          {event.venue}
+        </p>
+        <p className="meta mt-5">
+          <Scramble text={shortHash(event.slug)} trigger="mount" delay={1.35} />
+        </p>
+      </Link>
+    </Slam>
+  )
+}
 
-export default Home;
+export default function Home() {
+  const featured = getFeaturedEvents()
+  const next = getUpcomingEvents()[0]
+
+  return (
+    <>
+      <section className="border-b-3 border-ink">
+        <div className="wrap pb-8 pt-8 md:pb-12 md:pt-14">
+          <p className="meta mb-6">
+            <Typewriter text="rajalakshmi engineering college · blockchain student chapter" speed={0.02} />
+          </p>
+          <h1 className="t-hero">
+            {HERO_WORDS.map((word, i) => (
+              <span key={word} className="block">
+                <SplitText text={word} delay={0.15 + i * 0.13} />
+              </span>
+            ))}
+          </h1>
+          <div className="mt-9 grid gap-10 lg:grid-cols-[1fr_340px] lg:items-end">
+            <div>
+              <Wipe trigger="mount" delay={0.7} className="w-fit max-w-[50ch]">
+                <p className="t-lead">
+                  Rajalakshmi Engineering College&apos;s premier blockchain student chapter, empowering the next
+                  generation of Web3 pioneers.
+                </p>
+              </Wipe>
+              <div className="mt-8 flex flex-wrap gap-5">
+                <Drop delay={0.9}>
+                  <Magnetic>
+                    <Button to="/join">Join the club</Button>
+                  </Magnetic>
+                </Drop>
+                <Drop delay={1}>
+                  <Magnetic>
+                    <Button to="/events" variant="bone">Explore events</Button>
+                  </Magnetic>
+                </Drop>
+              </div>
+            </div>
+            {next && <NextEvent event={next} />}
+          </div>
+          <ChainRail nodes={events.length} delay={0.5} className="mt-10 md:mt-14" />
+        </div>
+      </section>
+
+      <section className="border-b-3 border-ink">
+        <div className="wrap section">
+          <StatBar items={stats} highlight={1} />
+          <div className="mt-14 md:mt-20">
+            <SectionHeading
+              eyebrow="about the chapter"
+              title="One club. Endless opportunities."
+              lead="Founded at Rajalakshmi Engineering College, our Blockchain Innovation Club accelerates the journey from curious student to Web3 professional."
+            />
+            <TrackCards items={pillars} />
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <div className="wrap section">
+          <SectionHeading
+            eyebrow="what we run"
+            title="Events that define us"
+            action={
+              <Magnetic>
+                <Button to="/events" variant="bone">View all events</Button>
+              </Magnetic>
+            }
+          />
+          <Ledger head={['date', 'event', 'type · venue', 'status']}>
+            {featured.map((event, i) => (
+              <EventRow key={event.id} event={event} index={i} />
+            ))}
+          </Ledger>
+        </div>
+      </section>
+
+      <InkCTA
+        title="Ready to level up?"
+        body="Join the Blockchain Innovation Club and unlock a global community of Web3 professionals, resources, and opportunities."
+        aside={
+          <div className="border-3 border-bone p-6">
+            <p className="meta">faculty coordinator</p>
+            <p className="t-card mt-3">Dr. N. Duraimurugan</p>
+            <a
+              href="mailto:duraimurugan.n@rajalakshmi.edu.in"
+              className="mt-3 inline-block break-all font-mono text-[12.5px] underline decoration-2 underline-offset-4"
+            >
+              duraimurugan.n@rajalakshmi.edu.in
+            </a>
+          </div>
+        }
+      >
+        <Button to="/join" variant="onInk">Become a member</Button>
+      </InkCTA>
+    </>
+  )
+}
