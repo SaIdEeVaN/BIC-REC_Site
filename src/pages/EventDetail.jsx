@@ -1,7 +1,7 @@
 import { Link, useParams } from 'react-router-dom'
 import { Button, Chip, EmptyState, Ledger, LedgerRow } from '../components/kit'
 import { Magnetic, Scramble, SplitText, Wipe } from '../components/motion'
-import { getEventById } from '../data/events'
+import { getEventById, isUpcoming } from '../data/events'
 import { blockNo, isRealLink, sealedDate, shortHash, stripEmoji } from '../lib/chain'
 
 function Block({ title, children }) {
@@ -31,7 +31,7 @@ export default function EventDetail() {
     )
   }
 
-  const upcoming = event.status === 'upcoming'
+  const upcoming = isUpcoming(event)
   const canRegister = upcoming && isRealLink(event.registrationLink)
   const registration = canRegister ? 'Open' : upcoming ? 'Opens soon' : 'Closed'
 

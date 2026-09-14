@@ -30,7 +30,7 @@ export const pad2 = (n) => String(n).padStart(2, '0')
 export const blockNo = (n) => `block #${String(n).padStart(4, '0')}`
 
 // Parses the loose date strings in src/data ("January 15, 2026", "February 20–21, 2026", "Nov 2024").
-function parseLooseDate(value) {
+export function parseLooseDate(value) {
   if (value instanceof Date) return value
   const str = String(value).toLowerCase()
   const year = str.match(/\b(\d{4})\b/)

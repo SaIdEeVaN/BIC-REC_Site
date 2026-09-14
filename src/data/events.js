@@ -1,3 +1,5 @@
+import { parseLooseDate } from '../lib/chain.js'
+
 export const events = [
   {
     id: 1,
@@ -7,7 +9,6 @@ export const events = [
     time: '10:00 AM – 4:00 PM',
     venue: 'REC Seminar Hall, Block A',
     type: 'Workshop',
-    status: 'completed',
     description: 'An intensive one-day workshop covering Bitcoin, Ethereum, distributed ledgers, and consensus mechanisms for absolute beginners.',
     about: `Our inaugural Blockchain Fundamentals Workshop brought together 60+ students from various departments at Rajalakshmi Engineering College for a full-day deep dive into blockchain technology. The session covered the history of distributed ledgers, how Bitcoin works under the hood, the Ethereum ecosystem, smart contracts, and hands-on demos with MetaMask wallets.
 
@@ -39,7 +40,6 @@ The event was a massive success with overwhelming positive feedback and a 95% sa
     time: '9:00 AM – 6:00 PM (24 Hours)',
     venue: 'REC Innovation Lab & Main Auditorium',
     type: 'Hackathon',
-    status: 'completed',
     description: 'A 24-hour hackathon challenging student teams to build decentralized applications solving real-world problems using blockchain technology.',
     about: `The Web3 Hackathon 2026 was our flagship event — an intense 24-hour challenge that brought together 12 teams and 60+ participants to build decentralized solutions for real-world problems. Teams worked on projects spanning DeFi, supply chain transparency, digital identity verification, healthcare records, and NFT marketplaces.
 
@@ -76,7 +76,6 @@ All 12 teams successfully demonstrated working prototypes. The top 3 teams won c
     time: '2:00 PM – 5:00 PM',
     venue: 'REC Main Auditorium',
     type: 'Guest Lecture',
-    status: 'completed',
     description: 'An expert session on Decentralized Finance, yield farming, liquidity pools, and the future of money by a leading DeFi researcher.',
     about: `A captivating session on the rapidly evolving DeFi landscape, delivered by Mr. Vivek Nair, a renowned DeFi researcher and protocol designer. The lecture provided an in-depth exploration of how decentralized finance is fundamentally reimagining the global financial system.
 
@@ -106,7 +105,6 @@ The lecture drew attendees not just from REC but also from nearby colleges, maki
     time: '10:00 AM – 5:00 PM',
     venue: 'REC Computer Lab, Block B (Room 205)',
     type: 'Workshop',
-    status: 'upcoming',
     description: 'A full-day hands-on bootcamp on Solidity programming, smart contract deployment on Ethereum, and building your first DApp.',
     about: `The Smart Contract Development Bootcamp is designed for students who want to transition from blockchain enthusiasts to blockchain builders. This intensive full-day hands-on session covers everything you need to write, test, and deploy smart contracts on the Ethereum blockchain.
 
@@ -136,7 +134,6 @@ Prerequisites: Basic JavaScript or programming knowledge. Bring your laptop with
     time: '3:00 PM – 6:00 PM',
     venue: 'REC Seminar Hall, Block C',
     type: 'Competition',
-    status: 'upcoming',
     description: 'A competitive team quiz on Blockchain, Cryptocurrency, Web3, and emerging technologies with exciting cash prizes and certificates.',
     about: `Test your blockchain knowledge in our Crypto Quiz Championship! Teams of 2–3 will battle it out across 5 electrifying rounds covering Blockchain basics, Cryptocurrency markets, DeFi protocols, NFTs, and cutting-edge Web3 trends.
 
@@ -165,7 +162,6 @@ Exciting cash prizes for the top 3 teams, special recognition for the best indiv
     time: '5:00 PM – 8:00 PM',
     venue: 'REC Open Amphitheater',
     type: 'Community Meetup',
-    status: 'upcoming',
     description: 'An informal evening gathering for blockchain enthusiasts to connect, showcase projects, share ideas, and discuss the latest in Web3.',
     about: `Join us for a relaxed and inspiring evening meetup where blockchain enthusiasts from REC and the broader tech community come together under the open sky. This informal gathering is all about community, connection, and sharing ideas.
 
@@ -190,4 +186,23 @@ Refreshments will be provided. This event is free and open to all REC students.`
 
 export const getEventById = (id) => events.find(e => e.id === parseInt(id))
 export const getFeaturedEvents = () => events.slice(0, 3)
-export const getUpcomingEvents = () => events.filter(e => e.status === 'upcoming')
+// Status comes from the date, never a hand-typed field, so a past event can't keep saying "Upcoming".
+// An event counts as upcoming until the end of its last day ("February 20–21, 2026" → end of the 21st).
+function eventEnd(event) {
+  const start = parseLooseDate(event.date)
+  if (!start) return null
+  const end = new Date(start)
+  const range = event.date.match(/\b\d{1,2}\s*[–-]\s*(\d{1,2})\b/)
+  if (range) end.setDate(Number(range[1]))
+  end.setHours(23, 59, 59, 999)
+  return end
+}
+
+export const isUpcoming = (event, now = new Date()) => {
+  const end = eventEnd(event)
+  return end !== null && end >= now
+}
+
+// Soonest first.
+export const getUpcomingEvents = (now = new Date()) =>
+  events.filter((e) => isUpcoming(e, now)).sort((a, b) => eventEnd(a) - eventEnd(b))

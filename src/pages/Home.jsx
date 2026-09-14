@@ -21,6 +21,8 @@ const pillars = [
 
 const HERO_WORDS = ['Build.', 'Innovate.', 'Decentralize.']
 
+const INSTAGRAM = 'https://www.instagram.com/bic.rec?utm_source=ig_web_button_share_sheet&igsi=ZDNlZDc0MzIxNw=='
+
 // Hero load sequence (seconds): eyebrow types 0 → words shunt up .15–.6 → lead unseals .7 →
 // buttons drop .9 → next-event card slams 1.05 → chain draws and a packet starts travelling.
 
@@ -66,6 +68,28 @@ function NextEvent({ event }) {
   )
 }
 
+// Shown in the next-event slot when nothing is scheduled, so the hero never promotes a past event.
+function NoUpcomingEvent() {
+  const linkClass = 'text-[14px] font-extrabold uppercase underline decoration-[3px] underline-offset-[5px]'
+  return (
+    <Slam trigger="mount" delay={1.05} className="border-3 border-ink bg-bone p-6 shadow-ink">
+      <p className="meta">
+        <Scramble text="next event · not scheduled" trigger="mount" delay={1.2} />
+      </p>
+      <h2 className="t-card mt-5">Next event coming soon</h2>
+      <p className="t-small mt-3">New workshops and hackathons are announced on Instagram first.</p>
+      <div className="mt-5 flex flex-wrap gap-x-5 gap-y-2">
+        <a href={INSTAGRAM} target="_blank" rel="noopener noreferrer" className={linkClass}>
+          Follow @bic.rec
+        </a>
+        <Link to="/events" className={linkClass}>
+          Past events
+        </Link>
+      </div>
+    </Slam>
+  )
+}
+
 export default function Home() {
   const featured = getFeaturedEvents()
   const next = getUpcomingEvents()[0]
@@ -105,7 +129,7 @@ export default function Home() {
                 </Drop>
               </div>
             </div>
-            {next && <NextEvent event={next} />}
+            {next ? <NextEvent event={next} /> : <NoUpcomingEvent />}
           </div>
           <ChainRail nodes={events.length} delay={0.5} className="mt-10 md:mt-14" />
         </div>

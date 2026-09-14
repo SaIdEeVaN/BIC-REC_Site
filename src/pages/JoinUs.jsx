@@ -1,7 +1,8 @@
 import { Button, Chip, InkCTA, PageHeader, SectionHeading, TrackCards } from '../components/kit'
 
-// TODO: replace with the membership application form URL (both buttons on this page use it).
-const APPLY_URL = '#'
+// Until the club has an application form, both buttons open the contact form with the subject filled in.
+// When a form exists, point both buttons at its link with `href` instead of `to`.
+const APPLY_PATH = '/contact?subject=Membership%20application'
 
 const whyJoin = [
   { title: 'Learn emerging tech', body: 'Get hands-on with Blockchain, Web3, Solidity, and the latest in decentralized technology.' },
@@ -29,7 +30,7 @@ export default function JoinUs() {
         title="Ready to build the future?"
         lead="Whether you're a developer, designer, researcher, communicator, or simply someone curious about Blockchain — there's a place for you here."
       >
-        <Button href={APPLY_URL}>Join the club</Button>
+        <Button to={APPLY_PATH}>Join the club</Button>
       </PageHeader>
 
       <section className="border-b-3 border-ink">
@@ -61,9 +62,9 @@ export default function JoinUs() {
 
       <InkCTA
         title="Ready to join the blockchain revolution?"
-        body="Fill out our application form and we'll get back to you within 48 hours. No experience needed — just curiosity!"
+        body="Send us a short note about what you'd like to work on and we'll get back to you within 48 hours. No experience needed — just curiosity!"
       >
-        <Button href={APPLY_URL} variant="onInk">Apply now</Button>
+        <Button to={APPLY_PATH} variant="onInk">Apply now</Button>
       </InkCTA>
     </>
   )

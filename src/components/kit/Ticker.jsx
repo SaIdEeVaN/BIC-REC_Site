@@ -1,11 +1,10 @@
 import { motion } from 'motion/react'
-import { events } from '../../data/events'
+import { events, isUpcoming } from '../../data/events'
 import { blockNo, sealedDate, shortHash } from '../../lib/chain'
 import { useCanAnimate } from '../motion/core'
 
 const entries = events.map(
-  (e) =>
-    `${blockNo(e.id)} · ${shortHash(e.slug)} · ${e.status === 'upcoming' ? 'pending' : `sealed ${sealedDate(e.date)}`}`
+  (e) => `${blockNo(e.id)} · ${shortHash(e.slug)} · ${isUpcoming(e) ? 'pending' : `sealed ${sealedDate(e.date)}`}`
 )
 
 function Run() {

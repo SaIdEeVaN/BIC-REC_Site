@@ -100,10 +100,23 @@ Notes:
 - The "Deploy to Firebase Hosting" workflow is **disabled_manually** on GitHub — that's why the PR #1 merge (07:17 UTC) did not deploy. Pushes to `main` won't deploy until it's re-enabled.
 - Branches: `origin/redesign/neo-brutalist` is fully merged into `main`; `origin/copilot/explain-repository-structure` is an unmerged, unrelated history from Aug 2026. Left untouched (branches, not files).
 
+---
+
+# Task 6 — Fix what visitors notice (started 2026-09-14, branch `main`)
+
+## To-do
+
+- [x] 1. Event status derived from the date (`isUpcoming` in `src/data/events.js`, end of last day, ranges handled) — replaces the hand-typed `status` field that kept April/May events "Upcoming". Home shows "Next event coming soon" when nothing is scheduled
+- [x] 2. Contact form opens the visitor's email app addressed to the club (no backend), honest "Check your email app" state with a retry link; `?subject=` pre-fills the subject
+- [x] 3. Join / Apply buttons → `/contact?subject=Membership application` (were `#`)
+- [x] 4. Tests (`tests/e2e/features.spec.js`, clock pinned to 2026-04-01 / 2026-09-14): lint 0, knip clean, 154 e2e passed; screenshots checked (home "Next event coming soon" card at 1280/390, contact form + "Check your email app" state)
+  - [x] User said yes → committed + pushed to `main` (deploy workflow still disabled, so no deploy)
+
 ## Open items for the club (not blocking)
 
-- `JoinUs.jsx` → `APPLY_URL` is still `'#'` (both "Join"/"Apply" buttons go nowhere until a form link is added).
-- Contact form doesn't send anything yet (same as before) — it only shows the "Message sent" state.
+- Join/Apply buttons open the contact form (subject "Membership application") — swap in a real application form link in `JoinUs.jsx` when one exists.
+- Contact form sends through the visitor's email app (mailto). A real inbox/backend (e.g. Formspree, Supabase) would remove that step.
+- Events: add new events to `src/data/events.js` — "Upcoming"/"Sealed" now updates by itself from the date.
 - About page copy says "Founded in 2010" / "750+ students", which conflicts with other pages (2024, 500+). Copy kept as-is.
 - Gallery needs real photos; swap `FrameMark` for `<img>` when they exist.
 - Project GitHub/demo links and member LinkedIn links are all `'#'` in `src/data`, so they're hidden.

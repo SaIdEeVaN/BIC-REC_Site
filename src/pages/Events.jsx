@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react'
 import { Button, EmptyState, Ledger, PageHeader, Tabs } from '../components/kit'
 import EventRow from '../components/EventRow'
-import { events } from '../data/events'
+import { events, getUpcomingEvents } from '../data/events'
 import { pad2 } from '../lib/chain'
 
 const FILTERS = ['All', 'Workshop', 'Hackathon', 'Guest Lecture', 'Competition', 'Community Meetup']
@@ -12,7 +12,7 @@ export default function Events() {
     () => (filter === 'All' ? events : events.filter((e) => e.type === filter)),
     [filter]
   )
-  const upcoming = events.filter((e) => e.status === 'upcoming').length
+  const upcoming = getUpcomingEvents().length
 
   return (
     <>

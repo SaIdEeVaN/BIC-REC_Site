@@ -1,9 +1,17 @@
 import { useState } from 'react'
+import { useSearchParams } from 'react-router-dom'
 import { motion } from 'motion/react'
 import { Button, Chip, PageHeader } from '../components/kit'
 import { SLAM, Slam, SplitText, useCanAnimate } from '../components/motion'
 
+const CLUB_EMAIL = 'kbaclub@rajalakshmil.edu.in'
 const EMPTY = { name: '', email: '', subject: '', message: '' }
+
+// The site has no backend, so the message is handed to the visitor's own email app, addressed to the club.
+const mailtoFor = (form) =>
+  `mailto:${CLUB_EMAIL}?subject=${encodeURIComponent(form.subject)}&body=${encodeURIComponent(
+    `${form.message}\n\n— ${form.name} (${form.email})`
+  )}`
 
 const contactInfo = [
   { label: 'email us', value: 'kbaclub@rajalakshmil.edu.in', href: 'mailto:kbaclub@rajalakshmil.edu.in' },
@@ -27,7 +35,9 @@ function Field({ label, as: Tag = 'input', ...props }) {
 }
 
 export default function Contact() {
-  const [form, setForm] = useState(EMPTY)
+  const [searchParams] = useSearchParams()
+  // Links like /contact?subject=Membership%20application pre-fill the subject.
+  const [form, setForm] = useState(() => ({ ...EMPTY, subject: searchParams.get('subject') ?? '' }))
   const [submitted, setSubmitted] = useState(false)
   const canAnimate = useCanAnimate()
 
@@ -35,6 +45,7 @@ export default function Contact() {
 
   const handleSubmit = (e) => {
     e.preventDefault()
+    window.location.href = mailtoFor(form)
     setSubmitted(true)
   }
 
@@ -99,12 +110,25 @@ export default function Contact() {
                   animate={{ scale: 1, rotate: 0 }}
                   transition={SLAM}
                 >
-                  <Chip tone="confirmed">Confirmed</Chip>
+                  <Chip tone="pending">Drafted</Chip>
                 </motion.span>
                 <h2 className="t-h3 mt-5">
-                  <SplitText text="Message sent" delay={0.15} />
+                  <SplitText text="Check your email app" delay={0.15} />
                 </h2>
-                <p className="t-body mt-3">Thanks for reaching out! We&apos;ll get back to you within 48 hours.</p>
+                <p className="t-body mt-3">
+                  Your email app should have opened with the message ready — press send there to reach the club.
+                </p>
+                <p className="t-body mt-3">
+                  Nothing opened?{' '}
+                  <a href={mailtoFor(form)} className="font-bold underline decoration-2 underline-offset-4">
+                    Open the email again
+                  </a>{' '}
+                  or write to{' '}
+                  <a href={`mailto:${CLUB_EMAIL}`} className="break-all font-bold underline decoration-2 underline-offset-4">
+                    {CLUB_EMAIL}
+                  </a>
+                  .
+                </p>
                 <Button
                   variant="bone"
                   className="mt-8"
@@ -113,7 +137,7 @@ export default function Contact() {
                     setForm(EMPTY)
                   }}
                 >
-                  Send another message
+                  Write another message
                 </Button>
               </div>
             ) : (
@@ -141,7 +165,8 @@ export default function Contact() {
                   onChange={handleChange}
                   className="field resize-y"
                 />
-                <Button type="submit" className="mt-2 w-full">Send message</Button>
+                <p className="meta">opens your own email app — nothing is stored on this site</p>
+                <Button type="submit" className="w-full">Send via email</Button>
               </form>
             )}
           </Slam>

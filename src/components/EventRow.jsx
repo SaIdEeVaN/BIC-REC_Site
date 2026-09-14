@@ -1,9 +1,10 @@
 import { Chip, LedgerRow } from './kit'
 import { Scramble } from './motion'
 import { blockNo, shortHash } from '../lib/chain'
+import { isUpcoming } from '../data/events'
 
 export default function EventRow({ event, index = 0 }) {
-  const upcoming = event.status === 'upcoming'
+  const upcoming = isUpcoming(event)
 
   return (
     <LedgerRow
