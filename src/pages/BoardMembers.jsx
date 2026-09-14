@@ -1,85 +1,54 @@
-import { motion } from 'framer-motion'
-import PageTransition from '../components/PageTransition'
-import MemberCard from '../components/ui/MemberCard'
-import SectionTitle from '../components/ui/SectionTitle'
+import { PageHeader, SectionHeading } from '../components/kit'
+import MemberCell, { initials } from '../components/MemberCell'
 import { boardMembers } from '../data/members'
+import { pad2 } from '../lib/chain'
 
-const facultyCoord = boardMembers.find(m => m.role === 'Faculty Coordinator')
-const boardOnly = boardMembers.filter(m => m.role !== 'Faculty Coordinator')
+const facultyCoord = boardMembers.find((m) => m.role === 'Faculty Coordinator')
+const boardOnly = boardMembers.filter((m) => m.role !== 'Faculty Coordinator')
 
 export default function BoardMembers() {
   return (
-    <PageTransition>
-      {/* Page Hero */}
-      <div className="relative py-36 bg-surface overflow-hidden">
-        <div className="absolute inset-0 bg-grid opacity-30" />
-        <div className="absolute -top-20 right-0 w-96 h-96 bg-primary/10 rounded-full blur-3xl" />
-        <div className="absolute -bottom-20 left-0 w-96 h-96 bg-accent/5 rounded-full blur-3xl" />
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <motion.span
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="inline-block text-primary text-sm font-semibold tracking-widest uppercase mb-4"
-          >
-            Club Leadership
-          </motion.span>
-          <motion.h1
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
-            className="font-heading font-bold text-5xl md:text-6xl text-text-primary mb-6"
-          >
-            Meet Our{' '}
-            <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-              Leadership
-            </span>
-          </motion.h1>
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-            className="text-text-muted text-lg max-w-2xl mx-auto"
-          >
-            Introducing the people responsible for guiding, managing, and growing the Blockchain
-            Innovation Club at REC.
-          </motion.p>
-        </div>
-      </div>
+    <>
+      <PageHeader
+        eyebrow="club leadership"
+        title="Meet our leadership"
+        lead="Introducing the people responsible for guiding, managing, and growing the Blockchain Innovation Club at REC."
+        aside={[
+          ['faculty', pad2(facultyCoord ? 1 : 0)],
+          ['board', pad2(boardOnly.length)],
+        ]}
+      />
 
-      <section className="py-16 bg-dark">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          {/* Faculty Coordinator — featured */}
-          {facultyCoord && (
-            <div className="mb-14">
-              <SectionTitle eyebrow="Faculty" title="[[Faculty Coordinator]]" />
-              <div className="max-w-sm mx-auto">
-                <motion.div
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  className="bg-gradient-to-br from-primary/10 to-accent/5 border border-primary/20 rounded-3xl p-8 text-center"
-                >
-                  <div className="w-24 h-24 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center text-white font-heading font-bold text-2xl mx-auto mb-4 shadow-lg shadow-primary/30">
-                    {facultyCoord.name.split(' ').map(n => n[0]).join('').slice(0, 2)}
-                  </div>
-                  <h3 className="font-heading font-bold text-text-primary text-xl mb-1">{facultyCoord.name}</h3>
-                  <p className="text-sm font-semibold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent mb-2">{facultyCoord.role}</p>
-                  <p className="text-text-muted text-xs mb-2">{facultyCoord.department}</p>
-                  <p className="text-text-muted text-sm leading-relaxed">{facultyCoord.bio}</p>
-                </motion.div>
+      {facultyCoord && (
+        <section className="border-b-3 border-ink">
+          <div className="wrap section">
+            <div className="on-ink grid gap-7 bg-ink p-6 text-bone shadow-amber md:grid-cols-[auto_1fr] md:p-10">
+              <span
+                aria-hidden="true"
+                className="grid h-24 w-24 place-items-center bg-amber text-[34px] font-black tracking-[-.04em] text-ink"
+              >
+                {initials(facultyCoord.name)}
+              </span>
+              <div>
+                <p className="meta">faculty coordinator · {facultyCoord.department}</p>
+                <h2 className="t-h2 mt-3">{facultyCoord.name}</h2>
+                <p className="t-lead mt-4 max-w-[60ch]">{facultyCoord.bio}</p>
               </div>
             </div>
-          )}
-
-          {/* Board Members */}
-          <SectionTitle eyebrow="Student Leaders" title="The [[Board]]" />
-          <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            {boardOnly.map((member, i) => (
-              <MemberCard key={member.id} member={member} index={i} />
-            ))}
           </div>
+        </section>
+      )}
+
+      <section>
+        <div className="wrap section">
+          <SectionHeading eyebrow="student leaders" title="The board" />
+          <ul className="cells grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            {boardOnly.map((member, i) => (
+              <MemberCell key={member.id} member={member} index={i} />
+            ))}
+          </ul>
         </div>
       </section>
-    </PageTransition>
+    </>
   )
 }

@@ -1,5 +1,4 @@
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom'
-import { AnimatePresence } from 'framer-motion'
 import { useEffect } from 'react'
 import Navbar from './components/Navbar'
 import Footer from './components/Footer'
@@ -16,6 +15,7 @@ import News from './pages/News'
 import Resources from './pages/Resources'
 import JoinUs from './pages/JoinUs'
 import Contact from './pages/Contact'
+import NotFound from './pages/NotFound'
 
 function ScrollToTop() {
   const { pathname } = useLocation()
@@ -23,15 +23,15 @@ function ScrollToTop() {
   return null
 }
 
-function AppContent() {
-  const location = useLocation()
+export default function App() {
   return (
-    <div className="min-h-screen bg-dark flex flex-col">
-      <Navbar />
+    <Router>
       <ScrollToTop />
-      <main className="flex-1">
-        <AnimatePresence mode="wait">
-          <Routes location={location} key={location.pathname}>
+      <div className="flex min-h-screen flex-col bg-bone text-ink">
+        <a href="#main" className="btn btn-amber skip-link">Skip to content</a>
+        <Navbar />
+        <main id="main" className="flex-1">
+          <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/about" element={<About />} />
             <Route path="/events" element={<Events />} />
@@ -45,18 +45,11 @@ function AppContent() {
             <Route path="/resources" element={<Resources />} />
             <Route path="/join" element={<JoinUs />} />
             <Route path="/contact" element={<Contact />} />
+            <Route path="*" element={<NotFound />} />
           </Routes>
-        </AnimatePresence>
-      </main>
-      <Footer />
-    </div>
-  )
-}
-
-export default function App() {
-  return (
-    <Router>
-      <AppContent />
+        </main>
+        <Footer />
+      </div>
     </Router>
   )
 }

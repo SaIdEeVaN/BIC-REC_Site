@@ -31,17 +31,19 @@
 
 ## About
 
-The BIC-REC website is the official online presence of the **Blockchain Innovation Club** at REC. It showcases the club's events, projects, achievements, team members, and resources — all wrapped in a modern, animated UI.
+The BIC-REC website is the official online presence of the **Blockchain Innovation Club** at REC. It showcases the club's events, projects, achievements, team members, and resources.
+
+The UI follows a **neo-brutalist design system** — hard geometry, 3px ink rules, hard offset shadows, and blockchain vocabulary (block numbers, hashes, sealed dates). The full spec lives in [`DESIGN_SYSTEM.md`](DESIGN_SYSTEM.md).
 
 ---
 
 ## ✨ Features
 
-- 🏠 **Home** — Animated hero with particle background and stats counter
-- 📅 **Events** — Full event listings with detail pages
+- 🏠 **Home** — Stacked hero, chain rail, stat bar and event ledger
+- 📅 **Events** — Filterable event ledger with detail pages
 - 🏆 **Achievements** — Club milestones and accomplishments
 - 👥 **Team** — Board members and core team profiles
-- 🖼️ **Gallery** — Photo gallery with lightbox viewer
+- 🖼️ **Gallery** — Photo frames by category
 - 📰 **News** — Latest club updates
 - 🔧 **Projects** — Blockchain projects by the club
 - 📚 **Resources** — Learning materials and links
@@ -56,12 +58,9 @@ The BIC-REC website is the official online presence of the **Blockchain Innovati
 |---|---|
 | [React 18](https://react.dev/) | UI Framework |
 | [Vite](https://vitejs.dev/) | Build tool & Dev server |
-| [Tailwind CSS](https://tailwindcss.com/) | Styling |
-| [Framer Motion](https://www.framer.com/motion/) | Animations |
-| [GSAP](https://greensock.com/gsap/) | Advanced animations |
+| [Tailwind CSS](https://tailwindcss.com/) | Styling (tokens in `tailwind.config.js`) |
 | [React Router v7](https://reactrouter.com/) | Client-side routing |
-| [tsParticles](https://particles.js.org/) | Particle background |
-| [Lucide React](https://lucide.dev/) | Icons |
+| Archivo + IBM Plex Mono | Typefaces (Google Fonts) |
 | [Firebase Hosting](https://firebase.google.com/products/hosting) | Deployment |
 
 ---
@@ -109,14 +108,13 @@ BIC-WEBSITE/
 ├── public/                       # Static assets
 ├── src/
 │   ├── assets/                   # Images and media
-│   ├── components/               # Reusable UI components
+│   ├── components/
+│   │   ├── kit/                  # Design-system primitives (Button, Chip, Ledger, TrackCards, ChainRail, ...)
 │   │   ├── Navbar.jsx
 │   │   ├── Footer.jsx
-│   │   ├── Hero.jsx
-│   │   ├── ParticleBackground.jsx
-│   │   ├── StatsCounter.jsx
-│   │   ├── Timeline.jsx
-│   │   └── PageTransition.jsx
+│   │   ├── EventRow.jsx
+│   │   └── MemberCell.jsx
+│   ├── lib/chain.js              # Block numbers, display hashes, sealed dates
 │   ├── pages/                    # Route-level page components
 │   │   ├── Home.jsx
 │   │   ├── Events.jsx
@@ -130,7 +128,8 @@ BIC-WEBSITE/
 │   │   ├── Resources.jsx
 │   │   ├── News.jsx
 │   │   ├── JoinUs.jsx
-│   │   └── Contact.jsx
+│   │   ├── Contact.jsx
+│   │   └── NotFound.jsx
 │   ├── data/                     # Static data files
 │   ├── App.jsx                   # Root component & routing
 │   ├── main.jsx                  # App entry point

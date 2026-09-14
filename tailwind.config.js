@@ -1,62 +1,39 @@
 /** @type {import('tailwindcss').Config} */
+// Neo-brutalist tokens — see DESIGN_SYSTEM.md.
+// Colors, radii and border widths are replaced (not extended) so off-system values can't creep in.
 export default {
-  content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
+  content: ['./index.html', './src/**/*.{js,jsx}'],
   theme: {
+    colors: {
+      transparent: 'transparent',
+      current: 'currentColor',
+      ink: '#14110E',
+      bone: '#EDE6D8',
+      amber: '#D9A441',
+      mint: '#2FD9C4',
+      muted: '#4A4238',
+    },
+    borderRadius: {
+      none: '0',
+    },
+    borderWidth: {
+      DEFAULT: '3px',
+      0: '0',
+      2: '2px',
+      3: '3px',
+    },
     extend: {
-      colors: {
-        primary: '#c9a227',
-        'primary-light': '#e5be3a',
-        accent: '#FFA300',
-        dark: '#0A0A0F',
-        surface: '#12121A',
-        'surface-2': '#1A1A2E',
-        'surface-3': '#1E1E30',
-        'text-primary': '#E8E8F0',
-        'text-muted': '#8888A0',
-        'border-subtle': '#2A2A40',
-      },
       fontFamily: {
-        heading: ['Rajdhani', 'sans-serif'],
-        display: ['Rajdhani', 'sans-serif'],
-        mono: ['Space Grotesk', 'monospace'],
-        sans: ['Space Grotesk', 'sans-serif'],
+        sans: ['Archivo', 'Arial', 'sans-serif'],
+        mono: ['"IBM Plex Mono"', 'ui-monospace', 'Menlo', 'Consolas', 'monospace'],
       },
-      animation: {
-        float: 'float 6s ease-in-out infinite',
-        'float-delayed': 'float 6s ease-in-out 2s infinite',
-        'float-slow': 'float 8s ease-in-out 1s infinite',
-        glow: 'glow 2s ease-in-out infinite alternate',
-        gradient: 'gradient 8s ease infinite',
-        'spin-slow': 'spin 20s linear infinite',
-        'pulse-slow': 'pulse 4s ease-in-out infinite',
-        marquee: 'marquee 30s linear infinite',
-        'marquee-reverse': 'marquee 35s linear infinite reverse',
-        'fade-up': 'fadeUp 0.6s ease forwards',
-      },
-      keyframes: {
-        float: {
-          '0%, 100%': { transform: 'translateY(0px)' },
-          '50%': { transform: 'translateY(-20px)' },
-        },
-        glow: {
-          '0%': { boxShadow: '0 0 5px #6C3AFF, 0 0 10px #6C3AFF' },
-          '100%': { boxShadow: '0 0 20px #6C3AFF, 0 0 40px #6C3AFF' },
-        },
-        gradient: {
-          '0%, 100%': { backgroundPosition: '0% 50%' },
-          '50%': { backgroundPosition: '100% 50%' },
-        },
-        marquee: {
-          '0%': { transform: 'translateX(0%)' },
-          '100%': { transform: 'translateX(-50%)' },
-        },
-        fadeUp: {
-          '0%': { opacity: '0', transform: 'translateY(20px)' },
-          '100%': { opacity: '1', transform: 'translateY(0)' },
-        },
-      },
-      letterSpacing: {
-        widest2: '0.3em',
+      boxShadow: {
+        ink: '7px 7px 0 #14110E',
+        'ink-6': '6px 6px 0 #14110E',
+        'ink-5': '5px 5px 0 #14110E',
+        amber: '7px 7px 0 #D9A441',
+        'amber-6': '6px 6px 0 #D9A441',
+        bone: '6px 6px 0 #EDE6D8',
       },
     },
   },

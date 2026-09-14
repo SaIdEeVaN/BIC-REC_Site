@@ -1,88 +1,103 @@
-import React, { useState, useEffect, useRef } from 'react';
-import ReactDOM from 'react-dom';
-import { Link, useLocation } from 'react-router-dom';
-import { Menu, X } from 'lucide-react';
-import './Navbar.css';
-import collegeLogo from '../assets/logo/BIC logo.jpeg';
+import { useEffect, useState } from 'react'
+import { Link, NavLink, useLocation } from 'react-router-dom'
+import logo from '../assets/logo/BIC logo.jpeg'
+import { Ticker } from './kit'
 
-const Navbar = () => {
-    const [isMobileMenuActive, setIsMobileMenuActive] = useState(false);
-    const location = useLocation();
-    const headerRef = useRef(null);
+const links = [
+  { to: '/', label: 'Home', end: true },
+  { to: '/about', label: 'About us' },
+  { to: '/events', label: 'Events' },
+  { to: '/gallery', label: 'Gallery' },
+  { to: '/contact', label: 'Contact us' },
+]
 
-    const close = () => setIsMobileMenuActive(false);
+export default function Navbar() {
+  const [open, setOpen] = useState(false)
+  const { pathname } = useLocation()
 
-    // Dynamically calculate header height to prevent overlaps globally
-    useEffect(() => {
-        if (!headerRef.current) return;
-        const resizeObserver = new ResizeObserver((entries) => {
-            const navHeight = entries[0].target.offsetHeight;
-            document.documentElement.style.setProperty('--navbar-height', `${navHeight}px`);
-        });
-        resizeObserver.observe(headerRef.current);
-        return () => resizeObserver.disconnect();
-    }, []);
+  useEffect(() => { setOpen(false) }, [pathname])
 
-    // Lock body scroll when menu is open
-    useEffect(() => {
-        document.body.style.overflow = isMobileMenuActive ? 'hidden' : '';
-        return () => { document.body.style.overflow = ''; };
-    }, [isMobileMenuActive]);
+  useEffect(() => {
+    if (!open) return
+    const onKey = (e) => { if (e.key === 'Escape') setOpen(false) }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [open])
 
-    // Close menu on route change
-    useEffect(() => { close(); }, [location]);
+  return (
+    <>
+      <Ticker />
+      <header className="sticky top-0 z-40 border-b-3 border-ink bg-bone">
+        <div className="mx-auto flex h-16 max-w-[1280px] items-stretch md:h-[76px]">
+          <Link to="/" className="flex min-w-0 items-center gap-3 px-4 md:pl-[44px]" aria-label="BIC/REC home">
+            <img src={logo} alt="" className="h-10 w-10 shrink-0 border-3 border-ink object-cover md:h-12 md:w-12" />
+            <span className="flex flex-col leading-none">
+              <span className="text-[22px] font-black uppercase tracking-[-.04em] md:text-[26px]">BIC/REC</span>
+              <span className="meta mt-1 hidden sm:block">blockchain innovation club</span>
+            </span>
+          </Link>
 
-    const mobileMenu = ReactDOM.createPortal(
-        <>
-            <nav
-                className={`mobile-nav ${isMobileMenuActive ? 'mobile-nav--open' : ''}`}
-                aria-label="Mobile Navigation"
+          <nav aria-label="Main" className="ml-auto hidden lg:flex">
+            {links.map((link) => (
+              <NavLink
+                key={link.to}
+                to={link.to}
+                end={link.end}
+                className={({ isActive }) =>
+                  `flex items-center border-l-3 border-ink px-5 text-[14px] font-extrabold uppercase ${
+                    isActive ? 'bg-ink text-bone' : 'decoration-[3px] underline-offset-[6px] hover:underline'
+                  }`
+                }
+              >
+                {link.label}
+              </NavLink>
+            ))}
+          </nav>
+
+          <NavLink
+            to="/join"
+            className={({ isActive }) =>
+              `ml-auto flex items-center border-l-3 border-ink px-4 text-[14px] font-extrabold uppercase md:px-6 lg:ml-0 ${
+                isActive ? 'bg-ink text-bone' : 'bg-amber text-ink'
+              }`
+            }
+          >
+            Join
+          </NavLink>
+
+          <button
+            type="button"
+            className="flex w-[84px] items-center justify-center border-l-3 border-ink text-[14px] font-extrabold uppercase lg:hidden"
+            aria-expanded={open}
+            aria-controls="mobile-nav"
+            onClick={() => setOpen((o) => !o)}
+          >
+            {open ? 'Close' : 'Menu'}
+          </button>
+        </div>
+
+        <nav
+          id="mobile-nav"
+          aria-label="Main"
+          hidden={!open}
+          className="absolute inset-x-0 top-full border-b-3 border-ink bg-bone lg:hidden"
+        >
+          {links.map((link) => (
+            <NavLink
+              key={link.to}
+              to={link.to}
+              end={link.end}
+              className={({ isActive }) =>
+                `block border-b-3 border-ink px-4 py-4 text-[24px] font-black uppercase tracking-[-.03em] last:border-b-0 ${
+                  isActive ? 'bg-ink text-bone' : ''
+                }`
+              }
             >
-                <button className="mobile-nav__close" onClick={close} aria-label="Close menu">
-                    <X size={28} />
-                </button>
-
-                <Link to="/" className={location.pathname === '/' ? 'mobile-nav__link active' : 'mobile-nav__link'} style={{ '--i': 1 }} onClick={close}>Home</Link>
-                <Link to="/about" className={location.pathname === '/about' ? 'mobile-nav__link active' : 'mobile-nav__link'} style={{ '--i': 2 }} onClick={close}>About Us</Link>
-                <Link to="/events" className={location.pathname === '/events' ? 'mobile-nav__link active' : 'mobile-nav__link'} style={{ '--i': 3 }} onClick={close}>Events</Link>
-                <Link to="/gallery" className={location.pathname === '/gallery' ? 'mobile-nav__link active' : 'mobile-nav__link'} style={{ '--i': 4 }} onClick={close}>Gallery</Link>
-                <Link to="/contact" className={location.pathname === '/contact' ? 'mobile-nav__link active' : 'mobile-nav__link'} style={{ '--i': 5 }} onClick={close}>Contact Us</Link>
-            </nav>
-        </>,
-        document.body
-    );
-
-    return (
-        <>
-            <header className="header" ref={headerRef}>
-                <div className="logo-container flex items-center">
-                    <Link to="/" onClick={close}>
-                        <img src={collegeLogo} className="logo-left h-[74px] w-[200px] object-contain" alt="College Logo" />
-                    </Link>
-                </div>
-
-                <nav className="navbar" aria-label="Main Navigation">
-                    <Link to="/" className={location.pathname === '/' ? 'active' : ''} onClick={close}>Home</Link>
-                    <Link to="/about" className={location.pathname === '/about' ? 'active' : ''} onClick={close}>About Us</Link>
-                    <Link to="/events" className={location.pathname === '/events' ? 'active' : ''} onClick={close}>Events</Link>
-                    <Link to="/gallery" className={location.pathname === '/gallery' ? 'active' : ''} onClick={close}>Gallery</Link>
-                    <Link to="/contact" className={location.pathname === '/contact' ? 'active' : ''} onClick={close}>Contact Us</Link>
-                </nav>
-
-                <button
-                    className="mobile-menu-btn"
-                    aria-label={isMobileMenuActive ? 'Close menu' : 'Open menu'}
-                    aria-expanded={isMobileMenuActive}
-                    onClick={() => setIsMobileMenuActive(prev => !prev)}
-                    style={{ padding: '4px 8px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-                >
-                    {isMobileMenuActive ? <X size={20} /> : <Menu size={20} />}
-                </button>
-            </header>
-
-            {mobileMenu}
-        </>
-    );
-};
-
-export default Navbar;
+              {link.label}
+            </NavLink>
+          ))}
+        </nav>
+      </header>
+    </>
+  )
+}
