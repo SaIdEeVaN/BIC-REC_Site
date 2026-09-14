@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import { sealedDate, shortHash } from '../lib/chain'
+import { SplitText } from './motion'
 
 const quickLinks = [
   { name: 'Home', path: '/' },
@@ -46,7 +47,9 @@ export default function Footer() {
     <footer className="on-ink border-t-3 border-bone bg-ink text-bone">
       <div className="wrap section grid gap-12 md:grid-cols-2 lg:grid-cols-[1.6fr_1fr_1fr]">
         <div className="md:col-span-2 lg:col-span-1">
-          <Link to="/" className="t-cta inline-block">BIC/REC</Link>
+          <Link to="/" className="t-cta inline-block">
+            <SplitText text="BIC/REC" by="char" trigger="view" stagger={0.05} />
+          </Link>
           <p className="t-body mt-5 max-w-[38ch]">
             Blockchain Innovation Club, Rajalakshmi Engineering College. Innovate. Decentralize. Build the future.
           </p>

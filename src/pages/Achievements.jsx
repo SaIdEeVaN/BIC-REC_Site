@@ -35,9 +35,10 @@ export default function Achievements() {
         <div className="wrap section">
           <SectionHeading eyebrow="highlights" title="Key milestones" />
           <Ledger head={['date', 'milestone', 'category', 'block']}>
-            {achievements.map((a) => (
+            {achievements.map((a, i) => (
               <LedgerRow
                 key={a.id}
+                index={i}
                 date={a.date}
                 main={
                   <>

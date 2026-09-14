@@ -1,6 +1,8 @@
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom'
 import { lazy, Suspense, useEffect } from 'react'
+import { MotionConfig } from 'motion/react'
 import Navbar from './components/Navbar'
+import { RouteShutter } from './components/motion'
 import Footer from './components/Footer'
 import Home from './pages/Home'
 import { metaFor } from './seo'
@@ -58,7 +60,9 @@ function PageFallback() {
 export default function App() {
   return (
     <Router>
+      <MotionConfig reducedMotion="user">
       <RouteEffects />
+      <RouteShutter />
       <div className="flex min-h-screen flex-col bg-bone text-ink">
         <a href="#main" className="btn btn-amber skip-link">Skip to content</a>
         <Navbar />
@@ -84,6 +88,7 @@ export default function App() {
         </main>
         <Footer />
       </div>
+      </MotionConfig>
     </Router>
   )
 }

@@ -32,8 +32,8 @@ export default function Events() {
           <Tabs label="Filter events by type" options={FILTERS} value={filter} onChange={setFilter} className="mb-8" />
           {filtered.length > 0 ? (
             <Ledger head={['date', 'event', 'type · venue', 'status']}>
-              {filtered.map((event) => (
-                <EventRow key={event.id} event={event} />
+              {filtered.map((event, i) => (
+                <EventRow key={event.id} event={event} index={i} />
               ))}
             </Ledger>
           ) : (

@@ -36,7 +36,7 @@ export default function CoreMembers() {
         <div className="wrap section">
           <Tabs label="Filter members by team" options={allTeams} value={filter} onChange={setFilter} />
           <p className="t-body mt-6 max-w-[60ch]">{teamDescriptions[filter]}</p>
-          <ul className="cells mt-8 grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
+          <ul className="cells mt-8 grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {filtered.map((member, i) => (
               <MemberCell key={member.id} member={member} index={i} />
             ))}

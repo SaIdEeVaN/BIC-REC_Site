@@ -1,4 +1,5 @@
 import { PageHeader, SectionHeading } from '../components/kit'
+import { AMBER, Slam } from '../components/motion'
 import MemberCell from '../components/MemberCell'
 import { boardMembers } from '../data/members'
 import { pad2 } from '../lib/chain'
@@ -23,7 +24,7 @@ export default function BoardMembers() {
       {facultyCoord && (
         <section className="border-b-3 border-ink">
           <div className="wrap section">
-            <div className="on-ink grid gap-7 bg-ink p-6 text-bone shadow-amber md:grid-cols-[auto_1fr] md:p-10">
+            <Slam color={AMBER} className="on-ink grid gap-7 bg-ink p-6 text-bone shadow-amber md:grid-cols-[auto_1fr] md:p-10">
               <span
                 aria-hidden="true"
                 className="grid h-24 w-24 place-items-center bg-amber text-[34px] font-black tracking-[-.04em] text-ink"
@@ -35,7 +36,7 @@ export default function BoardMembers() {
                 <h2 className="t-h2 mt-3">{facultyCoord.name}</h2>
                 <p className="t-lead mt-4 max-w-[60ch]">{facultyCoord.bio}</p>
               </div>
-            </div>
+            </Slam>
           </div>
         </section>
       )}

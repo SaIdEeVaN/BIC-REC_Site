@@ -28,6 +28,7 @@ export default function News() {
                 return (
                   <LedgerRow
                     key={item.id}
+                    index={i}
                     to={internal ? item.link : undefined}
                     tone={latest ? 'pending' : 'confirmed'}
                     date={item.date}

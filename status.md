@@ -42,6 +42,35 @@ Started: 2026-09-14
   - Not verified locally: Firebase `cleanUrls` serving (no emulator) — check `/events/2` share preview after the next deploy
 - [x] 8. Commit + push to `redesign/neo-brutalist`
 
+---
+
+# Task 3 — Motion "to the max" (started 2026-09-14, same branch `redesign/neo-brutalist`)
+
+Rule: motion must obey DESIGN_SYSTEM.md — hard, mechanical, no blur/fade/rounded/gradient. Patterns from Kokonut UI / bklit UI are rebuilt in the brutalist style, not pasted in.
+
+## To-do
+
+- [x] 1. Research: `motion` 13.2 (React 18 OK). bklit UI = charts (visx + Motion springs, React 19/Tailwind 4 registry) → adapt one animated bar chart by hand. Kokonut UI = shadcn registry (Tailwind 4) → port patterns (typewriter, number ticker, magnetic button, marquee, decrypt text), don't install
+- [x] 2. Installed `motion`; kit in `src/components/motion/`: SplitText, Wipe, Slam, Scramble, CountUp, Typewriter, Magnetic, ScrollProgress, RouteShutter + `core.js` (tokens, `useReveal`, `RevealContext`). `MotionConfig reducedMotion="user"` + `useCanAnimate()` render final state for reduced motion
+- [x] 3. Home: orchestrated load (eyebrow types → words shunt up → lead unseals → buttons drop → next-event card slams → chain draws + packet travels), stat counters + amber fill, slamming track cards, printing ledger rows, magnetic CTAs
+- [x] 4. Shell: ticker marquee, sliding ink nav fill (shared with Join), mobile menu slide-in, amber scroll-progress rule, ink route shutter
+- [x] 5. Rolled out via kit to every page; Projects gets a bklit-style animated "What we build with" bar chart (hover readout + table view); Gallery crosses draw; Contact "Confirmed" stamp; member initials slam
+- [x] 6. Lint 0 errors; Playwright 149 passed at 360/390/768/1024/1280 (layout tests under reduced motion + new motion-on tests + new "no heading word wider than its column" test). README "Motion" section added
+
+## Bugs found and fixed along the way
+
+- CountUp restarted forever (effect depended on a new array each render)
+- Ledger rows never revealed: IntersectionObserver can't see an element hidden by its own clip-path → observe an unclipped wrapper, pass state down via `RevealContext`
+- Scroll bar stuck full on lazy-loaded pages → progress computed from scrollY + current page height
+- Headings force-broken mid-word (from Task 2's `overflow-wrap: anywhere`): ACHIEVEMENTS, VENKATARAMAN, DECENTRALIZE., RAMACHANDRAN, CRYPTOCURRENCY @768 → fluid type sizes, team grid max 4 columns, header aside column only when there is an aside
+- Ledger 4-column layout squeezed the title to ~105px at 768 → switches at lg; event winners ledger overflowed at 1024 → switches at xl (`<Ledger from="xl">`)
+
+## Notes
+
+- Main bundle 212 KB → 360 KB (gzip 70 → 118 KB) because of `motion`. Could trim with `LazyMotion` later if needed.
+- Chart deviates from the dataviz defaults on purpose: square bar ends and no hairline grid (DESIGN_SYSTEM.md forbids radius and 1px rules).
+- [x] Committed + pushed to `redesign/neo-brutalist` (user asked: no new branches).
+
 ## Open items for the club (not blocking)
 
 - `JoinUs.jsx` → `APPLY_URL` is still `'#'` (both "Join"/"Apply" buttons go nowhere until a form link is added).

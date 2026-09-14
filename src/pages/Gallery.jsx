@@ -1,5 +1,7 @@
 import { useState } from 'react'
+import { motion } from 'motion/react'
 import { PageHeader, Tabs } from '../components/kit'
+import { EASE, INK, Scramble, useReveal } from '../components/motion'
 import { blockNo, pad2 } from '../lib/chain'
 
 const allPhotos = [
@@ -19,13 +21,29 @@ const allPhotos = [
 
 const galleryCats = ['All', 'Workshops', 'Hackathons', 'Guest Sessions', 'Events', 'Team Moments', 'Club Activities']
 
-// Crossed frame = a reserved photo slot. Swap for an <img> once real photos are added.
-function FrameMark() {
+// Crossed frame = a reserved photo slot; the cross draws itself when scrolled into view.
+// Swap the <svg> for an <img> once real photos are added.
+function Frame({ id, index }) {
+  const [ref, active, canAnimate] = useReveal()
+  const draw = (delay) =>
+    canAnimate
+      ? {
+          initial: { pathLength: 0 },
+          animate: { pathLength: active ? 1 : 0 },
+          transition: { duration: 0.5, ease: EASE, delay: delay + (index % 4) * 0.08 },
+        }
+      : {}
+
   return (
-    <svg aria-hidden="true" className="absolute inset-0 h-full w-full">
-      <line x1="0" y1="0" x2="100%" y2="100%" stroke="#14110E" strokeWidth="3" />
-      <line x1="100%" y1="0" x2="0" y2="100%" stroke="#14110E" strokeWidth="3" />
-    </svg>
+    <div ref={ref} className="relative aspect-[4/3] border-b-3 border-ink">
+      <svg aria-hidden="true" className="absolute inset-0 h-full w-full">
+        <motion.line x1="0" y1="0" x2="100%" y2="100%" stroke={INK} strokeWidth="3" {...draw(0.1)} />
+        <motion.line x1="100%" y1="0" x2="0" y2="100%" stroke={INK} strokeWidth="3" {...draw(0.3)} />
+      </svg>
+      <span className="meta absolute left-0 top-0 border-b-3 border-r-3 border-ink bg-bone px-2 py-1 text-ink">
+        <Scramble text={blockNo(id)} delay={(index % 4) * 0.08} />
+      </span>
+    </div>
   )
 }
 
@@ -50,14 +68,9 @@ export default function Gallery() {
           <Tabs label="Filter photos by category" options={galleryCats} value={filter} onChange={setFilter} />
           <p className="meta mt-5">photos are being uploaded — each frame below is reserved for one.</p>
           <ul className="cells mt-8 grid grid-cols-1 min-[420px]:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-            {filtered.map((photo) => (
+            {filtered.map((photo, i) => (
               <li key={photo.id} className="flex flex-col bg-bone">
-                <div className="relative aspect-[4/3] border-b-3 border-ink">
-                  <FrameMark />
-                  <span className="meta absolute left-0 top-0 border-b-3 border-r-3 border-ink bg-bone px-2 py-1 text-ink">
-                    {blockNo(photo.id)}
-                  </span>
-                </div>
+                <Frame id={photo.id} index={i} />
                 <div className="p-4">
                   <h2 className="t-row">{photo.title}</h2>
                   <p className="meta mt-2">

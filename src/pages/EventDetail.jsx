@@ -1,12 +1,15 @@
 import { Link, useParams } from 'react-router-dom'
 import { Button, Chip, EmptyState, Ledger, LedgerRow } from '../components/kit'
+import { Magnetic, Scramble, SplitText, Wipe } from '../components/motion'
 import { getEventById } from '../data/events'
 import { blockNo, isRealLink, sealedDate, shortHash, stripEmoji } from '../lib/chain'
 
 function Block({ title, children }) {
   return (
     <section className="border-b-3 border-ink py-8 last:border-b-0 md:py-10">
-      <h2 className="t-h3 mb-6">{title}</h2>
+      <h2 className="t-h3 mb-6">
+        <SplitText text={title} trigger="view" />
+      </h2>
       {children}
     </section>
   )
@@ -40,9 +43,17 @@ export default function EventDetail() {
             ← back to events
           </Link>
           <p className="meta mt-8">
-            {blockNo(event.id)} · {shortHash(event.slug)} · {upcoming ? 'pending' : `sealed ${sealedDate(event.date)}`}
+            <Scramble
+              trigger="mount"
+              duration={1}
+              text={`${blockNo(event.id)} · ${shortHash(event.slug)} · ${
+                upcoming ? 'pending' : `sealed ${sealedDate(event.date)}`
+              }`}
+            />
           </p>
-          <h1 className="t-title t-title-fluid mt-4 max-w-[17ch]">{event.title}</h1>
+          <h1 className="t-title t-title-fluid mt-4 max-w-[17ch]">
+            <SplitText text={event.title} delay={0.15} />
+          </h1>
           <div className="mt-7 flex flex-wrap gap-2">
             <Chip tone={upcoming ? 'pending' : 'confirmed'}>{upcoming ? 'Upcoming' : 'Sealed'}</Chip>
             <Chip>{event.type}</Chip>
@@ -62,10 +73,12 @@ export default function EventDetail() {
           {event.highlights?.length > 0 && (
             <Block title="Highlights">
               <ul className="border-3 border-ink">
-                {event.highlights.map((h) => (
-                  <li key={h} className="t-small flex gap-4 border-t-3 border-ink px-4 py-3 first:border-t-0">
-                    <span aria-hidden="true" className="mt-[7px] h-2.5 w-2.5 shrink-0 bg-ink" />
-                    {h}
+                {event.highlights.map((h, i) => (
+                  <li key={h} className="t-small border-t-3 border-ink px-4 py-3 first:border-t-0">
+                    <Wipe delay={i * 0.06} className="flex gap-4">
+                      <span aria-hidden="true" className="mt-[7px] h-2.5 w-2.5 shrink-0 bg-ink" />
+                      {h}
+                    </Wipe>
                   </li>
                 ))}
               </ul>
@@ -74,10 +87,11 @@ export default function EventDetail() {
 
           {event.winners?.length > 0 && (
             <Block title="Winners">
-              <Ledger head={['place', 'team · project', 'prize', 'block']}>
+              <Ledger from="xl" head={['place', 'team · project', 'prize', 'block']}>
                 {event.winners.map((w, i) => (
                   <LedgerRow
                     key={w.team}
+                    index={i}
                     tone={i === 0 ? 'pending' : 'confirmed'}
                     date={stripEmoji(w.position)}
                     main={
@@ -127,7 +141,11 @@ export default function EventDetail() {
             </dl>
 
             {canRegister && (
-              <Button href={event.registrationLink} className="mt-7 w-full">Register now</Button>
+              <div className="mt-7">
+                <Magnetic className="block">
+                  <Button href={event.registrationLink} className="w-full">Register now</Button>
+                </Magnetic>
+              </div>
             )}
 
             {event.speakers?.length > 0 && (

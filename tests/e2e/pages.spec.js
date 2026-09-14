@@ -1,8 +1,10 @@
 import { test, expect } from '@playwright/test'
 import { metaFor, renderSeoTags, staticRoutes } from '../../src/seo.js'
+import { findOversizedHeadingWords, measureOverflow, overflowMessage } from './overflow.js'
 
 const routes = [...staticRoutes, '/this-page-does-not-exist']
 
+// Runs with reduced motion (playwright.config.js), i.e. against the settled, final layout.
 for (const route of routes) {
   test(`${route} fits the viewport and has its own title`, async ({ page }) => {
     await page.goto(route)
@@ -12,34 +14,10 @@ for (const route of routes) {
 
     await expect(page).toHaveTitle(metaFor(route).title)
 
-    const result = await page.evaluate(() => {
-      const viewport = document.documentElement.clientWidth
-      const offenders = []
-      for (const el of document.body.querySelectorAll('*')) {
-        const rect = el.getBoundingClientRect()
-        // scrollWidth also catches text spilling out of a normally sized box (long unbreakable words).
-        const right = Math.max(rect.right, rect.left + el.scrollWidth)
-        if (rect.width === 0 || right <= viewport + 1) continue
-        // Content inside an overflow-clipping ancestor (e.g. the header ticker) can't cause page scroll.
-        let clipped = false
-        for (let p = el.parentElement; p && p !== document.body; p = p.parentElement) {
-          if (getComputedStyle(p).overflowX !== 'visible') {
-            clipped = true
-            break
-          }
-        }
-        if (!clipped) {
-          const cls = typeof el.className === 'string' ? el.className.trim().split(/\s+/).slice(0, 4).join('.') : ''
-          offenders.push(`<${el.tagName.toLowerCase()}${cls ? ` .${cls}` : ''}> right edge ${Math.round(right)}px`)
-        }
-      }
-      return { viewport, scrollWidth: document.documentElement.scrollWidth, offenders: offenders.slice(0, 5) }
-    })
+    const result = await measureOverflow(page)
+    expect(result.scrollWidth, overflowMessage(route, result)).toBeLessThanOrEqual(result.viewport)
 
-    expect(
-      result.scrollWidth,
-      `${route} scrolls sideways (${result.scrollWidth}px > ${result.viewport}px). Widest elements:\n${result.offenders.join('\n')}`
-    ).toBeLessThanOrEqual(result.viewport)
+    expect(await findOversizedHeadingWords(page), `${route} has heading words wider than their column`).toEqual([])
   })
 }
 

@@ -25,9 +25,10 @@ export default function Resources() {
         <div className="wrap section">
           <Tabs label="Resource track" options={tabs} value={activeTab} onChange={setActiveTab} className="mb-8" />
           <Ledger head={['type', 'resource', 'source', 'link']}>
-            {resources[activeTab].map((r) => (
+            {resources[activeTab].map((r, i) => (
               <LedgerRow
                 key={r.url}
+                index={i}
                 href={r.url}
                 date={<Chip>{r.type}</Chip>}
                 main={

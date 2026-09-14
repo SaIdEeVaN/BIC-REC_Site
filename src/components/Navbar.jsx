@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react'
 import { Link, NavLink, useLocation } from 'react-router-dom'
+import { motion } from 'motion/react'
 import logo from '../assets/logo/BIC logo.jpeg'
 import { Ticker } from './kit'
+import { EASE, SNAP, ScrollProgress } from './motion'
 
 const links = [
   { to: '/', label: 'Home', end: true },
@@ -10,6 +12,11 @@ const links = [
   { to: '/gallery', label: 'Gallery' },
   { to: '/contact', label: 'Contact us' },
 ]
+
+// Desktop nav: one shared ink block slides to whichever item (or Join) is active.
+function ActiveFill() {
+  return <motion.span layoutId="nav-active" aria-hidden="true" className="absolute inset-0 bg-ink" transition={SNAP} />
+}
 
 export default function Navbar() {
   const { pathname } = useLocation()
@@ -44,12 +51,17 @@ export default function Navbar() {
                 to={link.to}
                 end={link.end}
                 className={({ isActive }) =>
-                  `flex items-center border-l-3 border-ink px-5 text-[14px] font-extrabold uppercase ${
-                    isActive ? 'bg-ink text-bone' : 'decoration-[3px] underline-offset-[6px] hover:underline'
+                  `relative flex items-center border-l-3 border-ink px-5 text-[14px] font-extrabold uppercase ${
+                    isActive ? 'text-bone' : 'decoration-[3px] underline-offset-[6px] hover:underline'
                   }`
                 }
               >
-                {link.label}
+                {({ isActive }) => (
+                  <>
+                    {isActive && <ActiveFill />}
+                    <span className="relative">{link.label}</span>
+                  </>
+                )}
               </NavLink>
             ))}
           </nav>
@@ -57,12 +69,17 @@ export default function Navbar() {
           <NavLink
             to="/join"
             className={({ isActive }) =>
-              `ml-auto flex items-center border-l-3 border-ink px-4 text-[14px] font-extrabold uppercase md:px-6 lg:ml-0 ${
-                isActive ? 'bg-ink text-bone' : 'bg-amber text-ink'
+              `relative ml-auto flex items-center border-l-3 border-ink bg-amber px-4 text-[14px] font-extrabold uppercase md:px-6 lg:ml-0 ${
+                isActive ? 'text-bone' : 'text-ink'
               }`
             }
           >
-            Join
+            {({ isActive }) => (
+              <>
+                {isActive && <ActiveFill />}
+                <span className="relative">Join</span>
+              </>
+            )}
           </NavLink>
 
           <button
@@ -82,21 +99,31 @@ export default function Navbar() {
           hidden={!open}
           className="absolute inset-x-0 top-full border-b-3 border-ink bg-bone lg:hidden"
         >
-          {links.map((link) => (
-            <NavLink
-              key={link.to}
-              to={link.to}
-              end={link.end}
-              className={({ isActive }) =>
-                `block border-b-3 border-ink px-4 py-4 text-[24px] font-black uppercase tracking-[-.03em] last:border-b-0 ${
-                  isActive ? 'bg-ink text-bone' : ''
-                }`
-              }
-            >
-              {link.label}
-            </NavLink>
-          ))}
+          {open &&
+            links.map((link, i) => (
+              <div key={link.to} className="overflow-hidden border-b-3 border-ink last:border-b-0">
+                <motion.div
+                  initial={{ x: '-100%' }}
+                  animate={{ x: '0%' }}
+                  transition={{ duration: 0.45, ease: EASE, delay: i * 0.05 }}
+                >
+                  <NavLink
+                    to={link.to}
+                    end={link.end}
+                    className={({ isActive }) =>
+                      `block px-4 py-4 text-[24px] font-black uppercase tracking-[-.03em] ${
+                        isActive ? 'bg-ink text-bone' : 'bg-bone'
+                      }`
+                    }
+                  >
+                    {link.label}
+                  </NavLink>
+                </motion.div>
+              </div>
+            ))}
         </nav>
+
+        <ScrollProgress />
       </header>
     </>
   )

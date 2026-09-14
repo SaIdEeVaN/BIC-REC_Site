@@ -101,6 +101,22 @@ npm run og-image  # Re-render public/og-image.png from scripts/og-image.html
 
 > First time running the Playwright tests? Install the browser once: `npx playwright install chromium`
 
+### Motion
+
+Animation uses [Motion](https://motion.dev) (`motion/react`) through a small kit in [`src/components/motion/`](src/components/motion/). It follows the design system: blocks shunt, slam, draw and decrypt — nothing fades or blurs.
+
+| Primitive | What it does |
+|---|---|
+| `SplitText` | Words/characters shunt up out of clipped slots (headings) |
+| `Wipe` | Content "unseals" from under a solid block |
+| `Slam` | A card drops from a long hard shadow onto its resting shadow |
+| `Scramble` | Mono text decrypts through hex glyphs (hashes, block numbers) |
+| `CountUp` / `Typewriter` | Number ticker / typed text with a hard block caret |
+| `Magnetic` | Buttons lean toward the mouse pointer |
+| `ScrollProgress` / `RouteShutter` | Amber scroll bar in the header / ink shutter on page change |
+
+Everything respects the OS "reduce motion" setting (`MotionConfig reducedMotion="user"` plus `useCanAnimate()`), which renders the final state immediately. Scroll-triggered animations must observe an element that isn't clipped at rest — see `useReveal` in `core.js`.
+
 ### Page titles & share previews
 
 Titles and descriptions for every route live in [`src/seo.js`](src/seo.js). The app updates the tab title as you navigate, and `npm run build` writes a separate HTML file per route (e.g. `dist/events/2.html`) so link previews on WhatsApp, LinkedIn, etc. show the right page. Firebase serves those files via `cleanUrls` in `firebase.json`. New events in `src/data/events.js` are picked up automatically.

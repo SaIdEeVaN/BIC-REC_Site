@@ -1,5 +1,7 @@
 import { useState } from 'react'
 import { Button, Chip, EmptyState, InkCTA, PageHeader, Tabs } from '../components/kit'
+import { Scramble, SplitText } from '../components/motion'
+import StackChart from '../components/StackChart'
 import { projects, projectCategories } from '../data/projects'
 import { blockNo, isRealLink, pad2, shortHash, stripEmoji } from '../lib/chain'
 
@@ -14,12 +16,14 @@ function BuildRow({ project }) {
   ].filter(([, href]) => isRealLink(href))
 
   return (
-    <li className="grid border-t-3 border-ink first:border-t-0 md:grid-cols-[1fr_300px]">
-      <div className="py-7 md:py-9 md:pr-10">
+    <li className="grid border-t-3 border-ink first:border-t-0 lg:grid-cols-[1fr_300px]">
+      <div className="py-7 md:py-9 lg:pr-10">
         <p className="meta">
           {blockNo(project.id)} · {project.category}
         </p>
-        <h2 className="t-h2 mt-3">{project.name}</h2>
+        <h2 className="t-h2 mt-3">
+          <SplitText text={project.name} trigger="view" />
+        </h2>
         <p className="t-lead mt-3 font-bold">{project.tagline}</p>
         <p className="t-small mt-5 max-w-[68ch]">
           <span className="mr-2 font-mono text-[12px] font-medium">problem:</span>
@@ -35,7 +39,7 @@ function BuildRow({ project }) {
         </ul>
       </div>
 
-      <div className="flex flex-col gap-6 border-t-3 border-ink py-7 md:border-l-3 md:border-t-0 md:py-9 md:pl-8">
+      <div className="flex flex-col gap-6 border-t-3 border-ink py-7 md:py-9 lg:border-l-3 lg:border-t-0 lg:pl-8">
         <Chip tone={live ? 'shipped' : 'pending'} className="self-start">
           {live ? 'Shipped' : 'Building'}
         </Chip>
@@ -63,7 +67,9 @@ function BuildRow({ project }) {
             ))}
           </div>
         )}
-        <p className="meta mt-auto">{shortHash(project.name)}</p>
+        <p className="meta mt-auto">
+          <Scramble text={shortHash(project.name)} />
+        </p>
       </div>
     </li>
   )
@@ -91,11 +97,14 @@ export default function Projects() {
         <div className="wrap section">
           <Tabs label="Filter projects by category" options={categories} value={filter} onChange={setFilter} className="mb-8" />
           {filtered.length > 0 ? (
-            <ul className="border-y-3 border-ink">
-              {filtered.map((project) => (
-                <BuildRow key={project.id} project={project} />
-              ))}
-            </ul>
+            <>
+              <StackChart projects={filtered} />
+              <ul className="mt-12 border-y-3 border-ink">
+                {filtered.map((project) => (
+                  <BuildRow key={project.id} project={project} />
+                ))}
+              </ul>
+            </>
           ) : (
             <EmptyState
               title="Nothing built here yet"

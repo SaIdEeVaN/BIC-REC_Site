@@ -1,17 +1,21 @@
 import { Chip, LedgerRow } from './kit'
+import { Scramble } from './motion'
 import { blockNo, shortHash } from '../lib/chain'
 
-export default function EventRow({ event }) {
+export default function EventRow({ event, index = 0 }) {
   const upcoming = event.status === 'upcoming'
 
   return (
     <LedgerRow
       to={`/events/${event.id}`}
       tone={upcoming ? 'pending' : 'confirmed'}
+      index={index}
       date={
         <>
           <span className="block">{event.date}</span>
-          <span className="meta mt-1 block">{blockNo(event.id)}</span>
+          <span className="meta mt-1 block">
+            <Scramble text={blockNo(event.id)} delay={index * 0.07 + 0.2} />
+          </span>
         </>
       }
       main={
@@ -28,8 +32,13 @@ export default function EventRow({ event }) {
       }
       status={
         <>
-          <span className="block">{upcoming ? 'Upcoming' : 'Sealed'}</span>
-          <span className={`meta mt-2 block ${upcoming ? 'text-ink' : ''}`}>{shortHash(event.slug)}</span>
+          <span className="block">
+            {upcoming && <span aria-hidden="true" className="blink mr-2 inline-block h-2 w-2 bg-ink align-middle" />}
+            {upcoming ? 'Upcoming' : 'Sealed'}
+          </span>
+          <span className={`meta mt-2 block ${upcoming ? 'text-ink' : ''}`}>
+            <Scramble text={shortHash(event.slug)} delay={index * 0.07 + 0.3} />
+          </span>
         </>
       }
     />

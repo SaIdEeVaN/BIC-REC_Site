@@ -1,5 +1,7 @@
 import { useState } from 'react'
+import { motion } from 'motion/react'
 import { Button, Chip, PageHeader } from '../components/kit'
+import { SLAM, Slam, SplitText, useCanAnimate } from '../components/motion'
 
 const EMPTY = { name: '', email: '', subject: '', message: '' }
 
@@ -27,6 +29,7 @@ function Field({ label, as: Tag = 'input', ...props }) {
 export default function Contact() {
   const [form, setForm] = useState(EMPTY)
   const [submitted, setSubmitted] = useState(false)
+  const canAnimate = useCanAnimate()
 
   const handleChange = (e) => setForm((f) => ({ ...f, [e.target.name]: e.target.value }))
 
@@ -77,7 +80,9 @@ export default function Contact() {
                     {...(s.href.startsWith('http') ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
                     className="group flex flex-col gap-1 py-5"
                   >
-                    <span className="t-card decoration-[3px] underline-offset-[5px] group-hover:underline">{s.label}</span>
+                    <span className="t-card decoration-[3px] underline-offset-[5px] group-hover:underline">
+                      <SplitText text={s.label} trigger="view" />
+                    </span>
                     <span className="meta break-all">{s.handle}</span>
                   </a>
                 </li>
@@ -85,11 +90,20 @@ export default function Contact() {
             </ul>
           </div>
 
-          <div className="border-3 border-ink bg-bone p-6 shadow-ink md:p-8">
+          <Slam className="border-3 border-ink bg-bone p-6 shadow-ink md:p-8">
             {submitted ? (
               <div role="status">
-                <Chip tone="confirmed">Confirmed</Chip>
-                <h2 className="t-h3 mt-5">Message sent</h2>
+                <motion.span
+                  className="inline-block"
+                  initial={canAnimate ? { scale: 1.8, rotate: -8 } : false}
+                  animate={{ scale: 1, rotate: 0 }}
+                  transition={SLAM}
+                >
+                  <Chip tone="confirmed">Confirmed</Chip>
+                </motion.span>
+                <h2 className="t-h3 mt-5">
+                  <SplitText text="Message sent" delay={0.15} />
+                </h2>
                 <p className="t-body mt-3">Thanks for reaching out! We&apos;ll get back to you within 48 hours.</p>
                 <Button
                   variant="bone"
@@ -130,7 +144,7 @@ export default function Contact() {
                 <Button type="submit" className="mt-2 w-full">Send message</Button>
               </form>
             )}
-          </div>
+          </Slam>
         </div>
       </section>
     </>
