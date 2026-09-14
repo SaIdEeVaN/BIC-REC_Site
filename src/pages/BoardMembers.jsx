@@ -1,7 +1,8 @@
 import { PageHeader, SectionHeading } from '../components/kit'
-import MemberCell, { initials } from '../components/MemberCell'
+import MemberCell from '../components/MemberCell'
 import { boardMembers } from '../data/members'
 import { pad2 } from '../lib/chain'
+import { initials } from '../lib/initials'
 
 const facultyCoord = boardMembers.find((m) => m.role === 'Faculty Coordinator')
 const boardOnly = boardMembers.filter((m) => m.role !== 'Faculty Coordinator')

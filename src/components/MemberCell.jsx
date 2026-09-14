@@ -1,12 +1,5 @@
 import { blockNo, isRealLink } from '../lib/chain'
-
-export const initials = (name) =>
-  name
-    .replace(/^Dr\.\s*/, '')
-    .split(' ')
-    .map((part) => part[0])
-    .join('')
-    .slice(0, 2)
+import { initials } from '../lib/initials'
 
 // One cell in a `.cells` grid.
 export default function MemberCell({ member, index }) {

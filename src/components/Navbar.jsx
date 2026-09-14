@@ -12,14 +12,14 @@ const links = [
 ]
 
 export default function Navbar() {
-  const [open, setOpen] = useState(false)
   const { pathname } = useLocation()
-
-  useEffect(() => { setOpen(false) }, [pathname])
+  // The menu remembers the page it was opened on, so navigating anywhere closes it without an effect.
+  const [openOn, setOpenOn] = useState(null)
+  const open = openOn === pathname
 
   useEffect(() => {
     if (!open) return
-    const onKey = (e) => { if (e.key === 'Escape') setOpen(false) }
+    const onKey = (e) => { if (e.key === 'Escape') setOpenOn(null) }
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
   }, [open])
@@ -70,7 +70,7 @@ export default function Navbar() {
             className="flex w-[84px] items-center justify-center border-l-3 border-ink text-[14px] font-extrabold uppercase lg:hidden"
             aria-expanded={open}
             aria-controls="mobile-nav"
-            onClick={() => setOpen((o) => !o)}
+            onClick={() => setOpenOn(open ? null : pathname)}
           >
             {open ? 'Close' : 'Menu'}
           </button>

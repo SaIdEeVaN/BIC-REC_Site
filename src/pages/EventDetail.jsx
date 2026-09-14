@@ -42,7 +42,7 @@ export default function EventDetail() {
           <p className="meta mt-8">
             {blockNo(event.id)} · {shortHash(event.slug)} · {upcoming ? 'pending' : `sealed ${sealedDate(event.date)}`}
           </p>
-          <h1 className="t-title mt-4 max-w-[17ch]">{event.title}</h1>
+          <h1 className="t-title t-title-fluid mt-4 max-w-[17ch]">{event.title}</h1>
           <div className="mt-7 flex flex-wrap gap-2">
             <Chip tone={upcoming ? 'pending' : 'confirmed'}>{upcoming ? 'Upcoming' : 'Sealed'}</Chip>
             <Chip>{event.type}</Chip>

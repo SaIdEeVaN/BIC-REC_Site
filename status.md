@@ -25,6 +25,23 @@ Started: 2026-09-14
 - [x] 17a. Update README
 - [x] 17b. Commit + push branch `redesign/neo-brutalist` to origin
 
+---
+
+# Task 2 — Technical polish (started 2026-09-14, same branch)
+
+## To-do
+
+- [x] 1. Per-page tab titles + descriptions at runtime (`src/seo.js` + `RouteEffects` in App)
+- [x] 2. Share previews: build step writes one HTML file per route with its own share tags (`scripts/prerender-meta.js`, 18 routes), Firebase `cleanUrls` + `trailingSlash: false`
+- [x] 3. Share image 1200×630 in the new style (`scripts/og-image.html` → `public/og-image.png`)
+- [x] 4. Route-level code splitting — main bundle 252 KB → 212 KB, each page its own 0.3–7 KB chunk
+- [x] 5. ESLint flat config (ESLint 10, react-hooks 7, react-refresh) + `npm run lint` passing. Fixed: `initials` moved to `src/lib/initials.js`; Navbar menu no longer calls setState in an effect
+- [x] 6. Playwright test (`tests/e2e/pages.spec.js`): 75 passed. It caught a real bug — `/events/3` title ("CRYPTOCURRENCY") scrolled sideways on phones → headings now hyphenate/break long words
+- [x] 7. Run everything (lint 0 errors, build, 75/75 e2e passed), README "Available scripts" + "Page titles & share previews" updated
+  - Follow-up fix: event titles use `.t-title-fluid` on phones (34px @390, 32px @360, 76px desktop) so long words fit whole instead of breaking mid-word
+  - Not verified locally: Firebase `cleanUrls` serving (no emulator) — check `/events/2` share preview after the next deploy
+- [x] 8. Commit + push to `redesign/neo-brutalist`
+
 ## Open items for the club (not blocking)
 
 - `JoinUs.jsx` → `APPLY_URL` is still `'#'` (both "Join"/"Apply" buttons go nowhere until a form link is added).

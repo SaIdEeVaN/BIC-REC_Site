@@ -92,9 +92,18 @@ The site will be available at **http://localhost:5173**
 
 ```bash
 npm run dev       # Start dev server with hot reload
-npm run build     # Build for production (outputs to /dist)
+npm run build     # Build for production (outputs to /dist) + write per-page share tags
 npm run preview   # Preview the production build locally
+npm run lint      # ESLint
+npm run test:e2e  # Playwright: every page at 360/390/1280px — no sideways scroll, correct title + share tags
+npm run og-image  # Re-render public/og-image.png from scripts/og-image.html
 ```
+
+> First time running the Playwright tests? Install the browser once: `npx playwright install chromium`
+
+### Page titles & share previews
+
+Titles and descriptions for every route live in [`src/seo.js`](src/seo.js). The app updates the tab title as you navigate, and `npm run build` writes a separate HTML file per route (e.g. `dist/events/2.html`) so link previews on WhatsApp, LinkedIn, etc. show the right page. Firebase serves those files via `cleanUrls` in `firebase.json`. New events in `src/data/events.js` are picked up automatically.
 
 ---
 
