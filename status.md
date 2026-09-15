@@ -152,3 +152,26 @@ User asked for more animations. Everything already animated once on entrance; wh
 - Drift, bands and reshuffles all respect reduced motion (`useCanAnimate()` gates style-driven transforms, which `MotionConfig` alone doesn't stop).
 - `Marquee` only runs its frame loop while in view. Tests must not use `scrollIntoViewIfNeeded` on the moving `.t-band` itself — scroll its parent strip.
 - Gallery / Core members grids use `AnimatePresence mode="popLayout"`, so their direct children must forward refs (`LiftCell`, `MemberCell`).
+- User said commit + push → committed as a12710a on `main`
+
+---
+
+# Task 8 — Board for the next tenure (started 2026-09-15, branch `main`)
+
+Source: `bic-board-next-tenure.md` from the user (names and roles only — no departments, years, bios or links).
+
+## To-do
+
+- [x] 1. `src/data/members.js`: placeholder `boardMembers` replaced by `facultyCoordinators` (2) and `boardGroups` (9 groups, 26 people; a seat with two names becomes two cards)
+- [x] 2. Board page: both coordinators in the ink panel; the board grouped under its published headings (Core board → Media) with seat counts; block numbers run on across groups
+- [x] 3. `MemberCell`: department/year line only when present; `heading` prop so names sit under group headings
+- [x] 4. Home "faculty coordinators" panel shows the new coordinators and links to the board (the old coordinator's email is gone)
+- [x] 5. User sent the coordinators' emails mid-task → mailto links under each coordinator on the board page and on Home
+- [x] 6. Lint 0 errors; full Playwright run caught a real bug — coordinator names (MUNEESHWARI) broke mid-word beside the initials block at 360 and 768 → initials stack above the name on phones, coordinators side by side only from xl. Re-run: 171 passed. Screenshots at 1280 / 390: 26 cards in 9 groups, no sideways scroll
+- [x] 7. Committed + pushed to `main` (user asked)
+
+## Open items for the club
+
+- Departments, years, bios and LinkedIn links for the new board — add them per member in `src/data/members.js`.
+- Core members page (`coreMembers`) still lists the old placeholder team; the tenure file didn't cover it.
+- Name/email mismatch to confirm: "Dr. Muneeshwari R" (tenure file) vs `muneeshwari.p@rajalakshmi.edu.in` (user) — both kept as given.

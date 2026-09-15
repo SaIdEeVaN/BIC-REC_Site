@@ -5,6 +5,7 @@ import { Button, ChainRail, Chip, InkCTA, Ledger, SectionHeading, StatBar, Track
 import { EASE, Magnetic, Marquee, Scramble, Slam, SplitText, Typewriter, Wipe, useCanAnimate } from '../components/motion'
 import EventRow from '../components/EventRow'
 import { events, getFeaturedEvents, getUpcomingEvents } from '../data/events'
+import { facultyCoordinators } from '../data/members'
 import { blockNo, shortHash } from '../lib/chain'
 
 const stats = [
@@ -192,14 +193,26 @@ export default function Home() {
         body="Join the Blockchain Innovation Club and unlock a global community of Web3 professionals, resources, and opportunities."
         aside={
           <div className="border-3 border-bone p-6">
-            <p className="meta">faculty coordinator</p>
-            <p className="t-card mt-3">Dr. N. Duraimurugan</p>
-            <a
-              href="mailto:duraimurugan.n@rajalakshmi.edu.in"
-              className="mt-3 inline-block break-all font-mono text-[12.5px] underline decoration-2 underline-offset-4"
+            <p className="meta">faculty coordinators</p>
+            <ul className="mt-3 flex flex-col gap-4">
+              {facultyCoordinators.map((coordinator) => (
+                <li key={coordinator.name}>
+                  <p className="t-card">{coordinator.name}</p>
+                  <a
+                    href={`mailto:${coordinator.email}`}
+                    className="mt-1 inline-block break-all font-mono text-[12.5px] underline decoration-2 underline-offset-4"
+                  >
+                    {coordinator.email}
+                  </a>
+                </li>
+              ))}
+            </ul>
+            <Link
+              to="/team/board"
+              className="mt-4 inline-block font-mono text-[12.5px] underline decoration-2 underline-offset-4"
             >
-              duraimurugan.n@rajalakshmi.edu.in
-            </a>
+              meet the board →
+            </Link>
           </div>
         }
       >
