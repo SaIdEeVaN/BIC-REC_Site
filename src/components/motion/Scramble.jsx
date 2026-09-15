@@ -6,15 +6,21 @@ const GLYPHS = '0123456789abcdef'
 const KEEP = new Set([' ', '·', '#', '.', '…', '/', '-', ':', '&'])
 
 // Decrypt effect for mono metadata: characters cycle through hex glyphs and lock in left to right.
-export default function Scramble({ text, duration = 0.8, delay = 0, trigger = 'view', className = '' }) {
+// `replay`: bump the number to decrypt again straight away (e.g. when the card holding it is hovered).
+export default function Scramble({ text, duration = 0.8, delay = 0, trigger = 'view', replay = 0, className = '' }) {
   const [ref, active, canAnimate] = useReveal({ trigger })
   const [progress, setProgress] = useState(canAnimate ? 0 : 1)
 
   useEffect(() => {
     if (!canAnimate || !active) return
-    const controls = animate(0, 1, { duration, delay, ease: 'linear', onUpdate: (v) => setProgress(v) })
+    const controls = animate(0, 1, {
+      duration,
+      delay: replay ? 0 : delay,
+      ease: 'linear',
+      onUpdate: (v) => setProgress(v),
+    })
     return () => controls.stop()
-  }, [canAnimate, active, duration, delay])
+  }, [canAnimate, active, duration, delay, replay])
 
   const chars = Array.from(text)
   const locked = Math.floor(progress * chars.length)

@@ -1,4 +1,5 @@
 import { Button, Chip, InkCTA, PageHeader, SectionHeading, TrackCards } from '../components/kit'
+import { LiftCell, Marquee, Stamp } from '../components/motion'
 
 // Until the club has an application form, both buttons open the contact form with the subject filled in.
 // When a form exists, point both buttons at its link with `href` instead of `to`.
@@ -12,6 +13,8 @@ const whyJoin = [
   { title: 'Network with industry', body: 'Connect with professionals from Kerala Blockchain Association, Web3 companies, and beyond.' },
   { title: 'Develop leadership', body: 'Take on roles in the club team, lead events, and grow as a leader in the tech community.' },
 ]
+
+const BAND_WORDS = ['Builders', 'Organizers', 'Creatives', 'Communicators', 'Writers']
 
 const openRoles = [
   { team: 'Technical Team', skills: ['Solidity', 'React', 'Web3'] },
@@ -40,21 +43,25 @@ export default function JoinUs() {
         </div>
       </section>
 
+      <Marquee words={BAND_WORDS} />
+
       <section>
         <div className="wrap section">
           <SectionHeading eyebrow="positions open" title="Find your team" />
           <ul className="cells grid sm:grid-cols-2 lg:grid-cols-3">
             {openRoles.map((role) => (
-              <li key={role.team} className="bg-bone p-6">
+              <LiftCell key={role.team} className="bg-bone p-6">
                 <h3 className="t-card">{role.team}</h3>
                 <ul className="mt-5 flex flex-wrap gap-2" aria-label="Skills">
-                  {role.skills.map((skill) => (
+                  {role.skills.map((skill, i) => (
                     <li key={skill}>
-                      <Chip lower>{skill}</Chip>
+                      <Stamp delay={0.1 + i * 0.08}>
+                        <Chip lower>{skill}</Chip>
+                      </Stamp>
                     </li>
                   ))}
                 </ul>
-              </li>
+              </LiftCell>
             ))}
           </ul>
         </div>

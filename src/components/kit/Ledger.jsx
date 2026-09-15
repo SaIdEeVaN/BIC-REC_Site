@@ -7,7 +7,8 @@ import { EASE, RevealContext, useReveal } from '../motion/core'
 // Below the breakpoint each row folds to: [date | status] / main / side.
 // The fixed columns take ~530px, so the four-column layout needs ~930px of the ledger's own width:
 // `from="lg"` for full-width ledgers, `from="xl"` for a ledger inside a narrower column.
-// Animated: each row "prints" left to right out of the ink as it scrolls in.
+// Animated: each row "prints" left to right out of the ink as it scrolls in; hovering a linked row sweeps ink
+// across its first cell (.row-sweep in index.css).
 const LAYOUTS = {
   lg: {
     grid: 'lg:grid-cols-[150px_1fr_210px_160px]',
@@ -71,7 +72,7 @@ export function LedgerRow({ to, href, date, main, side, status, tone = 'confirme
 
   const cells = (
     <>
-      <div className={`${CELL} order-1 font-mono text-[12.5px] font-medium`}>{date}</div>
+      <div className={`${CELL} row-sweep order-1 font-mono text-[12.5px] font-medium`}>{date}</div>
       <div
         className={`${STATUS_TONE[tone]} order-2 p-4 font-mono text-[12.5px] font-medium uppercase md:p-5 ${layout.status}`}
       >

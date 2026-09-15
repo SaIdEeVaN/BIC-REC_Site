@@ -1,8 +1,7 @@
 import { useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
-import { motion } from 'motion/react'
 import { Button, Chip, PageHeader } from '../components/kit'
-import { SLAM, Slam, SplitText, useCanAnimate } from '../components/motion'
+import { LiftCell, Slam, SplitText, Stamp } from '../components/motion'
 
 const CLUB_EMAIL = 'kbaclub@rajalakshmil.edu.in'
 const EMPTY = { name: '', email: '', subject: '', message: '' }
@@ -39,7 +38,6 @@ export default function Contact() {
   // Links like /contact?subject=Membership%20application pre-fill the subject.
   const [form, setForm] = useState(() => ({ ...EMPTY, subject: searchParams.get('subject') ?? '' }))
   const [submitted, setSubmitted] = useState(false)
-  const canAnimate = useCanAnimate()
 
   const handleChange = (e) => setForm((f) => ({ ...f, [e.target.name]: e.target.value }))
 
@@ -61,7 +59,7 @@ export default function Contact() {
         <div className="wrap section">
           <ul className="cells grid md:grid-cols-3">
             {contactInfo.map((c) => (
-              <li key={c.label} className="bg-bone p-5 md:p-6">
+              <LiftCell key={c.label} className="bg-bone p-5 md:p-6">
                 <p className="meta">{c.label}</p>
                 {c.href ? (
                   <a
@@ -73,7 +71,7 @@ export default function Contact() {
                 ) : (
                   <p className="mt-2 text-[16px] font-bold">{c.value}</p>
                 )}
-              </li>
+              </LiftCell>
             ))}
           </ul>
         </div>
@@ -104,14 +102,9 @@ export default function Contact() {
           <Slam className="border-3 border-ink bg-bone p-6 shadow-ink md:p-8">
             {submitted ? (
               <div role="status">
-                <motion.span
-                  className="inline-block"
-                  initial={canAnimate ? { scale: 1.8, rotate: -8 } : false}
-                  animate={{ scale: 1, rotate: 0 }}
-                  transition={SLAM}
-                >
+                <Stamp trigger="mount">
                   <Chip tone="pending">Drafted</Chip>
-                </motion.span>
+                </Stamp>
                 <h2 className="t-h3 mt-5">
                   <SplitText text="Check your email app" delay={0.15} />
                 </h2>

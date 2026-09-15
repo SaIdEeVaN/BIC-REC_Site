@@ -114,6 +114,12 @@ Animation uses [Motion](https://motion.dev) (`motion/react`) through a small kit
 | `CountUp` / `Typewriter` | Number ticker / typed text with a hard block caret |
 | `Magnetic` | Buttons lean toward the mouse pointer |
 | `ScrollProgress` / `RouteShutter` | Amber scroll bar in the header / ink shutter on page change |
+| `Stamp` | Chips and statuses are stamped onto the page, oversized and askew |
+| `LiftCell` | Grid cells are picked up onto a hard shadow on hover; with `shuffle`, filtered grids reflow cell by cell |
+| `Marquee` | Huge caps band that runs sideways, speeds up as you scroll down and reverses when you scroll up |
+| `Roll` | Button, nav and footer labels roll to a fresh copy on hover (CSS, `.roll` in `index.css`) |
+
+Hover motion that needs no JavaScript lives in `src/index.css`: label roll, the ink sweep on linked ledger rows, the rising fill on ghost buttons and footer socials, the header logo lift and the form-field focus lift.
 
 Everything respects the OS "reduce motion" setting (`MotionConfig reducedMotion="user"` plus `useCanAnimate()`), which renders the final state immediately. Scroll-triggered animations must observe an element that isn't clipped at rest — see `useReveal` in `core.js`.
 

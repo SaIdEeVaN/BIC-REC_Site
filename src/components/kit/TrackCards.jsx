@@ -1,4 +1,4 @@
-import { Fragment } from 'react'
+import { Fragment, useState } from 'react'
 import { motion } from 'motion/react'
 import { blockNo } from '../../lib/chain'
 import { EASE, Scramble, Slam, useReveal } from '../motion'
@@ -21,6 +21,28 @@ function Connector({ delay }) {
   )
 }
 
+// Hovering a card picks the block up off the page and re-decrypts its block number.
+function TrackCard({ item, eyebrow, delay }) {
+  const [replay, setReplay] = useState(0)
+
+  return (
+    <Slam
+      as="article"
+      size={6}
+      delay={delay}
+      hover
+      onHoverStart={() => setReplay((n) => n + 1)}
+      className="min-w-0 flex-1 border-3 border-ink bg-bone p-6 shadow-ink-5 lg:shadow-ink-6"
+    >
+      <p className="meta mb-5">
+        <Scramble text={eyebrow} delay={delay + 0.15} replay={replay} />
+      </p>
+      <h3 className="t-card mb-3">{item.title}</h3>
+      <p className="t-small">{item.body}</p>
+    </Slam>
+  )
+}
+
 // Cards in a row joined by literal 36px x 3px connector bars. The last card overall is the head.
 export default function TrackCards({ items, perRow = 3 }) {
   const rows = []
@@ -37,18 +59,11 @@ export default function TrackCards({ items, perRow = 3 }) {
             return (
               <Fragment key={item.title}>
                 {j > 0 && <Connector delay={delay - 0.08} />}
-                <Slam
-                  as="article"
-                  size={6}
+                <TrackCard
+                  item={item}
                   delay={delay}
-                  className="min-w-0 flex-1 border-3 border-ink bg-bone p-6 shadow-ink-5 lg:shadow-ink-6"
-                >
-                  <p className="meta mb-5">
-                    <Scramble text={`${blockNo(index + 1)}${index === last ? ' · head' : ''}`} delay={delay + 0.15} />
-                  </p>
-                  <h3 className="t-card mb-3">{item.title}</h3>
-                  <p className="t-small">{item.body}</p>
-                </Slam>
+                  eyebrow={`${blockNo(index + 1)}${index === last ? ' · head' : ''}`}
+                />
               </Fragment>
             )
           })}

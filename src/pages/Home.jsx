@@ -1,7 +1,8 @@
+import { useRef } from 'react'
 import { Link } from 'react-router-dom'
-import { motion } from 'motion/react'
+import { motion, useScroll, useTransform } from 'motion/react'
 import { Button, ChainRail, Chip, InkCTA, Ledger, SectionHeading, StatBar, TrackCards } from '../components/kit'
-import { EASE, Magnetic, Scramble, Slam, SplitText, Typewriter, Wipe, useCanAnimate } from '../components/motion'
+import { EASE, Magnetic, Marquee, Scramble, Slam, SplitText, Typewriter, Wipe, useCanAnimate } from '../components/motion'
 import EventRow from '../components/EventRow'
 import { events, getFeaturedEvents, getUpcomingEvents } from '../data/events'
 import { blockNo, shortHash } from '../lib/chain'
@@ -20,11 +21,24 @@ const pillars = [
 ]
 
 const HERO_WORDS = ['Build.', 'Innovate.', 'Decentralize.']
+const BAND_WORDS = ['Workshops', 'Hackathons', 'Guest lectures', 'Live projects']
 
 const INSTAGRAM = 'https://www.instagram.com/bic.rec?utm_source=ig_web_button_share_sheet&igsi=ZDNlZDc0MzIxNw=='
 
 // Hero load sequence (seconds): eyebrow types 0 → words shunt up .15–.6 → lead unseals .7 →
 // buttons drop .9 → next-event card slams 1.05 → chain draws and a packet starts travelling.
+// Scrolling away, the hero lines drift apart.
+
+// Alternate hero lines slide left and right as the hero scrolls out, past the section's clipped edge.
+function DriftLine({ progress, direction, children }) {
+  const canAnimate = useCanAnimate()
+  const x = useTransform(progress, [0, 1], [0, direction * 140])
+  return (
+    <motion.span className="block" style={canAnimate ? { x } : undefined}>
+      {children}
+    </motion.span>
+  )
+}
 
 function Drop({ delay, children }) {
   const canAnimate = useCanAnimate()
@@ -93,19 +107,22 @@ function NoUpcomingEvent() {
 export default function Home() {
   const featured = getFeaturedEvents()
   const next = getUpcomingEvents()[0]
+  const heroRef = useRef(null)
+  const { scrollYProgress } = useScroll({ target: heroRef, offset: ['start start', 'end start'] })
 
   return (
     <>
-      <section className="border-b-3 border-ink">
+      {/* overflow-x-clip: drifting hero lines slide past the page edge without making the page scroll sideways. */}
+      <section ref={heroRef} className="overflow-x-clip border-b-3 border-ink">
         <div className="wrap pb-8 pt-8 md:pb-12 md:pt-14">
           <p className="meta mb-6">
             <Typewriter text="rajalakshmi engineering college · blockchain student chapter" speed={0.02} />
           </p>
           <h1 className="t-hero">
             {HERO_WORDS.map((word, i) => (
-              <span key={word} className="block">
+              <DriftLine key={word} progress={scrollYProgress} direction={i % 2 ? 1 : -1}>
                 <SplitText text={word} delay={0.15 + i * 0.13} />
-              </span>
+              </DriftLine>
             ))}
           </h1>
           <div className="mt-9 grid gap-10 lg:grid-cols-[1fr_340px] lg:items-end">
@@ -148,6 +165,8 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      <Marquee words={BAND_WORDS} />
 
       <section>
         <div className="wrap section">

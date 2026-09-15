@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 import { sealedDate, shortHash } from '../lib/chain'
-import { SplitText } from './motion'
+import { Roll, Scramble, SplitText } from './motion'
 
 const quickLinks = [
   { name: 'Home', path: '/' },
@@ -24,7 +24,7 @@ const socialLinks = [
   { label: 'Email', href: 'mailto:kbaclub@rajalakshmil.edu.in' },
 ]
 
-const linkClass = 'text-[15px] font-extrabold uppercase decoration-[3px] underline-offset-[5px] hover:underline'
+const linkClass = 'roll-host text-[15px] font-extrabold uppercase'
 
 function FooterNav({ title, links, children }) {
   return (
@@ -33,7 +33,9 @@ function FooterNav({ title, links, children }) {
       <ul className="mt-4 flex flex-col gap-2.5">
         {links.map((l) => (
           <li key={l.path}>
-            <Link to={l.path} className={linkClass}>{l.name}</Link>
+            <Link to={l.path} className={linkClass}>
+              <Roll>{l.name}</Roll>
+            </Link>
           </li>
         ))}
         {children && <li>{children}</li>}
@@ -60,7 +62,7 @@ export default function Footer() {
                 <a
                   href={s.href}
                   {...(s.href.startsWith('http') ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
-                  className="block border-3 border-bone px-3 py-2 text-[13.5px] font-extrabold uppercase hover:bg-bone hover:text-ink"
+                  className="fill-up block border-3 border-bone px-3 py-2 text-[13.5px] font-extrabold uppercase"
                 >
                   {s.label}
                 </a>
@@ -71,14 +73,18 @@ export default function Footer() {
 
         <FooterNav title="quick links" links={quickLinks} />
         <FooterNav title="explore" links={moreLinks}>
-          <Link to="/join" className={`${linkClass} text-amber`}>Join the club</Link>
+          <Link to="/join" className={`${linkClass} text-amber`}>
+            <Roll>Join the club</Roll>
+          </Link>
         </FooterNav>
       </div>
 
       <div className="border-t-3 border-bone">
         <div className="wrap flex flex-col gap-2 py-5 font-mono text-[12px] sm:flex-row sm:justify-between">
           <span>© 2026 blockchain innovation club · rajalakshmi engineering college. all rights reserved.</span>
-          <span>head {shortHash('bic-rec')} · sealed {sealedDate(new Date())}</span>
+          <span>
+            head <Scramble text={shortHash('bic-rec')} duration={1} /> · sealed {sealedDate(new Date())}
+          </span>
         </div>
       </div>
     </footer>

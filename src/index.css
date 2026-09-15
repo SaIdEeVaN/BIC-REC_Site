@@ -327,10 +327,9 @@
     box-shadow: none;
   }
 
+  /* The bone hover fill rises from the bottom edge — the Button kit adds .fill-up to this variant. */
   .btn-ghost-ink:hover,
   .btn-ghost-ink:active {
-    background: var(--bone);
-    color: var(--ink);
     transform: none;
     box-shadow: none;
   }
@@ -366,14 +365,17 @@
     background: var(--bone);
     color: var(--ink);
     font-size: 15px;
+    transition: transform 120ms linear, box-shadow 120ms linear;
   }
 
   .field::placeholder {
     color: var(--muted);
   }
 
+  /* Focus picks the field up off the page onto its hard shadow. */
   .field:focus {
     outline: none;
+    transform: translate(-3px, -3px);
     box-shadow: 6px 6px 0 var(--ink);
   }
 
@@ -411,6 +413,120 @@
     50% {
       visibility: hidden;
     }
+  }
+
+  /* Hover motion. Pure CSS, so it costs nothing until a pointer arrives. Everything moves on the kit's shunt
+     curve (EASE in motion/core.js); the reduced-motion rule above turns each one into an instant swap. */
+
+  /* Label roll (<Roll>): the label shunts up out of its slot and an identical copy rises into it. */
+  .roll {
+    display: inline-grid;
+    overflow: hidden;
+    padding-block: 0.15em;
+    margin-block: -0.15em;
+  }
+
+  .roll > span {
+    grid-area: 1 / 1;
+    transition: transform 380ms cubic-bezier(0.77, 0, 0.175, 1);
+  }
+
+  .roll > span + span {
+    transform: translateY(calc(100% + 0.3em));
+  }
+
+  :is(.btn, .roll-host):is(:hover, :focus-visible) .roll > span:first-child {
+    transform: translateY(calc(-100% - 0.3em));
+  }
+
+  :is(.btn, .roll-host):is(:hover, :focus-visible) .roll > span + span {
+    transform: none;
+  }
+
+  /* A bone fill rises from the bottom edge; the text flips to ink once the fill is halfway up. */
+  .fill-up {
+    position: relative;
+    isolation: isolate;
+    transition: color 0s linear 150ms;
+  }
+
+  .fill-up::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: var(--bone);
+    transform: scaleY(0);
+    transform-origin: bottom;
+    transition: transform 300ms cubic-bezier(0.77, 0, 0.175, 1);
+  }
+
+  .fill-up:is(:hover, :focus-visible) {
+    color: var(--ink);
+  }
+
+  .fill-up:is(:hover, :focus-visible)::before {
+    transform: scaleY(1);
+  }
+
+  /* Linked ledger rows: ink sweeps across the first cell and inverts it (plain rows aren't links, so they stay put). */
+  .row-sweep {
+    position: relative;
+    isolation: isolate;
+  }
+
+  .row-sweep,
+  .row-sweep .meta,
+  .row-sweep .chip {
+    transition: color 0s linear 170ms, border-color 0s linear 170ms;
+  }
+
+  .row-sweep::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: var(--ink);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 350ms cubic-bezier(0.77, 0, 0.175, 1);
+  }
+
+  a.row-link:is(:hover, :focus-visible) .row-sweep::before {
+    transform: scaleX(1);
+  }
+
+  a.row-link:is(:hover, :focus-visible) :is(.row-sweep, .row-sweep .meta) {
+    color: var(--bone);
+  }
+
+  a.row-link:is(:hover, :focus-visible) .row-sweep .chip {
+    border-color: var(--bone);
+  }
+
+  /* Header logo: picked up off the bar onto a hard shadow. */
+  .logo-lift {
+    transition: transform 150ms linear, box-shadow 150ms linear;
+  }
+
+  a:is(:hover, :focus-visible) > .logo-lift {
+    transform: translate(-3px, -3px);
+    box-shadow: 3px 3px 0 var(--ink);
+  }
+
+  /* Kinetic band (<Marquee>). Outlined words use a 2px stroke, the thinnest rule the system allows;
+     looser tracking than headings so neighbouring outlines don't cross. */
+  .t-band {
+    font-size: clamp(48px, 13vw, 112px);
+    font-weight: 900;
+    line-height: 0.95;
+    letter-spacing: -0.02em;
+    text-transform: uppercase;
+  }
+
+  .t-outline {
+    color: transparent;
+    -webkit-text-stroke: 2px var(--bone);
   }
 
   .skip-link {

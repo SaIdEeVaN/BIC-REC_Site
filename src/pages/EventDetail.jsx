@@ -1,6 +1,6 @@
 import { Link, useParams } from 'react-router-dom'
 import { Button, Chip, EmptyState, Ledger, LedgerRow } from '../components/kit'
-import { Magnetic, Scramble, SplitText, Wipe } from '../components/motion'
+import { Magnetic, Scramble, SplitText, Stamp, Wipe } from '../components/motion'
 import { getEventById, isUpcoming } from '../data/events'
 import { blockNo, isRealLink, sealedDate, shortHash, stripEmoji } from '../lib/chain'
 
@@ -55,9 +55,17 @@ export default function EventDetail() {
             <SplitText text={event.title} delay={0.15} />
           </h1>
           <div className="mt-7 flex flex-wrap gap-2">
-            <Chip tone={upcoming ? 'pending' : 'confirmed'}>{upcoming ? 'Upcoming' : 'Sealed'}</Chip>
-            <Chip>{event.type}</Chip>
-            {event.certificate && <Chip>Certificate provided</Chip>}
+            <Stamp trigger="mount" delay={0.6}>
+              <Chip tone={upcoming ? 'pending' : 'confirmed'}>{upcoming ? 'Upcoming' : 'Sealed'}</Chip>
+            </Stamp>
+            <Stamp trigger="mount" delay={0.68}>
+              <Chip>{event.type}</Chip>
+            </Stamp>
+            {event.certificate && (
+              <Stamp trigger="mount" delay={0.76}>
+                <Chip>Certificate provided</Chip>
+              </Stamp>
+            )}
           </div>
         </div>
       </header>

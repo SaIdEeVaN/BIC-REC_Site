@@ -1,4 +1,7 @@
 import { Button, InkCTA, PageHeader, SectionHeading, TrackCards } from '../components/kit'
+import { Marquee } from '../components/motion'
+
+const BAND_WORDS = ['Blockchain', 'Web3', 'Smart contracts', 'DeFi']
 
 const story = [
   {
@@ -23,6 +26,8 @@ export default function About() {
         title="About us"
         lead="A student-driven community dedicated to exploring Blockchain, Web3, and emerging technologies at Rajalakshmi Engineering College."
       />
+
+      <Marquee words={BAND_WORDS} />
 
       <section>
         <div className="wrap section">

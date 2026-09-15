@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Button, Chip, EmptyState, InkCTA, PageHeader, Tabs } from '../components/kit'
-import { Scramble, SplitText } from '../components/motion'
+import { Scramble, SplitText, Stamp } from '../components/motion'
 import StackChart from '../components/StackChart'
 import { projects, projectCategories } from '../data/projects'
 import { blockNo, isRealLink, pad2, shortHash, stripEmoji } from '../lib/chain'
@@ -31,18 +31,20 @@ function BuildRow({ project }) {
         </p>
         <p className="t-small mt-3 max-w-[68ch]">{project.description}</p>
         <ul className="mt-6 flex flex-wrap gap-2" aria-label="Tech stack">
-          {project.tech.map((t) => (
+          {project.tech.map((t, i) => (
             <li key={t}>
-              <Chip lower>{t}</Chip>
+              <Stamp delay={0.1 + i * 0.06}>
+                <Chip lower>{t}</Chip>
+              </Stamp>
             </li>
           ))}
         </ul>
       </div>
 
       <div className="flex flex-col gap-6 border-t-3 border-ink py-7 md:py-9 lg:border-l-3 lg:border-t-0 lg:pl-8">
-        <Chip tone={live ? 'shipped' : 'pending'} className="self-start">
-          {live ? 'Shipped' : 'Building'}
-        </Chip>
+        <Stamp delay={0.2} className="self-start">
+          <Chip tone={live ? 'shipped' : 'pending'}>{live ? 'Shipped' : 'Building'}</Chip>
+        </Stamp>
         {project.awards && <p className="text-[15px] font-bold leading-snug">{stripEmoji(project.awards)}</p>}
         <div>
           <p className="meta">team</p>

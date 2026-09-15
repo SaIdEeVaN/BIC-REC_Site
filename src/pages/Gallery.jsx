@@ -1,7 +1,7 @@
 import { useState } from 'react'
-import { motion } from 'motion/react'
+import { AnimatePresence, motion } from 'motion/react'
 import { PageHeader, Tabs } from '../components/kit'
-import { EASE, INK, Scramble, useReveal } from '../components/motion'
+import { EASE, INK, LiftCell, Scramble, useReveal } from '../components/motion'
 import { blockNo, pad2 } from '../lib/chain'
 
 const allPhotos = [
@@ -67,18 +67,21 @@ export default function Gallery() {
         <div className="wrap section">
           <Tabs label="Filter photos by category" options={galleryCats} value={filter} onChange={setFilter} />
           <p className="meta mt-5">photos are being uploaded — each frame below is reserved for one.</p>
-          <ul className="cells mt-8 grid grid-cols-1 min-[420px]:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-            {filtered.map((photo, i) => (
-              <li key={photo.id} className="flex flex-col bg-bone">
-                <Frame id={photo.id} index={i} />
-                <div className="p-4">
-                  <h2 className="t-row">{photo.title}</h2>
-                  <p className="meta mt-2">
-                    {photo.date} · {photo.category}
-                  </p>
-                </div>
-              </li>
-            ))}
+          {/* Positioned so leaving frames can be popped out of the flow while the rest slide into place. */}
+          <ul className="cells relative mt-8 grid grid-cols-1 min-[420px]:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+            <AnimatePresence mode="popLayout" initial={false}>
+              {filtered.map((photo, i) => (
+                <LiftCell key={photo.id} shuffle className="flex flex-col bg-bone">
+                  <Frame id={photo.id} index={i} />
+                  <div className="p-4">
+                    <h2 className="t-row">{photo.title}</h2>
+                    <p className="meta mt-2">
+                      {photo.date} · {photo.category}
+                    </p>
+                  </div>
+                </LiftCell>
+              ))}
+            </AnimatePresence>
           </ul>
         </div>
       </section>

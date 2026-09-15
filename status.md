@@ -129,3 +129,26 @@ Notes:
 - `hero_bg.jpg` (glowing illustration) removed — spec forbids glow/illustration.
 - Gallery: no real photos exist in the repo (old page used random picsum images) → frames are shown as reserved slots.
 - Events "photo dump" viewer + lightbox removed (they only ever showed the same stock image).
+
+---
+
+# Task 7 — More motion (started 2026-09-15, branch `main`)
+
+User asked for more animations. Everything already animated once on entrance; what was missing is motion that answers the visitor — hover, scroll speed, filter changes. Same rule as Task 3: obey DESIGN_SYSTEM.md (no fade/blur/radius/gradient).
+
+## To-do
+
+- [x] 1. New kit pieces: `Roll` (CSS label roll), `Stamp` (chips stamped on), `LiftCell` (cell picked up on hover + reshuffle on filter), `Marquee` (scroll-velocity kinetic band); `Slam hover`, `Scramble replay`
+- [x] 2. Hover: buttons, desktop nav and footer links roll; track cards and member/role/gallery/contact cells lift (member cells and track cards also re-decrypt their block number); linked ledger rows sweep ink across the date cell; ghost buttons and footer socials fill from the bottom; header logo lifts; form fields lift on focus
+- [x] 3. Scroll: Home hero lines drift apart; kinetic bands on Home / About / Join; footer head hash decrypts; header wordmark decrypts on load and on hover
+- [x] 4. Filters: Gallery and Core members grids reshuffle (leavers shrink out, the rest slide to their new slots)
+- [x] 5. Chips stamp on: Join skills, Projects stack + status, Event detail header; Contact "Drafted" stamp moved onto `Stamp`
+- [x] 6. Lint 0 errors; build OK (main bundle 360 → 365 KB); full Playwright run 170 passed + 1 failed — the failure was my new band test (the band never holds still, so Playwright's wait-for-stable scroll timed out) → fixed, motion spec re-run 53 passed. README Motion table updated
+  - Visual check with scripted Chromium against the dev server (Chrome extension wasn't connected): mid-animation screenshots at 1280 / 390, no console warnings, no sideways scroll; measured roll swap on hover + keyboard focus, 18/18 skill stamps hidden until scrolled to, reduced motion → stamps visible and untransformed, band static
+  - Not committed — waiting on the user
+
+## Notes
+
+- Drift, bands and reshuffles all respect reduced motion (`useCanAnimate()` gates style-driven transforms, which `MotionConfig` alone doesn't stop).
+- `Marquee` only runs its frame loop while in view. Tests must not use `scrollIntoViewIfNeeded` on the moving `.t-band` itself — scroll its parent strip.
+- Gallery / Core members grids use `AnimatePresence mode="popLayout"`, so their direct children must forward refs (`LiftCell`, `MemberCell`).
