@@ -12,7 +12,7 @@ const quickLinks = [
 const moreLinks = [
   { name: 'Projects', path: '/projects' },
   { name: 'Board Members', path: '/team/board' },
-  { name: 'Core Members', path: '/team/core' },
+  { name: 'Members', path: '/team/members' },
   { name: 'Achievements', path: '/achievements' },
   { name: 'News', path: '/news' },
   { name: 'Resources', path: '/resources' },

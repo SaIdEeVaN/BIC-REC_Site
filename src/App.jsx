@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom'
+import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom'
 import { lazy, Suspense, useEffect } from 'react'
 import { MotionConfig } from 'motion/react'
 import Navbar from './components/Navbar'
@@ -13,7 +13,7 @@ const Events = lazy(() => import('./pages/Events'))
 const EventDetail = lazy(() => import('./pages/EventDetail'))
 const Gallery = lazy(() => import('./pages/Gallery'))
 const BoardMembers = lazy(() => import('./pages/BoardMembers'))
-const CoreMembers = lazy(() => import('./pages/CoreMembers'))
+const Members = lazy(() => import('./pages/Members'))
 const Projects = lazy(() => import('./pages/Projects'))
 const Achievements = lazy(() => import('./pages/Achievements'))
 const News = lazy(() => import('./pages/News'))
@@ -75,7 +75,8 @@ export default function App() {
               <Route path="/events/:id" element={<EventDetail />} />
               <Route path="/gallery" element={<Gallery />} />
               <Route path="/team/board" element={<BoardMembers />} />
-              <Route path="/team/core" element={<CoreMembers />} />
+              <Route path="/team/members" element={<Members />} />
+              <Route path="/team/core" element={<Navigate to="/team/members" replace />} />
               <Route path="/projects" element={<Projects />} />
               <Route path="/achievements" element={<Achievements />} />
               <Route path="/news" element={<News />} />

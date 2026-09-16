@@ -69,22 +69,3 @@ export const boardGroups = [
   },
 ]
 
-export const coreMembers = [
-  { id: 1, name: 'Sanjay Mohan', role: 'Smart Contract Developer', team: 'Technical Team', department: 'CSE', year: '3rd Year', photo: null, linkedin: '#' },
-  { id: 2, name: 'Deepa Ramachandran', role: 'Web3 Developer', team: 'Technical Team', department: 'CSE', year: '2nd Year', photo: null, linkedin: '#' },
-  { id: 3, name: 'Mohammed Ali K', role: 'Blockchain Researcher', team: 'Technical Team', department: 'IT', year: '3rd Year', photo: null, linkedin: '#' },
-  { id: 4, name: 'Lakshmi Priya S', role: 'DApp Developer', team: 'Technical Team', department: 'CSE', year: '2nd Year', photo: null, linkedin: '#' },
-  { id: 5, name: 'Ravi Shankar P', role: 'Events Coordinator', team: 'Events Team', department: 'ECE', year: '3rd Year', photo: null, linkedin: '#' },
-  { id: 6, name: 'Kavitha Sundar', role: 'Event Logistics', team: 'Events Team', department: 'IT', year: '2nd Year', photo: null, linkedin: '#' },
-  { id: 7, name: 'Aditya Kumar V', role: 'Sponsorship & Budget', team: 'Events Team', department: 'CSE', year: '3rd Year', photo: null, linkedin: '#' },
-  { id: 8, name: 'Pooja Nair', role: 'Graphic Designer', team: 'Design & Media Team', department: 'IT', year: '2nd Year', photo: null, linkedin: '#' },
-  { id: 9, name: 'Rahul Menon', role: 'Content Creator & Photographer', team: 'Design & Media Team', department: 'CSE', year: '2nd Year', photo: null, linkedin: '#' },
-  { id: 10, name: 'Anjali Suresh', role: 'Social Media Manager', team: 'PR & Outreach Team', department: 'ECE', year: '3rd Year', photo: null, linkedin: '#' },
-  { id: 11, name: 'Nithish Kumar R', role: 'Community Manager', team: 'PR & Outreach Team', department: 'CSE', year: '2nd Year', photo: null, linkedin: '#' },
-  { id: 12, name: 'Sreeja R', role: 'Technical Writer', team: 'Content Team', department: 'IT', year: '3rd Year', photo: null, linkedin: '#' },
-  { id: 13, name: 'Gowtham Prakash', role: 'Blog & Newsletter', team: 'Content Team', department: 'CSE', year: '2nd Year', photo: null, linkedin: '#' },
-  { id: 14, name: 'Harini Krishnan', role: 'Operations Coordinator', team: 'Operations Team', department: 'ECE', year: '3rd Year', photo: null, linkedin: '#' },
-  { id: 15, name: 'Vijay Anand S', role: 'Resource Management', team: 'Operations Team', department: 'CSE', year: '2nd Year', photo: null, linkedin: '#' },
-]
-
-export const teams = ['Technical Team', 'Events Team', 'Design & Media Team', 'PR & Outreach Team', 'Content Team', 'Operations Team']
