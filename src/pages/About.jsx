@@ -6,11 +6,11 @@ const BAND_WORDS = ['Blockchain', 'Web3', 'Smart contracts', 'DeFi']
 const story = [
   {
     title: 'The journey',
-    body: "Founded in 2010, we've bridged the gap between student curiosity and industry expertise through immersive tech experiences.",
+    body: 'Founded in 2025, we bridge the gap between student curiosity and industry expertise through hands-on workshops, hackathons and live builds.',
   },
   {
     title: 'Our impact',
-    body: 'Transforming 750+ students into industry-ready professionals through award-winning projects and career-launching initiatives.',
+    body: 'Taking members from first principles to shipping on-chain — workshops, guest sessions and a team to build alongside.',
   },
   {
     title: 'Our ethos',

@@ -11,7 +11,7 @@ import { blockNo, shortHash } from '../lib/chain'
 const stats = [
   { value: '12+', label: 'annual events' },
   { value: '60+', label: 'active members' },
-  { value: '2+', label: 'years active' },
+  { value: '1+', label: 'years active' },
   { value: '15+', label: 'workshops' },
 ]
 

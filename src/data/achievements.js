@@ -9,14 +9,6 @@ export const stats = {
 
 export const achievements = [
   {
-    id: 1,
-    title: '1st Place — Tamil Nadu Inter-College Blockchain Challenge',
-    date: 'February 2026',
-    category: 'Competition',
-    description: 'Team ChainShield from BIC won first place with their DeCert project at the statewide blockchain competition hosted by Anna University, Chennai.',
-    icon: '🏆',
-  },
-  {
     id: 2,
     title: 'Official Partnership with Kerala Blockchain Association',
     date: 'November 2024',
@@ -39,14 +31,6 @@ export const achievements = [
     category: 'Recognition',
     description: 'BIC was recognized as the Best Innovation Club at Rajalakshmi Engineering College Annual Day for its contribution to technology awareness and student development.',
     icon: '🏅',
-  },
-  {
-    id: 5,
-    title: '3 Live Projects Deployed on Ethereum & Polygon',
-    date: 'March 2026',
-    category: 'Technical',
-    description: 'DeCert, CryptoVote, and REC NFT Gallery — three projects built by BIC members — are live on Ethereum and Polygon mainnets with real users.',
-    icon: '🚀',
   },
   {
     id: 6,

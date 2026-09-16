@@ -32,7 +32,7 @@ const PAGES = {
   },
   '/projects': {
     title: 'Projects',
-    description: 'Real projects built by BIC members, tackling real-world problems with blockchain technology.',
+    description: "The club's first blockchain projects are in progress — each will be published here as it ships.",
   },
   '/achievements': {
     title: 'Achievements',

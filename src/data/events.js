@@ -16,10 +16,7 @@ Participants received a beginner's toolkit including curated reading materials, 
 
 The event was a massive success with overwhelming positive feedback and a 95% satisfaction rate. It set the foundation for the Blockchain Innovation Club's journey at REC.`,
     poster: null,
-    speakers: [
-      { name: 'Dr. Rajesh Kumar Nair', role: 'Blockchain Researcher, Kerala Blockchain Association', bio: 'PhD in Distributed Systems with 10+ years in blockchain research and curriculum design.' },
-      { name: 'Ms. Priya Menon', role: 'Web3 Developer, Technopark Trivandrum', bio: 'Full-stack Web3 developer specializing in DeFi protocols and smart contract auditing.' },
-    ],
+    speakers: [],
     highlights: [
       '60+ students attended from 8 departments',
       'Hands-on MetaMask wallet setup for every participant',
@@ -47,10 +44,7 @@ Industry mentors from Kerala Blockchain Association and leading Web3 companies g
 
 All 12 teams successfully demonstrated working prototypes. The top 3 teams won cash prizes worth ₹50,000 combined and were recommended for incubation support at the KBA innovation hub.`,
     poster: null,
-    speakers: [
-      { name: 'Mr. Arun Sharma', role: 'CTO, BlockTech India', bio: 'Leading blockchain architect with expertise in DeFi protocols and Layer 2 solutions.' },
-      { name: 'Ms. Deepa Krishnan', role: 'Product Lead, Web3 Foundation', bio: 'Product strategist driving adoption of decentralized technologies across Southeast Asia.' },
-    ],
+    speakers: [],
     highlights: [
       '12 teams, 60+ participants over 24 hours',
       '5 live DApp demonstrations at the finale',
@@ -61,11 +55,6 @@ All 12 teams successfully demonstrated working prototypes. The top 3 teams won c
     ],
     registrationLink: '#',
     photos: [],
-    winners: [
-      { position: '🥇 1st Place', team: 'ChainShield', project: 'DeCert — Blockchain Certificate Verification', prize: '₹25,000' },
-      { position: '🥈 2nd Place', team: 'Web3Warriors', project: 'CryptoVote — Decentralized Voting Platform', prize: '₹15,000' },
-      { position: '🥉 3rd Place', team: 'BlockBuilders', project: 'TrustChain Supply — Supply Chain Transparency', prize: '₹10,000' },
-    ],
     certificate: true,
   },
   {
@@ -83,9 +72,7 @@ Topics covered included automated market makers (AMMs), yield farming strategies
 
 The lecture drew attendees not just from REC but also from nearby colleges, making it one of the most well-attended events in the club's history with 100+ participants.`,
     poster: null,
-    speakers: [
-      { name: 'Mr. Vivek Nair', role: 'DeFi Researcher & Protocol Designer, KBA', bio: 'Expert in decentralized finance with contributions to multiple DeFi protocols and author of the "DeFi Decoded" whitepaper.' },
-    ],
+    speakers: [],
     highlights: [
       '100+ attendees from multiple colleges',
       'Live DeFi protocol demonstration on mainnet',
@@ -112,9 +99,7 @@ You will learn Solidity programming from scratch, understand smart contract secu
 
 Prerequisites: Basic JavaScript or programming knowledge. Bring your laptop with MetaMask installed (we'll help set it up).`,
     poster: null,
-    speakers: [
-      { name: 'Mr. Rohith Menon', role: 'Senior Solidity Developer, Polygon', bio: 'Experienced smart contract developer with 5+ years in Ethereum development and 3 deployed DeFi protocols.' },
-    ],
+    speakers: [],
     highlights: [
       'Write and understand Solidity syntax from scratch',
       'Deploy your first smart contract on Ethereum Sepolia testnet',
