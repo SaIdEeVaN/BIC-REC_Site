@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Button, Chip, EmptyState, InkCTA, PageHeader, Tabs } from '../components/kit'
-import { Scramble, SplitText, Stamp } from '../components/motion'
+import { Reveal, Scramble, Stamp } from '../components/motion'
 import StackChart from '../components/StackChart'
 import { projects, projectCategories } from '../data/projects'
 import { blockNo, isRealLink, pad2, shortHash, stripEmoji } from '../lib/chain'
@@ -8,7 +8,7 @@ import { blockNo, isRealLink, pad2, shortHash, stripEmoji } from '../lib/chain'
 const categories = ['All', ...projectCategories]
 
 // Builds list: 1fr 300px rows separated by 3px rules — no cards.
-function BuildRow({ project }) {
+function BuildRow({ project, index }) {
   const live = project.status === 'live'
   const links = [
     ['GitHub', project.github],
@@ -16,14 +16,16 @@ function BuildRow({ project }) {
   ].filter(([, href]) => isRealLink(href))
 
   return (
-    <li className="grid border-t-3 border-ink first:border-t-0 lg:grid-cols-[1fr_300px]">
+    <Reveal
+      as="li"
+      index={index}
+      className="grid border-t-3 border-ink first:border-t-0 lg:grid-cols-[1fr_300px]"
+    >
       <div className="py-7 md:py-9 lg:pr-10">
         <p className="meta">
           {blockNo(project.id)} · {project.category}
         </p>
-        <h2 className="t-h2 mt-3">
-          <SplitText text={project.name} trigger="view" />
-        </h2>
+        <h2 className="t-h2 mt-3">{project.name}</h2>
         <p className="t-lead mt-3 font-bold">{project.tagline}</p>
         <p className="t-small mt-5 max-w-[68ch]">
           <span className="mr-2 font-mono text-[12px] font-medium">problem:</span>
@@ -31,11 +33,9 @@ function BuildRow({ project }) {
         </p>
         <p className="t-small mt-3 max-w-[68ch]">{project.description}</p>
         <ul className="mt-6 flex flex-wrap gap-2" aria-label="Tech stack">
-          {project.tech.map((t, i) => (
+          {project.tech.map((t) => (
             <li key={t}>
-              <Stamp delay={0.1 + i * 0.06}>
-                <Chip lower>{t}</Chip>
-              </Stamp>
+              <Chip lower>{t}</Chip>
             </li>
           ))}
         </ul>
@@ -73,7 +73,7 @@ function BuildRow({ project }) {
           <Scramble text={shortHash(project.name)} />
         </p>
       </div>
-    </li>
+    </Reveal>
   )
 }
 
@@ -102,8 +102,8 @@ export default function Projects() {
             <>
               <StackChart projects={filtered} />
               <ul className="mt-12 border-y-3 border-ink">
-                {filtered.map((project) => (
-                  <BuildRow key={project.id} project={project} />
+                {filtered.map((project, i) => (
+                  <BuildRow key={project.id} project={project} index={i} />
                 ))}
               </ul>
             </>

@@ -1,13 +1,20 @@
 import { useId } from 'react'
 import { motion } from 'motion/react'
-import { SNAP } from '../motion/core'
+import { SNAP, useReveal } from '../motion/core'
 
 // Filter tabs: joined cells; the ink selection fill slides to the chosen tab.
+// The strip sits directly under the page header on every filtered page, so it carries the scroll reveal too.
 export default function Tabs({ options, value, onChange, label, className = '' }) {
   const id = useId()
+  const [ref, revealed] = useReveal()
 
   return (
-    <div role="group" aria-label={label} className={`cells flex flex-wrap ${className}`}>
+    <div
+      ref={ref}
+      role="group"
+      aria-label={label}
+      className={`cells flex flex-wrap reveal${revealed ? ' reveal--in' : ''} ${className}`}
+    >
       {options.map((option) => {
         const selected = option === value
         return (

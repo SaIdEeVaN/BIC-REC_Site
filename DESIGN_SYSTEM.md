@@ -4,7 +4,7 @@ Reference for the mockups in `BIC-REC Mockups.dc.html`. Everything here is what 
 
 ## Principle
 
-Hard geometry, no softness. Nothing is rounded, nothing is blurred, nothing fades. Structure is drawn with black rules instead of implied with whitespace. The blockchain idea is expressed literally — blocks, chains, hashes, sealed dates — never as gradients or glow.
+Hard geometry, no softness. Nothing is rounded, nothing is blurred, nothing fades — see Motion. Structure is drawn with black rules instead of implied with whitespace. The blockchain idea is expressed literally — blocks, chains, hashes, sealed dates — never as gradients or glow.
 
 ## Color
 
@@ -86,6 +86,35 @@ Offset direction is always down-right. Shadow color is ink on bone, amber or bon
 | Selected tab | Ink fill, bone text |
 | Active nav item | Ink fill, bone text |
 | Empty state | Full ink panel, amber shadow, 44px heading, one amber CTA |
+
+## Motion
+
+One reveal, one cadence. A block shunts up into place out of a 26px drop over 720ms on
+`cubic-bezier(.34, 1.56, .64, 1)` — the overshoot is what makes it land rather than drift. Never opacity:
+nothing on this site fades in.
+
+| Layer | Treatment |
+| --- | --- |
+| Block entrance | `<Reveal>` / the `.reveal` class — the default for any block that scrolls in |
+| Card entrance | `<Slam>` — hovers up-left on a long shadow, then drops onto its resting shadow |
+| Table row | Clipped print, left to right, out of the ink |
+| Type accent | `<SplitText>` on a heading, at most one per block |
+| Value accent | `<Scramble>` / `<CountUp>` on mono figures and hashes |
+| Status accent | `<Stamp>` — oversized and askew, then down onto the page |
+
+Rules:
+
+- **One block motion plus at most one accent.** A heading that rises, splits its title, decrypts its eyebrow
+  and unseals its lead is four events where one was wanted.
+- **Stagger is `Math.min(i, 12) * 45ms`** — `stagger(i)` in `motion/core.js`. Capped, because the 30th row
+  of a ledger should not wait two seconds for its turn.
+- **Reveals fire once**, at `threshold: 0.12` with `rootMargin: 0 0 -8% 0`, through the single shared
+  observer in `motion/revealObserver.js`. Observing at the viewport edge animates blocks in the bottom
+  sliver of the screen, where nobody sees them.
+- **Reveals are CSS, not JS.** `translate` transitions on the compositor; springing dozens of block
+  entrances through Motion is what made the long pages stutter.
+- Mount sequences (hero, `PageHeader`) are the exception to the cadence — they are choreographed, and
+  they are the only place delays run past 300ms.
 
 ## Don'ts
 

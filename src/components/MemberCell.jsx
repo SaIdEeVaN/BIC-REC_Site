@@ -2,7 +2,7 @@ import { forwardRef, useState } from 'react'
 import { motion } from 'motion/react'
 import { blockNo, isRealLink } from '../lib/chain'
 import { initials } from '../lib/initials'
-import { LiftCell, SLAM, Scramble, useReveal } from './motion'
+import { LiftCell, SLAM, Scramble, stagger, useReveal } from './motion'
 
 // One cell in a `.cells` grid. The initials block slams in as the cell scrolls into view; hovering picks the
 // cell up and re-decrypts its block number. `shuffle` + the forwarded ref let a filtered grid reflow it (LiftCell).
@@ -11,7 +11,7 @@ import { LiftCell, SLAM, Scramble, useReveal } from './motion'
 const MemberCell = forwardRef(function MemberCell({ member, index, shuffle = false, heading: Heading = 'h3' }, ref) {
   const [revealRef, active, canAnimate] = useReveal()
   const [replay, setReplay] = useState(0)
-  const delay = (index % 5) * 0.06
+  const delay = stagger(index % 5)
 
   return (
     <LiftCell ref={ref} shuffle={shuffle} className="bg-bone" onHoverStart={() => setReplay((n) => n + 1)}>

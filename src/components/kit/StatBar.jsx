@@ -13,7 +13,12 @@ export default function StatBar({ items, highlight = 0, className = '' }) {
   const [ref, active, canAnimate] = useReveal()
 
   return (
-    <dl ref={ref} className={`grid gap-[3px] border-3 border-ink bg-ink ${COLS[items.length] ?? COLS[4]} ${className}`}>
+    <dl
+      ref={ref}
+      className={`grid gap-[3px] border-3 border-ink bg-ink reveal${active ? ' reveal--in' : ''} ${
+        COLS[items.length] ?? COLS[4]
+      } ${className}`}
+    >
       {items.map((item, i) => {
         const lit = i === highlight
         return (

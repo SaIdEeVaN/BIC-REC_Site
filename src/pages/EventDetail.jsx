@@ -1,6 +1,6 @@
 import { Link, useParams } from 'react-router-dom'
 import { Button, Chip, EmptyState, Ledger, LedgerRow } from '../components/kit'
-import { Magnetic, Scramble, SplitText, Stamp, Wipe } from '../components/motion'
+import { Magnetic, Reveal, Scramble, SplitText, Stamp, Wipe } from '../components/motion'
 import { getEventById, isUpcoming } from '../data/events'
 import { blockNo, isRealLink, sealedDate, shortHash, stripEmoji } from '../lib/chain'
 
@@ -10,7 +10,7 @@ function Block({ title, children }) {
       <h2 className="t-h3 mb-6">
         <SplitText text={title} trigger="view" />
       </h2>
-      {children}
+      <Reveal delay={120}>{children}</Reveal>
     </section>
   )
 }
@@ -131,22 +131,24 @@ export default function EventDetail() {
 
         <aside className="order-first border-b-3 border-ink py-8 lg:order-last lg:border-b-0 lg:pl-8">
           <div className="lg:sticky lg:top-[100px]">
-            <dl className="border-3 border-ink">
-              {[
-                ['date', event.date],
-                ['time', event.time],
-                ['venue', event.venue],
-              ].map(([label, value]) => (
-                <div key={label} className="border-t-3 border-ink px-4 py-3 first:border-t-0">
-                  <dt className="meta">{label}</dt>
-                  <dd className="mt-1 text-[15px] font-bold">{value}</dd>
+            <Reveal as="div">
+              <dl className="border-3 border-ink">
+                {[
+                  ['date', event.date],
+                  ['time', event.time],
+                  ['venue', event.venue],
+                ].map(([label, value]) => (
+                  <div key={label} className="border-t-3 border-ink px-4 py-3 first:border-t-0">
+                    <dt className="meta">{label}</dt>
+                    <dd className="mt-1 text-[15px] font-bold">{value}</dd>
+                  </div>
+                ))}
+                <div className={`border-t-3 border-ink px-4 py-3 ${upcoming ? 'bg-amber' : ''}`}>
+                  <dt className={`meta ${upcoming ? 'text-ink' : ''}`}>registration</dt>
+                  <dd className="mt-1 font-mono text-[12.5px] font-medium uppercase">{registration}</dd>
                 </div>
-              ))}
-              <div className={`border-t-3 border-ink px-4 py-3 ${upcoming ? 'bg-amber' : ''}`}>
-                <dt className={`meta ${upcoming ? 'text-ink' : ''}`}>registration</dt>
-                <dd className="mt-1 font-mono text-[12.5px] font-medium uppercase">{registration}</dd>
-              </div>
-            </dl>
+              </dl>
+            </Reveal>
 
             {canRegister && (
               <div className="mt-7">
@@ -157,7 +159,7 @@ export default function EventDetail() {
             )}
 
             {event.speakers?.length > 0 && (
-              <div className="mt-9">
+              <Reveal className="mt-9">
                 <h2 className="meta">speakers</h2>
                 <ul className="mt-3 border-3 border-ink">
                   {event.speakers.map((sp) => (
@@ -168,7 +170,7 @@ export default function EventDetail() {
                     </li>
                   ))}
                 </ul>
-              </div>
+              </Reveal>
             )}
           </div>
         </aside>

@@ -1,5 +1,5 @@
 import { PageHeader, SectionHeading } from '../components/kit'
-import { AMBER, Slam } from '../components/motion'
+import { AMBER, Reveal, Slam } from '../components/motion'
 import MemberCell from '../components/MemberCell'
 import { boardGroups, facultyCoordinators } from '../data/members'
 import { pad2 } from '../lib/chain'
@@ -64,12 +64,12 @@ export default function BoardMembers() {
           <div className="flex flex-col gap-10 md:gap-14">
             {groups.map((group) => (
               <div key={group.title}>
-                <div className="mb-5 flex items-baseline justify-between gap-4 border-b-3 border-ink pb-3">
+                <Reveal className="mb-5 flex items-baseline justify-between gap-4 border-b-3 border-ink pb-3">
                   <h3 className="t-h3">{group.title}</h3>
                   <p className="meta shrink-0">
                     {pad2(group.members.length)} {group.members.length === 1 ? 'seat' : 'seats'}
                   </p>
-                </div>
+                </Reveal>
                 <ul className="cells grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                   {group.members.map((member, i) => (
                     <MemberCell key={member.name} member={member} index={group.start + i} heading="h4" />

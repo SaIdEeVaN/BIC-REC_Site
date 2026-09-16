@@ -18,6 +18,15 @@ for (const route of routes) {
     expect(result.scrollWidth, overflowMessage(route, result)).toBeLessThanOrEqual(result.viewport)
 
     expect(await findOversizedHeadingWords(page), `${route} has heading words wider than their column`).toEqual([])
+
+    // Reduced motion strips transitions globally, which would otherwise leave every scroll reveal
+    // holding the offset its transition was going to animate away.
+    const stranded = await page.locator('.reveal').evaluateAll((nodes) =>
+      nodes
+        .map((node) => getComputedStyle(node).translate)
+        .filter((value) => value !== 'none' && value !== '0px'),
+    )
+    expect(stranded, `${route} strands scroll reveals when motion is reduced`).toEqual([])
   })
 }
 

@@ -1,7 +1,7 @@
 import { createContext, useContext } from 'react'
 import { Link } from 'react-router-dom'
 import { motion } from 'motion/react'
-import { EASE, RevealContext, useReveal } from '../motion/core'
+import { EASE, RevealContext, stagger, useReveal } from '../motion/core'
 
 // Table as CSS grid: 150px 1fr 210px 160px with a 3px gap so the ink background draws the rules.
 // Below the breakpoint each row folds to: [date | status] / main / side.
@@ -59,14 +59,14 @@ export function Ledger({ head, from = 'lg', children, className = '' }) {
 
 export function LedgerRow({ to, href, date, main, side, status, tone = 'confirmed', index = 0 }) {
   const layout = useContext(LayoutContext)
-  const [ref, active, canAnimate] = useReveal({ amount: 0.2 })
+  const [ref, active, canAnimate] = useReveal()
   const className = `row-link group grid grid-cols-[1fr_auto] gap-[3px] ${layout.grid}`
   const hidden = { clipPath: 'inset(0 100% 0 0)' }
   const reveal = canAnimate
     ? {
         initial: hidden,
         animate: active ? { clipPath: 'inset(0 0% 0 0)', transitionEnd: { clipPath: 'none' } } : hidden,
-        transition: { duration: 0.55, ease: EASE, delay: Math.min(index, 8) * 0.07 },
+        transition: { duration: 0.55, ease: EASE, delay: stagger(index) },
       }
     : {}
 

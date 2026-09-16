@@ -1,11 +1,11 @@
 import { Fragment, useState } from 'react'
 import { motion } from 'motion/react'
 import { blockNo } from '../../lib/chain'
-import { EASE, Scramble, Slam, useReveal } from '../motion'
+import { EASE, Scramble, Slam, stagger, useReveal } from '../motion'
 
 // Connector bar: reveals from its top-left corner, so it draws across on desktop and down on mobile.
 function Connector({ delay }) {
-  const [ref, active, canAnimate] = useReveal({ amount: 0.5 })
+  const [ref, active, canAnimate] = useReveal()
   const hidden = { clipPath: 'inset(0 100% 100% 0)' }
   const shown = { clipPath: 'inset(0 0% 0% 0)' }
 
@@ -55,7 +55,7 @@ export default function TrackCards({ items, perRow = 3 }) {
         <div key={r} className="flex flex-col lg:flex-row lg:items-stretch">
           {row.map((item, j) => {
             const index = r * perRow + j
-            const delay = j * 0.14
+            const delay = stagger(j)
             return (
               <Fragment key={item.title}>
                 {j > 0 && <Connector delay={delay - 0.08} />}

@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { Button, Chip, PageHeader } from '../components/kit'
-import { LiftCell, Slam, SplitText, Stamp } from '../components/motion'
+import { LiftCell, Reveal, Slam, SplitText, Stamp } from '../components/motion'
 
 const CLUB_EMAIL = 'kbaclub@rajalakshmil.edu.in'
 const EMPTY = { name: '', email: '', subject: '', message: '' }
@@ -58,8 +58,8 @@ export default function Contact() {
       <section className="border-b-3 border-ink">
         <div className="wrap section">
           <ul className="cells grid md:grid-cols-3">
-            {contactInfo.map((c) => (
-              <LiftCell key={c.label} className="bg-bone p-5 md:p-6">
+            {contactInfo.map((c, i) => (
+              <LiftCell key={c.label} index={i} className="bg-bone p-5 md:p-6">
                 <p className="meta">{c.label}</p>
                 {c.href ? (
                   <a
@@ -79,7 +79,7 @@ export default function Contact() {
 
       <section>
         <div className="wrap section grid gap-12 lg:grid-cols-[1fr_620px]">
-          <div>
+          <Reveal>
             <h2 className="t-h3">Find us online</h2>
             <ul className="mt-6 border-y-3 border-ink">
               {socials.map((s) => (
@@ -90,14 +90,14 @@ export default function Contact() {
                     className="group flex flex-col gap-1 py-5"
                   >
                     <span className="t-card decoration-[3px] underline-offset-[5px] group-hover:underline">
-                      <SplitText text={s.label} trigger="view" />
+                      {s.label}
                     </span>
                     <span className="meta break-all">{s.handle}</span>
                   </a>
                 </li>
               ))}
             </ul>
-          </div>
+          </Reveal>
 
           <Slam className="border-3 border-ink bg-bone p-6 shadow-ink md:p-8">
             {submitted ? (

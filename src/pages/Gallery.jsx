@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { AnimatePresence, motion } from 'motion/react'
 import { PageHeader, Tabs } from '../components/kit'
-import { EASE, INK, LiftCell, Scramble, useReveal } from '../components/motion'
+import { EASE, INK, LiftCell, Reveal, Scramble, stagger, useReveal } from '../components/motion'
 import { blockNo, pad2 } from '../lib/chain'
 
 const allPhotos = [
@@ -30,7 +30,7 @@ function Frame({ id, index }) {
       ? {
           initial: { pathLength: 0 },
           animate: { pathLength: active ? 1 : 0 },
-          transition: { duration: 0.5, ease: EASE, delay: delay + (index % 4) * 0.08 },
+          transition: { duration: 0.5, ease: EASE, delay: delay + stagger(index % 4) },
         }
       : {}
 
@@ -41,7 +41,7 @@ function Frame({ id, index }) {
         <motion.line x1="100%" y1="0" x2="0" y2="100%" stroke={INK} strokeWidth="3" {...draw(0.3)} />
       </svg>
       <span className="meta absolute left-0 top-0 border-b-3 border-r-3 border-ink bg-bone px-2 py-1 text-ink">
-        <Scramble text={blockNo(id)} delay={(index % 4) * 0.08} />
+        <Scramble text={blockNo(id)} delay={stagger(index % 4)} />
       </span>
     </div>
   )
@@ -66,7 +66,9 @@ export default function Gallery() {
       <section>
         <div className="wrap section">
           <Tabs label="Filter photos by category" options={galleryCats} value={filter} onChange={setFilter} />
-          <p className="meta mt-5">photos are being uploaded — each frame below is reserved for one.</p>
+          <Reveal as="p" className="meta mt-5">
+            photos are being uploaded — each frame below is reserved for one.
+          </Reveal>
           {/* Positioned so leaving frames can be popped out of the flow while the rest slide into place. */}
           <ul className="cells relative mt-8 grid grid-cols-1 min-[420px]:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
             <AnimatePresence mode="popLayout" initial={false}>

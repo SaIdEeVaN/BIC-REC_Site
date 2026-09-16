@@ -13,6 +13,13 @@
     --mint: #2fd9c4;
     --muted: #4a4238;
     --mono: 'IBM Plex Mono', ui-monospace, Menlo, Consolas, monospace;
+
+    /* Motion. --m scales every reveal distance from one place. */
+    --m: 1;
+    --reveal-rise: calc(26px * var(--m));
+    /* Overshoot: the block passes its mark and settles back, so it lands instead of drifting. */
+    --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+    --ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
   }
 
   html {
@@ -63,6 +70,11 @@
     *::after {
       transition: none !important;
       animation: none !important;
+    }
+
+    /* The rule above removes the transition but not the offset it was going to animate away. */
+    .reveal {
+      translate: none !important;
     }
   }
 }
@@ -538,5 +550,17 @@
 
   .skip-link:focus {
     top: 16px;
+  }
+
+  /* Scroll reveal ─ the site's default entrance. Paired with <Reveal>, driven by one shared
+     IntersectionObserver. Transitioning `translate` only keeps this on the compositor, which is
+     what lets every block on a long page carry one. Never opacity: nothing on this site fades. */
+  .reveal {
+    translate: 0 var(--reveal-rise);
+    transition: translate 720ms var(--ease-spring);
+  }
+
+  .reveal--in {
+    translate: 0 0;
   }
 }

@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { AnimatePresence } from 'motion/react'
 import { PageHeader, Tabs } from '../components/kit'
+import { Reveal } from '../components/motion'
 import MemberCell from '../components/MemberCell'
 import { coreMembers, teams } from '../data/members'
 import { pad2 } from '../lib/chain'
@@ -36,7 +37,9 @@ export default function CoreMembers() {
       <section>
         <div className="wrap section">
           <Tabs label="Filter members by team" options={allTeams} value={filter} onChange={setFilter} />
-          <p className="t-body mt-6 max-w-[60ch]">{teamDescriptions[filter]}</p>
+          <Reveal as="p" className="t-body mt-6 max-w-[60ch]">
+            {teamDescriptions[filter]}
+          </Reveal>
           {/* Positioned so leaving cells can be popped out of the flow while the rest slide into place. */}
           <ul className="cells relative mt-8 grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             <AnimatePresence mode="popLayout" initial={false}>

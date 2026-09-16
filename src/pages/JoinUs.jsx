@@ -1,5 +1,5 @@
 import { Button, Chip, InkCTA, PageHeader, SectionHeading, TrackCards } from '../components/kit'
-import { LiftCell, Marquee, Stamp } from '../components/motion'
+import { LiftCell, Marquee } from '../components/motion'
 
 // Until the club has an application form, both buttons open the contact form with the subject filled in.
 // When a form exists, point both buttons at its link with `href` instead of `to`.
@@ -49,15 +49,13 @@ export default function JoinUs() {
         <div className="wrap section">
           <SectionHeading eyebrow="positions open" title="Find your team" />
           <ul className="cells grid sm:grid-cols-2 lg:grid-cols-3">
-            {openRoles.map((role) => (
-              <LiftCell key={role.team} className="bg-bone p-6">
+            {openRoles.map((role, i) => (
+              <LiftCell key={role.team} index={i} className="bg-bone p-6">
                 <h3 className="t-card">{role.team}</h3>
                 <ul className="mt-5 flex flex-wrap gap-2" aria-label="Skills">
-                  {role.skills.map((skill, i) => (
+                  {role.skills.map((skill) => (
                     <li key={skill}>
-                      <Stamp delay={0.1 + i * 0.08}>
-                        <Chip lower>{skill}</Chip>
-                      </Stamp>
+                      <Chip lower>{skill}</Chip>
                     </li>
                   ))}
                 </ul>

@@ -28,7 +28,7 @@ export default function StackChart({ projects }) {
   const rest = rows.length - shown.length
   const [view, setView] = useState('Chart')
   const [hovered, setHovered] = useState(null)
-  const [ref, active, canAnimate] = useReveal({ amount: 0.2 })
+  const [ref, active, canAnimate] = useReveal()
 
   return (
     <section aria-labelledby="stack-title" className="border-3 border-ink p-5 md:p-8">

@@ -7,7 +7,7 @@ const DRAW = 0.9
 // Animated: the rail draws left to right, each block slams in as the line reaches it, then a packet
 // keeps travelling along the chain.
 export default function ChainRail({ nodes = 6, delay = 0, className = '' }) {
-  const [ref, active, canAnimate] = useReveal({ amount: 0.6 })
+  const [ref, active, canAnimate] = useReveal()
   const on = !canAnimate || active
 
   return (
