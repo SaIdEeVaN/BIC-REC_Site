@@ -42,7 +42,7 @@ export const news = [
   {
     id: 8,
     title: 'Blockchain Innovation Club Officially Launched at REC',
-    date: 'December 1, 2024',
+    date: 'August 1, 2025',
     category: 'Announcement',
     description: 'The Blockchain Innovation Club is officially launched at Rajalakshmi Engineering College! In partnership with Kerala Blockchain Association, we aim to build the next generation of blockchain innovators.',
     link: '#',

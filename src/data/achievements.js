@@ -11,7 +11,7 @@ export const achievements = [
   {
     id: 2,
     title: 'Official Partnership with Kerala Blockchain Association',
-    date: 'November 2024',
+    date: 'August 2025',
     category: 'Collaboration',
     description: 'BIC became an official student chapter partner of the Kerala Blockchain Association, gaining access to industry mentors, resources, and events.',
     icon: '🤝',

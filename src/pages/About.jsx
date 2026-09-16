@@ -6,7 +6,7 @@ const BAND_WORDS = ['Blockchain', 'Web3', 'Smart contracts', 'DeFi']
 const story = [
   {
     title: 'The journey',
-    body: 'Founded in 2025, we bridge the gap between student curiosity and industry expertise through hands-on workshops, hackathons and live builds.',
+    body: 'Founded in August 2025, we bridge the gap between student curiosity and industry expertise through hands-on workshops, hackathons and live builds.',
   },
   {
     title: 'Our impact',
