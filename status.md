@@ -173,5 +173,6 @@ Source: `bic-board-next-tenure.md` from the user (names and roles only — no de
 ## Open items for the club
 
 - Departments, years, bios and LinkedIn links for the new board — add them per member in `src/data/members.js`.
-- Core members page (`coreMembers`) still lists the old placeholder team; the tenure file didn't cover it.
+- Core members page now shows a "results coming soon" notice; the placeholder roster is gone. Add the real
+  intake to `src/data/members.js` and restore the grid in `src/pages/CoreMembers.jsx` once results are out.
 - Name/email mismatch to confirm: "Dr. Muneeshwari R" (tenure file) vs `muneeshwari.p@rajalakshmi.edu.in` (user) — both kept as given.

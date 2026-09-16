@@ -18,8 +18,8 @@ export const SNAP = { type: 'spring', stiffness: 520, damping: 42 }
 
 // One cadence for every staggered group on the site. Capped, because the 30th row of a ledger
 // should not wait 2s for its turn — past a dozen items the stagger has already done its job.
-export const STAGGER_STEP = 0.045
-export const STAGGER_CAP = 12
+const STAGGER_STEP = 0.045
+const STAGGER_CAP = 12
 export function stagger(index) {
   return Math.min(index, STAGGER_CAP) * STAGGER_STEP
 }

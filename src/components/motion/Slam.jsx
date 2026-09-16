@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { motion } from 'motion/react'
 import { INK, SLAM, SNAP, useReveal } from './core'
 
-const TAGS = { div: motion.div, article: motion.article, li: motion.li, section: motion.section }
+const TAGS = { div: motion.div, article: motion.article }
 
 // A block hovers up-left on a long shadow, then slams down onto its resting hard shadow.
 // The shadow's far corner never moves, so it reads as the block dropping onto the page.

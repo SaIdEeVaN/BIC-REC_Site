@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom'
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom'
 import { lazy, Suspense, useEffect } from 'react'
 import { MotionConfig } from 'motion/react'
 import Navbar from './components/Navbar'
@@ -76,7 +76,6 @@ export default function App() {
               <Route path="/gallery" element={<Gallery />} />
               <Route path="/team/board" element={<BoardMembers />} />
               <Route path="/team/core" element={<CoreMembers />} />
-              <Route path="/team/members" element={<Navigate to="/team/core" replace />} />
               <Route path="/projects" element={<Projects />} />
               <Route path="/achievements" element={<Achievements />} />
               <Route path="/news" element={<News />} />

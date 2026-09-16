@@ -42,7 +42,7 @@ The UI follows a **neo-brutalist design system** — hard geometry, 3px ink rule
 - 🏠 **Home** — Stacked hero, chain rail, stat bar and event ledger
 - 📅 **Events** — Filterable event ledger with detail pages
 - 🏆 **Achievements** — Club milestones and accomplishments
-- 👥 **Team** — Board members and core team profiles
+- 👥 **Team** — Board member profiles; core team intake pending
 - 🖼️ **Gallery** — Photo frames by category
 - 📰 **News** — Latest club updates
 - 🔧 **Projects** — Blockchain projects by the club

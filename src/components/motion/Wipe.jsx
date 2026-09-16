@@ -1,7 +1,7 @@
 import { motion } from 'motion/react'
 import { EASE, useReveal } from './core'
 
-const COLORS = { ink: 'bg-ink', bone: 'bg-bone', amber: 'bg-amber' }
+const COLORS = { ink: 'bg-ink', bone: 'bg-bone' }
 
 // "Unsealing": content starts under a solid block that shunts off to the right. Nothing fades.
 export default function Wipe({ children, color = 'ink', delay = 0, trigger = 'view', className = '' }) {

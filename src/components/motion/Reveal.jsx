@@ -1,6 +1,6 @@
-import { STAGGER_CAP, STAGGER_STEP, useReveal } from './core'
+import { stagger, useReveal } from './core'
 
-const TAGS = { div: 'div', li: 'li', section: 'section', article: 'article', p: 'p', tr: 'tr' }
+const TAGS = { div: 'div', li: 'li', p: 'p' }
 
 // The default scroll reveal: a block shunts up into place out of a 26px drop, with a hint of
 // overshoot so it lands rather than drifts. No opacity — per DESIGN_SYSTEM.md nothing fades.
@@ -16,7 +16,7 @@ export default function Reveal({ as = 'div', index, delay = 0, className = '', c
   const Tag = TAGS[as] ?? 'div'
 
   // `index` is the shorthand for "this is item N of a staggered group"; `delay` is an explicit offset.
-  const ms = (index == null ? 0 : Math.min(index, STAGGER_CAP) * STAGGER_STEP * 1000) + delay
+  const ms = (index == null ? 0 : stagger(index) * 1000) + delay
 
   return (
     <Tag
