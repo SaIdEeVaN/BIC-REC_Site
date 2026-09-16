@@ -26,9 +26,9 @@ const PAGES = {
     title: 'Leadership',
     description: 'The people guiding, managing, and growing the Blockchain Innovation Club at REC.',
   },
-  '/team/members': {
-    title: 'Members',
-    description: "Selections for the club's new members are being finalised — results will be published here once they are out.",
+  '/team/core': {
+    title: 'Core team',
+    description: 'Core team selections are being finalised — results will be published here once they are out.',
   },
   '/projects': {
     title: 'Projects',
