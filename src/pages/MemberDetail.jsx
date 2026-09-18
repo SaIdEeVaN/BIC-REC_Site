@@ -163,7 +163,12 @@ export default function MemberDetail() {
       {(previous || next) && (
         <section className="border-t-3 border-ink">
           <div className="wrap section">
-            <div className="grid gap-[3px] border-3 border-ink bg-ink md:grid-cols-2">
+            {/* Two columns only when there are two neighbours. The first and last member of the roster
+                have one, and a half-filled two-column grid leaves the ink background showing through
+                the empty cell as a black slab beside it. */}
+            <div
+              className={`grid gap-[3px] border-3 border-ink bg-ink ${previous && next ? 'md:grid-cols-2' : ''}`}
+            >
               {previous && <Neighbour member={previous} direction={-1} />}
               {next && <Neighbour member={next} direction={1} />}
             </div>
