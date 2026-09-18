@@ -1,5 +1,6 @@
 import { Button, PageHeader } from '../components/kit'
-import { Marquee, Reveal, Scramble, SplitText } from '../components/motion'
+import { shortHash } from '../lib/chain'
+import { Marquee, Mine, Reveal, SplitText } from '../components/motion'
 
 // Core team selections haven't been announced yet, so this page holds the slot rather than listing
 // anyone. Add the roster here (a grid of MemberCell, filtered by Tabs) once the results are out.
@@ -21,8 +22,9 @@ export default function CoreMembers() {
           three stacked lines at hero scale, the last one hollow. */}
       <section className="on-ink border-b-3 border-ink bg-ink text-bone">
         <div className="wrap section">
+          {/* Not sealed because it hasn't been found yet — so show the search, not a settled hash. */}
           <p className="meta">
-            <Scramble text="block #—— · not yet sealed" />
+            block #—— · mining <Mine text={shortHash('core-members')} zeros={4} duration={2.4} />
           </p>
           <h2 className="t-hero mt-7">
             <span className="block">

@@ -1,5 +1,6 @@
 import { Button, PageHeader } from '../components/kit'
-import { Marquee, Reveal, Scramble, SplitText } from '../components/motion'
+import { shortHash } from '../lib/chain'
+import { Marquee, Mine, Reveal, SplitText } from '../components/motion'
 
 // No student projects are ready to publish yet, so this page holds the slot rather than listing any.
 // The previous listing — builds list, filters and the StackChart tech breakdown — is in git at e8c152d:
@@ -20,8 +21,9 @@ export default function Projects() {
 
       <section className="on-ink border-b-3 border-ink bg-ink text-bone">
         <div className="wrap section">
+          {/* Not sealed because it hasn't been found yet — so show the search, not a settled hash. */}
           <p className="meta">
-            <Scramble text="block #—— · not yet sealed" />
+            block #—— · mining <Mine text={shortHash('projects')} zeros={4} duration={2.4} />
           </p>
           <h2 className="t-hero mt-7">
             <span className="block">

@@ -1,8 +1,8 @@
 import { useState } from 'react'
 import { AnimatePresence, motion } from 'motion/react'
 import { PageHeader, Tabs } from '../components/kit'
-import { EASE, INK, LiftCell, Reveal, Scramble, stagger, useReveal } from '../components/motion'
-import { blockNo, pad2 } from '../lib/chain'
+import { EASE, INK, LiftCell, Mine, Reveal, Scramble, stagger, useReveal } from '../components/motion'
+import { blockNo, pad2, shortHash } from '../lib/chain'
 
 const allPhotos = [
   { id: 1, category: 'Workshops', title: 'Blockchain Fundamentals Workshop', date: 'Jan 2026' },
@@ -66,8 +66,10 @@ export default function Gallery() {
       <section>
         <div className="wrap section">
           <Tabs label="Filter photos by category" options={galleryCats} value={filter} onChange={setFilter} />
+          {/* The frames are reserved, not filled: the batch holding them is a block still being mined. */}
           <Reveal as="p" className="meta mt-5">
-            photos are being uploaded — each frame below is reserved for one.
+            photos are being uploaded — each frame below is reserved for one. batch{' '}
+            <Mine text={shortHash('gallery-batch')} />
           </Reveal>
           {/* Positioned so leaving frames can be popped out of the flow while the rest slide into place. */}
           <ul className="cells relative mt-8 grid grid-cols-1 min-[420px]:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">

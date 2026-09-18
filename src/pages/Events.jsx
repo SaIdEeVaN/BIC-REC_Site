@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import { Button, EmptyState, Ledger, PageHeader, Tabs } from '../components/kit'
+import { Button, ChainRail, EmptyState, Ledger, PageHeader, Tabs } from '../components/kit'
 import EventRow from '../components/EventRow'
 import { events, getUpcomingEvents } from '../data/events'
 import { pad2 } from '../lib/chain'
@@ -31,11 +31,16 @@ export default function Events() {
         <div className="wrap section">
           <Tabs label="Filter events by type" options={FILTERS} value={filter} onChange={setFilter} className="mb-8" />
           {filtered.length > 0 ? (
-            <Ledger head={['date', 'event', 'type · venue', 'status']}>
-              {filtered.map((event, i) => (
-                <EventRow key={event.id} event={event} index={i} />
-              ))}
-            </Ledger>
+            <>
+              {/* Keyed on the filter so the rail is rebuilt, not patched: the chain draws itself again,
+                  one node per event still standing, every time the selection changes. */}
+              <ChainRail key={filter} nodes={filtered.length} className="-mt-3 mb-4" />
+              <Ledger head={['date', 'event', 'type · venue', 'status']}>
+                {filtered.map((event, i) => (
+                  <EventRow key={event.id} event={event} index={i} />
+                ))}
+              </Ledger>
+            </>
           ) : (
             <EmptyState
               title="No events of this type yet"

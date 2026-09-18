@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Button, Chip, InkCTA, Ledger, LedgerRow, PageHeader, Tabs } from '../components/kit'
+import { Button, ChainRail, Chip, InkCTA, Ledger, LedgerRow, PageHeader, Tabs } from '../components/kit'
 import { resources } from '../data/resources'
 import { hostOf, pad2 } from '../lib/chain'
 
@@ -24,6 +24,8 @@ export default function Resources() {
       <section>
         <div className="wrap section">
           <Tabs label="Resource track" options={tabs} value={activeTab} onChange={setActiveTab} className="mb-8" />
+          {/* Keyed on the track, so switching tracks draws that track's chain again from scratch. */}
+          <ChainRail key={activeTab} nodes={resources[activeTab].length} className="-mt-3 mb-4" />
           <Ledger head={['type', 'resource', 'source', 'link']}>
             {resources[activeTab].map((r, i) => (
               <LedgerRow

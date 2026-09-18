@@ -1,4 +1,4 @@
-import { Button, Chip, InkCTA, PageHeader, SectionHeading, TrackCards } from '../components/kit'
+import { Button, Chip, InkCTA, NodeMesh, PageHeader, SectionHeading, TrackCards } from '../components/kit'
 import { LiftCell, Marquee } from '../components/motion'
 
 // Until the club has an application form, both buttons open the contact form with the subject filled in.
@@ -68,6 +68,14 @@ export default function JoinUs() {
       <InkCTA
         title="Ready to join the blockchain revolution?"
         body="Send us a short note about what you'd like to work on and we'll get back to you within 48 hours. No experience needed — just curiosity!"
+        aside={
+          <div className="border-3 border-bone p-6">
+            <p className="meta">the club, drawn</p>
+            {/* Shorter than the full-width mesh on the home page: this column is 380px, not the page. */}
+            <NodeMesh tone="bone" height="h-[150px]" className="mt-4" />
+            <p className="meta mt-4">every member is a peer — you&apos;d be the next one</p>
+          </div>
+        }
       >
         <Button to={APPLY_PATH} variant="onInk">Apply now</Button>
       </InkCTA>

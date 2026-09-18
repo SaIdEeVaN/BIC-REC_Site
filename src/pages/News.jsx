@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Button, Chip, EmptyState, InkCTA, Ledger, LedgerRow, PageHeader, Tabs } from '../components/kit'
+import { Mine, Scramble } from '../components/motion'
 import { news, newsCategories } from '../data/news'
 import { shortHash } from '../lib/chain'
 
@@ -44,7 +45,14 @@ export default function News() {
                     status={
                       <>
                         <span className="block">{internal ? 'Read more' : latest ? 'Latest' : 'Sealed'}</span>
-                        <span className={`meta mt-2 block ${latest ? 'text-ink' : ''}`}>{shortHash(item.title)}</span>
+                        {/* The newest update is the head of the chain — its hash is still being found. */}
+                        <span className={`meta mt-2 block ${latest ? 'text-ink' : ''}`}>
+                          {latest ? (
+                            <Mine text={shortHash(item.title)} />
+                          ) : (
+                            <Scramble text={shortHash(item.title)} delay={i * 0.07 + 0.3} />
+                          )}
+                        </span>
                       </>
                     }
                   />

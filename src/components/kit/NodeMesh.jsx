@@ -28,14 +28,16 @@ const TONES = {
   bone: { rule: BONE, rest: INK },
 }
 
-export default function NodeMesh({ tone = 'ink', className = '' }) {
+// `height` is Tailwind height classes for the drawing itself: the mesh scales to fit whatever box it is
+// given, so a narrow aside column wants a shorter one than a full-width section.
+export default function NodeMesh({ tone = 'ink', height = 'h-[190px] md:h-[340px]', className = '' }) {
   const [ref, active, canAnimate] = useReveal()
   const on = !canAnimate || active
   const { rule, rest } = TONES[tone] ?? TONES.ink
 
   return (
     <div ref={ref} aria-hidden="true" className={className}>
-      <svg viewBox="0 0 600 300" preserveAspectRatio="xMidYMid meet" className="block h-[190px] w-full md:h-[340px]">
+      <svg viewBox="0 0 600 300" preserveAspectRatio="xMidYMid meet" className={`block w-full ${height}`}>
         {LINKS.map(([from, to], i) => {
           const a = NODES[from]
           const b = NODES[to]

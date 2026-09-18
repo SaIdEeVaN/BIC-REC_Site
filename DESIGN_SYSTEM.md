@@ -81,6 +81,8 @@ Offset direction is always down-right. Shadow color is ink on bone, amber or bon
   runs down every link of a hop, and each node it reaches fills amber until the round resets.
 - The merkle tree SVG: leaves along the bottom, pairs routed up and inward on **right-angled** rules — never
   diagonals — to a single amber root. It folds bottom-up, one level at a time.
+- The confirmation strip: six equal cells split by 3px rules, one filled amber per block sealed on top, with
+  an `00/06 confirmations` readout. A block nothing is built on yet reads `00/06` and stays bone.
 - The block clock: `block 0000000 · sealed 00s ago`, counting from the club's genesis in August 2025 at one
   block every 12s. Derived from the clock, never stored, so it only ever goes up.
 - SVG drawn at more than one size uses `vector-effect="non-scaling-stroke"`. A 3px rule in a `600`-unit
@@ -116,6 +118,7 @@ nothing on this site fades in.
 | Hover accent | `<Desync>` — the label forks into an amber and a mint copy, then snaps back |
 | Depth | `<Drift>` — a block travels a little against the page as it scrolls past |
 | Ambient loop | `<NodeMesh>` — the one motion on the site that never finishes; everything else fires once |
+| Depth | `<Confirmations>` — cells fill left to right for each block sealed on top of this one |
 
 Rules:
 
@@ -124,8 +127,14 @@ Rules:
 - **Hover is a second layer, not a second accent.** A block may land on its entrance accent and still pick up,
   fork or re-decrypt under a pointer — a track card already does all three. What it may not do is arrive twice.
 - **`<Mine>` is not another `<Scramble>`.** Scramble decrypts at a constant rate and you can read the answer
-  coming; Mine *searches*, and nothing is settled until the difficulty is met. At most one per screen, on the
-  hash that is genuinely still being found — an upcoming event, a merkle root — never on a sealed one.
+  coming; Mine *searches*, and nothing is settled until the difficulty is met. At most one per section, on the
+  hash that is genuinely still being found — an unsealed block, a merkle root, the head of a feed — never on a
+  sealed one. Everything already on the chain decrypts instead.
+- **A filter change is an entrance.** `<ChainRail>` keyed on the active filter is rebuilt rather than patched,
+  so the chain draws itself again for whatever the selection left standing. The ledger beneath it re-staggers
+  on the same cadence — the two read as one event.
+- **Every `<PageHeader>` title and `<EmptyState>` heading forks on hover.** It is set once in those two
+  components, so pages do not opt in and cannot drift apart on it.
 - **Loops earn their place.** Reveals fire once by design. The ticker, the kinetic band, the chain rail's
   packet and the peer mesh are the only things that run forever, and each is describing something that is
   genuinely still happening.

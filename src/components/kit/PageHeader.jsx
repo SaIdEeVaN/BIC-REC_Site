@@ -1,7 +1,9 @@
 import { Children } from 'react'
-import { Magnetic, Scramble, SplitText, Typewriter, Wipe } from '../motion'
+import { Desync, Magnetic, Scramble, SplitText, Typewriter, Wipe } from '../motion'
 
 // Entrance: eyebrow types, title words shunt up, lead unseals, aside values decrypt.
+// Once landed, the title forks under a pointer — the same hover accent the footer wordmark carries, so
+// every page that uses this header gets it without asking.
 export default function PageHeader({ eyebrow, title, lead, aside, children }) {
   return (
     <header className="border-b-3 border-ink">
@@ -14,7 +16,9 @@ export default function PageHeader({ eyebrow, title, lead, aside, children }) {
             </p>
           )}
           <h1 className="t-title max-w-[13ch]">
-            <SplitText text={title} delay={0.15} />
+            <Desync text={title}>
+              <SplitText text={title} delay={0.15} />
+            </Desync>
           </h1>
           {lead && (
             <Wipe trigger="mount" delay={0.45} className="mt-6 w-fit max-w-[58ch]">
