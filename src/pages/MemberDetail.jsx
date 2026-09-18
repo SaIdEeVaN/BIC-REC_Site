@@ -121,6 +121,21 @@ export default function MemberDetail() {
                     <dd className="mt-1 text-[15px] font-bold">{value}</dd>
                   </div>
                 ))}
+                {member.email && (
+                  <div className="border-t-3 border-ink px-4 py-3">
+                    <dt className="meta">email</dt>
+                    {/* College addresses run past 45 characters, so they break anywhere rather than
+                        pushing the column open. Same treatment as the faculty addresses. */}
+                    <dd className="mt-1">
+                      <a
+                        href={`mailto:${member.email}`}
+                        className="break-all font-mono text-[12.5px] font-medium underline decoration-2 underline-offset-4"
+                      >
+                        {member.email}
+                      </a>
+                    </dd>
+                  </div>
+                )}
               </dl>
             </Reveal>
 

@@ -3,10 +3,9 @@
 // Contact details come from the club's own intake form. Members who predate it carry a name and role
 // only — the cells and the detail page render whatever is present, so a partial record is fine.
 //
-// `email` is deliberately NOT rendered anywhere. It is kept here because the club needs it, but
-// nineteen students' addresses on a public page is a spam-scraping target; LinkedIn and Instagram are
-// profiles people publish on purpose, so those are the links shown. To publish them anyway, add the
-// field to MemberDetail — nothing else needs to change.
+// `email` is shown on a member's own page at the club's request, alongside their LinkedIn and Instagram.
+// It is deliberately left off the grid at /team/board: a page listing twenty-five addresses at once is a
+// far easier scrape than twenty-five pages holding one each. Keep it that way when adding to MemberCell.
 //
 // `slug` is two things at once: the member's address at /team/board/<slug>, and the name their photo
 // file must carry. Drop src/assets/members/<slug>.jpg (or .jpeg/.png/.webp) in and it appears — see
