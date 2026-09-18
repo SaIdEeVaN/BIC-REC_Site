@@ -516,6 +516,95 @@
     border-color: var(--bone);
   }
 
+  /* Fork (<Desync>): for a moment the label disagrees with itself. Two copies — one amber, one mint —
+     snap out of register on a hard steps() cadence and snap back into consensus. Offsets only: the
+     ghosts are switched with `visibility`, never faded, and the reduced-motion rule above leaves them
+     switched off entirely. They sit behind the real label, so at rest they're covered exactly. */
+  .desync {
+    position: relative;
+    display: inline-block;
+    isolation: isolate;
+  }
+
+  .desync-ghost {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    visibility: hidden;
+    pointer-events: none;
+  }
+
+  .desync-a {
+    color: var(--amber);
+  }
+
+  .desync-b {
+    color: var(--mint);
+  }
+
+  :is(.desync:hover, .desync:focus-visible, .desync-host:is(:hover, :focus-visible) .desync) .desync-a {
+    animation: desync-a 420ms steps(1) 1;
+  }
+
+  :is(.desync:hover, .desync:focus-visible, .desync-host:is(:hover, :focus-visible) .desync) .desync-b {
+    animation: desync-b 420ms steps(1) 1;
+  }
+
+  /* Both end hidden and back in register, so nothing is left sitting out of place once the pointer goes. */
+  @keyframes desync-a {
+    0% {
+      visibility: visible;
+      translate: -5px -3px;
+    }
+
+    30% {
+      visibility: visible;
+      translate: 4px 2px;
+    }
+
+    60% {
+      visibility: visible;
+      translate: -3px 3px;
+    }
+
+    85% {
+      visibility: visible;
+      translate: 2px -2px;
+    }
+
+    100% {
+      visibility: hidden;
+      translate: 0 0;
+    }
+  }
+
+  @keyframes desync-b {
+    0% {
+      visibility: visible;
+      translate: 4px 3px;
+    }
+
+    30% {
+      visibility: visible;
+      translate: -4px -2px;
+    }
+
+    60% {
+      visibility: visible;
+      translate: 3px -3px;
+    }
+
+    85% {
+      visibility: visible;
+      translate: -2px 2px;
+    }
+
+    100% {
+      visibility: hidden;
+      translate: 0 0;
+    }
+  }
+
   /* Header logo: picked up off the bar onto a hard shadow. */
   .logo-lift {
     transition: transform 150ms linear, box-shadow 150ms linear;
