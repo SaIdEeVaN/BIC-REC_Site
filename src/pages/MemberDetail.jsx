@@ -1,6 +1,6 @@
 import { Link, useParams } from 'react-router-dom'
-import { Button, Chip, EmptyState } from '../components/kit'
-import { Desync, Reveal, Scramble, Slam, SplitText, Stamp } from '../components/motion'
+import { Button, EmptyState } from '../components/kit'
+import { Desync, Reveal, Scramble, Slam, SplitText } from '../components/motion'
 import { boardMembers, getMemberBySlug } from '../data/members'
 import { blockNo, shortHash } from '../lib/chain'
 import { initials } from '../lib/initials'
@@ -85,24 +85,13 @@ export default function MemberDetail() {
               text={`${blockNo(index + 1)} · ${shortHash(member.slug)} · sealed`}
             />
           </p>
+          {/* Role, group and department are stated once, in the details panel below — they used to be
+              stamped here as chips as well, which said everything twice. */}
           <h1 className="t-title t-title-fluid mt-4 max-w-[17ch]">
             <Desync text={member.name}>
               <SplitText text={member.name} delay={0.15} />
             </Desync>
           </h1>
-          <div className="mt-7 flex flex-wrap gap-2">
-            <Stamp trigger="mount" delay={0.6}>
-              <Chip tone="pending">{member.role}</Chip>
-            </Stamp>
-            <Stamp trigger="mount" delay={0.68}>
-              <Chip>{member.group}</Chip>
-            </Stamp>
-            {member.department && (
-              <Stamp trigger="mount" delay={0.76}>
-                <Chip>{member.department}</Chip>
-              </Stamp>
-            )}
-          </div>
         </div>
       </header>
 
