@@ -159,7 +159,9 @@ BIC-WEBSITE/
 │   │   ├── Footer.jsx
 │   │   ├── EventRow.jsx
 │   │   └── MemberCell.jsx
+│   ├── assets/members/           # Member photos — drop in <slug>.jpg, see its README
 │   ├── lib/chain.js              # Block numbers, display hashes, sealed dates
+│   ├── lib/memberPhotos.js       # Resolves a member's photo from their slug
 │   ├── lib/mesh.js               # Peer-mesh topology drawn by NodeMesh
 │   ├── pages/                    # Route-level page components
 │   │   ├── Home.jsx

@@ -2,6 +2,7 @@
 // Used at runtime (RouteMeta in App.jsx), at build time (scripts/prerender-meta.js) and by the e2e tests,
 // so keep this file free of browser-only or Vite-only code.
 import { events, getEventById } from './data/events.js'
+import { boardMembers, getMemberBySlug } from './data/members.js'
 
 const SITE_URL = 'https://bicrec.web.app'
 
@@ -72,6 +73,13 @@ export function metaFor(pathname) {
   const event = eventMatch && getEventById(eventMatch[1])
   if (event) return build(event.title, event.description, path)
 
+  const memberMatch = path.match(/^\/team\/board\/([a-z0-9-]+)$/)
+  const member = memberMatch && getMemberBySlug(memberMatch[1])
+  if (member) {
+    const detail = [member.role, member.department].filter(Boolean).join(' · ')
+    return build(member.name, `${detail} — Blockchain Innovation Club, Rajalakshmi Engineering College.`, path)
+  }
+
   const page = PAGES[path]
   if (page) return build(page.title, page.description, path)
 
@@ -79,7 +87,11 @@ export function metaFor(pathname) {
 }
 
 // Every route that gets its own prerendered HTML file.
-export const staticRoutes = [...Object.keys(PAGES), ...events.map((e) => `/events/${e.id}`)]
+export const staticRoutes = [
+  ...Object.keys(PAGES),
+  ...events.map((e) => `/events/${e.id}`),
+  ...boardMembers.map((m) => `/team/board/${m.slug}`),
+]
 
 const escapeAttr = (value) =>
   String(value).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
