@@ -1,7 +1,7 @@
 import { Link, useParams } from 'react-router-dom'
-import { Button, Chip, EmptyState, Ledger, LedgerRow } from '../components/kit'
+import { Button, Chip, Confirmations, EmptyState, Ledger, LedgerRow } from '../components/kit'
 import { Magnetic, Reveal, Scramble, SplitText, Stamp, Wipe } from '../components/motion'
-import { getEventById, isUpcoming } from '../data/events'
+import { events, getEventById, isUpcoming } from '../data/events'
 import { blockNo, isRealLink, sealedDate, shortHash, stripEmoji } from '../lib/chain'
 
 function Block({ title, children }) {
@@ -32,6 +32,8 @@ export default function EventDetail() {
   }
 
   const upcoming = isUpcoming(event)
+  // Depth: blocks sealed after this one. An event that hasn't happened has none — nothing is built on it.
+  const confirmations = events.filter((e) => e.id > event.id && !isUpcoming(e)).length
   const canRegister = upcoming && isRealLink(event.registrationLink)
   const registration = canRegister ? 'Open' : upcoming ? 'Opens soon' : 'Closed'
 
@@ -149,6 +151,8 @@ export default function EventDetail() {
                 </div>
               </dl>
             </Reveal>
+
+            <Confirmations count={confirmations} className="mt-7" />
 
             {canRegister && (
               <div className="mt-7">

@@ -1,4 +1,5 @@
-import { Chip, Ledger, LedgerRow, PageHeader, SectionHeading, StatBar, TrackCards } from '../components/kit'
+import { ChainRail, Chip, Ledger, LedgerRow, PageHeader, SectionHeading, StatBar, TrackCards } from '../components/kit'
+import { Scramble } from '../components/motion'
 import { stats, achievements } from '../data/achievements'
 import { shortHash } from '../lib/chain'
 
@@ -34,6 +35,8 @@ export default function Achievements() {
       <section className="border-b-3 border-ink">
         <div className="wrap section">
           <SectionHeading eyebrow="highlights" title="Key milestones" />
+          {/* The milestones are a chain: one node each, the most recent one the head. */}
+          <ChainRail nodes={achievements.length} className="-mt-4 mb-4" />
           <Ledger head={['date', 'milestone', 'category', 'block']}>
             {achievements.map((a, i) => (
               <LedgerRow
@@ -50,7 +53,9 @@ export default function Achievements() {
                 status={
                   <>
                     <span className="block">Sealed</span>
-                    <span className="meta mt-2 block">{shortHash(a.title)}</span>
+                    <span className="meta mt-2 block">
+                      <Scramble text={shortHash(a.title)} delay={i * 0.07 + 0.3} />
+                    </span>
                   </>
                 }
               />

@@ -1,7 +1,8 @@
 import { useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { Button, Chip, PageHeader } from '../components/kit'
-import { LiftCell, Reveal, Slam, SplitText, Stamp } from '../components/motion'
+import { shortHash } from '../lib/chain'
+import { LiftCell, Mine, Reveal, Slam, SplitText, Stamp } from '../components/motion'
 
 const CLUB_EMAIL = 'kbaclub@rajalakshmil.edu.in'
 const EMPTY = { name: '', email: '', subject: '', message: '' }
@@ -108,6 +109,10 @@ export default function Contact() {
                 <h2 className="t-h3 mt-5">
                   <SplitText text="Check your email app" delay={0.15} />
                 </h2>
+                {/* Nothing is sent from here, but the message now exists — give it a hash and mine it. */}
+                <p className="meta mt-3">
+                  broadcasting · <Mine text={shortHash(form.subject + form.message)} trigger="mount" delay={0.4} />
+                </p>
                 <p className="t-body mt-3">
                   Your email app should have opened with the message ready — press send there to reach the club.
                 </p>

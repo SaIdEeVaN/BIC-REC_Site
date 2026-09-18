@@ -118,6 +118,19 @@ Animation uses [Motion](https://motion.dev) (`motion/react`) through a small kit
 | `LiftCell` | Grid cells are picked up onto a hard shadow on hover; with `shuffle`, filtered grids reflow cell by cell |
 | `Marquee` | Huge caps band that runs sideways, speeds up as you scroll down and reverses when you scroll up |
 | `Roll` | Button, nav and footer labels roll to a fresh copy on hover (CSS, `.roll` in `index.css`) |
+| `Mine` | A hash churns through candidates until its difficulty zeros lock in — proof of work, drawn |
+| `Desync` | A label forks into an amber and a mint copy on hover, then snaps back (CSS, `.desync`) |
+| `Drift` | A block travels a little against the page as it scrolls past, so stacked blocks separate |
+
+Four of the kit's drawings are the chain itself: `ChainRail` (blocks on one rail — keyed on a filter, it
+redraws for whatever the selection left standing), `NodeMesh` (a broadcast propagating across nine peers, on
+the topology in [`src/lib/mesh.js`](src/lib/mesh.js)), `MerkleTree` (leaves folding bottom-up into one root)
+and `Confirmations` (a cell per block sealed on top of this one). `BlockClock` counts the club's block height
+from its August 2025 genesis at one block every 12s — derived from the clock rather than stored, so it needs
+nothing kept in sync.
+
+Every `PageHeader` title and `EmptyState` heading forks on hover, so that accent is consistent across pages
+without each one opting in.
 
 Hover motion that needs no JavaScript lives in `src/index.css`: label roll, the ink sweep on linked ledger rows, the rising fill on ghost buttons and footer socials, the header logo lift and the form-field focus lift.
 
@@ -140,12 +153,14 @@ BIC-WEBSITE/
 ├── src/
 │   ├── assets/                   # Images and media
 │   ├── components/
-│   │   ├── kit/                  # Design-system primitives (Button, Chip, Ledger, TrackCards, ChainRail, ...)
+│   │   ├── kit/                  # Design-system primitives (Button, Chip, Ledger, TrackCards, ChainRail,
+│   │   │                         #   NodeMesh, MerkleTree, BlockClock, ...)
 │   │   ├── Navbar.jsx
 │   │   ├── Footer.jsx
 │   │   ├── EventRow.jsx
 │   │   └── MemberCell.jsx
 │   ├── lib/chain.js              # Block numbers, display hashes, sealed dates
+│   ├── lib/mesh.js               # Peer-mesh topology drawn by NodeMesh
 │   ├── pages/                    # Route-level page components
 │   │   ├── Home.jsx
 │   │   ├── Events.jsx

@@ -1,11 +1,26 @@
 import { useRef } from 'react'
 import { Link } from 'react-router-dom'
-import { motion, useScroll, useTransform } from 'motion/react'
-import { Button, ChainRail, Chip, InkCTA, Ledger, SectionHeading, StatBar, TrackCards } from '../components/kit'
-import { EASE, Magnetic, Marquee, Scramble, Slam, SplitText, Typewriter, Wipe, useCanAnimate } from '../components/motion'
+import { motion, useScroll } from 'motion/react'
+import { Button, ChainRail, Chip, InkCTA, Ledger, NodeMesh, SectionHeading, StatBar, TrackCards } from '../components/kit'
+import {
+  Desync,
+  Drift,
+  EASE,
+  Magnetic,
+  Marquee,
+  Mine,
+  Reveal,
+  Scramble,
+  Slam,
+  SplitText,
+  Typewriter,
+  Wipe,
+  useCanAnimate,
+} from '../components/motion'
 import EventRow from '../components/EventRow'
 import { events, getFeaturedEvents, getUpcomingEvents } from '../data/events'
 import { facultyCoordinators } from '../data/members'
+import { meshFacts } from '../lib/mesh'
 import { blockNo, shortHash } from '../lib/chain'
 
 const stats = [
@@ -31,13 +46,12 @@ const INSTAGRAM = 'https://www.instagram.com/bic.rec?utm_source=ig_web_button_sh
 // Scrolling away, the hero lines drift apart.
 
 // Alternate hero lines slide left and right as the hero scrolls out, past the section's clipped edge.
+// They share the hero's scroll progress rather than measuring their own, so the lines pull apart together.
 function DriftLine({ progress, direction, children }) {
-  const canAnimate = useCanAnimate()
-  const x = useTransform(progress, [0, 1], [0, direction * 140])
   return (
-    <motion.span className="block" style={canAnimate ? { x } : undefined}>
+    <Drift as="span" progress={progress} x={direction * 140} className="block">
       {children}
-    </motion.span>
+    </Drift>
   )
 }
 
@@ -75,8 +89,9 @@ function NextEvent({ event }) {
           <br />
           {event.venue}
         </p>
+        {/* The block isn't sealed yet, so its hash is still being searched for rather than read out. */}
         <p className="meta mt-5">
-          <Scramble text={shortHash(event.slug)} trigger="mount" delay={1.35} />
+          mining · <Mine text={shortHash(event.slug)} trigger="mount" delay={1.35} />
         </p>
       </Link>
     </Slam>
@@ -102,6 +117,62 @@ function NoUpcomingEvent() {
         </Link>
       </div>
     </Slam>
+  )
+}
+
+const MESH_READOUT = [
+  ['peers', String(meshFacts.nodes).padStart(2, '0')],
+  ['links', String(meshFacts.links).padStart(2, '0')],
+  ['full reach', `${String(meshFacts.hops).padStart(2, '0')} hops`],
+]
+
+// The club drawn as what it actually is: peers, not rows in a classroom. The heading forks on hover —
+// a hover accent sitting over the entrance one, the way a track card is picked up after it has landed.
+function Network() {
+  const title = 'A network, not a classroom.'
+
+  return (
+    <section className="on-ink border-b-3 border-bone bg-ink text-bone">
+      <div className="wrap section">
+        <div className="grid gap-10 lg:grid-cols-[1fr_300px] lg:items-end">
+          <Reveal>
+            <p className="meta mb-4">peer network</p>
+            <h2 className="t-h2 max-w-[15ch]">
+              <Desync text={title}>
+                <SplitText text={title} trigger="view" />
+              </Desync>
+            </h2>
+            <p className="t-lead mt-5 max-w-[52ch]">
+              Sixty-plus members on one shared record. A workshop runs on Tuesday, the notes have propagated
+              by Wednesday, and the next build starts from where the last one finished.
+            </p>
+          </Reveal>
+          <dl className="border-3 border-bone">
+            {MESH_READOUT.map(([label, value], i) => (
+              <div
+                key={label}
+                className="flex items-baseline justify-between gap-4 border-t-3 border-bone px-4 py-2.5 first:border-t-0"
+              >
+                <dt className="meta">{label}</dt>
+                <dd className="font-mono text-[12.5px] font-medium uppercase">
+                  <Scramble text={value} delay={0.3 + i * 0.1} />
+                </dd>
+              </div>
+            ))}
+            <div className="flex items-baseline justify-between gap-4 border-t-3 border-bone px-4 py-2.5">
+              <dt className="meta">head</dt>
+              <dd className="font-mono text-[12.5px] font-medium">
+                <Mine text={shortHash('bic-rec')} delay={0.6} />
+              </dd>
+            </div>
+          </dl>
+        </div>
+        {/* Drifts up against the section as it passes, so the mesh floats clear of the copy above it. */}
+        <Drift y={-36} className="mt-12 md:mt-16">
+          <NodeMesh tone="bone" />
+        </Drift>
+      </div>
+    </section>
   )
 }
 
@@ -166,6 +237,8 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      <Network />
 
       <Marquee words={BAND_WORDS} />
 
