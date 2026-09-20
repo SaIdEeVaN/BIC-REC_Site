@@ -79,8 +79,6 @@ Offset direction is always down-right. Shadow color is ink on bone, amber or bon
 - The peer mesh SVG: nine 20px squares joined by 3px rules, authored in a fixed `600x300` viewBox
   (`src/lib/mesh.js`). A broadcast leaves the origin and reaches the whole mesh in four hops — an amber dash
   runs down every link of a hop, and each node it reaches fills amber until the round resets.
-- The merkle tree SVG: leaves along the bottom, pairs routed up and inward on **right-angled** rules — never
-  diagonals — to a single amber root. It folds bottom-up, one level at a time.
 - The confirmation strip: six equal cells split by 3px rules, one filled amber per block sealed on top, with
   an `00/06 confirmations` readout. A block nothing is built on yet reads `00/06` and stays bone.
 - The block clock: `block 0000000 · sealed 00s ago`, counting from the club's genesis in August 2025 at one
@@ -128,7 +126,7 @@ Rules:
   fork or re-decrypt under a pointer — a track card already does all three. What it may not do is arrive twice.
 - **`<Mine>` is not another `<Scramble>`.** Scramble decrypts at a constant rate and you can read the answer
   coming; Mine *searches*, and nothing is settled until the difficulty is met. At most one per section, on the
-  hash that is genuinely still being found — an unsealed block, a merkle root, the head of a feed — never on a
+  hash that is genuinely still being found — an unsealed block, a pending batch, the head of a feed — never on a
   sealed one. Everything already on the chain decrypts instead.
 - **A filter change is an entrance.** `<ChainRail>` keyed on the active filter is rebuilt rather than patched,
   so the chain draws itself again for whatever the selection left standing. The ledger beneath it re-staggers

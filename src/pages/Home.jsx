@@ -1,7 +1,7 @@
 import { useRef } from 'react'
 import { Link } from 'react-router-dom'
 import { motion, useScroll } from 'motion/react'
-import { Button, ChainRail, Chip, InkCTA, Ledger, NodeMesh, SectionHeading, StatBar, TrackCards } from '../components/kit'
+import { Button, ChainRail, Chip, InkCTA, Ledger, SectionHeading, StatBar, TrackCards } from '../components/kit'
 import {
   Desync,
   Drift,
@@ -167,10 +167,6 @@ function Network() {
             </div>
           </dl>
         </div>
-        {/* Drifts up against the section as it passes, so the mesh floats clear of the copy above it. */}
-        <Drift y={-36} className="mt-12 md:mt-16">
-          <NodeMesh tone="bone" />
-        </Drift>
       </div>
     </section>
   )

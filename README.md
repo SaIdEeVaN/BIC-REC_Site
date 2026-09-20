@@ -122,10 +122,10 @@ Animation uses [Motion](https://motion.dev) (`motion/react`) through a small kit
 | `Desync` | A label forks into an amber and a mint copy on hover, then snaps back (CSS, `.desync`) |
 | `Drift` | A block travels a little against the page as it scrolls past, so stacked blocks separate |
 
-Four of the kit's drawings are the chain itself: `ChainRail` (blocks on one rail — keyed on a filter, it
+Three of the kit's drawings are the chain itself: `ChainRail` (blocks on one rail — keyed on a filter, it
 redraws for whatever the selection left standing), `NodeMesh` (a broadcast propagating across nine peers, on
-the topology in [`src/lib/mesh.js`](src/lib/mesh.js)), `MerkleTree` (leaves folding bottom-up into one root)
-and `Confirmations` (a cell per block sealed on top of this one). `BlockClock` counts the club's block height
+the topology in [`src/lib/mesh.js`](src/lib/mesh.js)) and `Confirmations` (a cell per block sealed on top of
+this one). `BlockClock` counts the club's block height
 from its August 2025 genesis at one block every 12s — derived from the clock rather than stored, so it needs
 nothing kept in sync.
 
@@ -154,7 +154,7 @@ BIC-WEBSITE/
 │   ├── assets/                   # Images and media
 │   ├── components/
 │   │   ├── kit/                  # Design-system primitives (Button, Chip, Ledger, TrackCards, ChainRail,
-│   │   │                         #   NodeMesh, MerkleTree, BlockClock, ...)
+│   │   │                         #   NodeMesh, Confirmations, BlockClock, ...)
 │   │   ├── Navbar.jsx
 │   │   ├── Footer.jsx
 │   │   ├── EventRow.jsx
