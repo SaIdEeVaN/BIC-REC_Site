@@ -53,8 +53,13 @@ jobs:
         run: npm run lint
 
       # The browser is ~130MB and re-downloading it cost ~25s per runner. Cache it against the
-      # Playwright version, so it is only fetched again when that version actually changes. The OS
-      # libraries it needs aren't part of the cache, so those are still installed on a hit.
+      # Playwright version, so it is only fetched again when that version actually changes.
+      #
+      # On a cache hit nothing runs at all. `install-deps` used to run here and cost 20s a shard —
+      # apt-get on four runners — but ubuntu-latest already ships the libraries Chromium needs, so
+      # it was 20s of the critical path re-confirming what the image provides. If a future runner
+      # image drops one, Chromium fails to launch, the suite fails and the deploy stops: loud, and
+      # fixed by restoring `--with-deps` here.
       - name: Playwright version
         id: playwright
         run: echo "version=$(node -p "require('@playwright/test/package.json').version")" >> "$GITHUB_OUTPUT"
@@ -69,10 +74,6 @@ jobs:
       - name: Install Playwright browser
         if: steps.playwright-cache.outputs.cache-hit != 'true'
         run: npx playwright install --with-deps chromium
-
-      - name: Install Playwright system dependencies
-        if: steps.playwright-cache.outputs.cache-hit == 'true'
-        run: npx playwright install-deps chromium
 
       - name: End-to-end tests
         run: npm run test:e2e -- --shard=${{ matrix.shard }}/4
