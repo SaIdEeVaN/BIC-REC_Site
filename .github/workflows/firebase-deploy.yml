@@ -16,35 +16,43 @@ permissions:
   contents: read
 
 jobs:
-  build-and-deploy:
-    name: Build & Deploy
+  # Lint and test gate the live channel: this workflow deploys straight to production, so a failure
+  # here has to stop it. The e2e suite builds and previews the site itself (see playwright.config.js),
+  # which is also what catches case-sensitivity breakage a Windows checkout can't reproduce locally.
+  #
+  # Split across four runners because the suite, not the setup, is the long pole: one runner took
+  # ~2m of a ~3m deploy. Each shard repeats the ~25s of checkout/install, so this trades Actions
+  # minutes for wall-clock — worth it while the deploy is what everyone is waiting on.
+  test:
+    name: Lint & test (${{ matrix.shard }}/4)
     runs-on: ubuntu-latest
+    strategy:
+      # Let every shard report. A single failure blocks the deploy either way, and seeing all of
+      # them at once beats fixing one and discovering the next on the following run.
+      fail-fast: false
+      matrix:
+        shard: [1, 2, 3, 4]
 
     steps:
-      # 1. Checkout your code
       # (v5+ run on Node 24 — v4 used Node 20, which GitHub removes from runners on 2026-09-23)
       - name: Checkout repository
         uses: actions/checkout@v7
 
-      # 2. Set up Node.js
       - name: Set up Node.js
         uses: actions/setup-node@v7
         with:
           node-version: 22
           cache: 'npm'
 
-      # 3. Install dependencies
       - name: Install dependencies
         run: npm ci
 
-      # 4. Lint and test before anything reaches the live channel. This job deploys straight to
-      #    production, so a failure here has to stop it — the e2e suite builds and previews the
-      #    site itself (see playwright.config.js), which is also what catches case-sensitivity
-      #    breakage that a Windows checkout can't reproduce locally.
+      # Only the first shard needs to lint — it reads the same files on all four.
       - name: Lint
+        if: matrix.shard == 1
         run: npm run lint
 
-      # The browser is ~130MB and re-downloading it cost ~25s of every deploy. Cache it against the
+      # The browser is ~130MB and re-downloading it cost ~25s per runner. Cache it against the
       # Playwright version, so it is only fetched again when that version actually changes. The OS
       # libraries it needs aren't part of the cache, so those are still installed on a hit.
       - name: Playwright version
@@ -67,21 +75,40 @@ jobs:
         run: npx playwright install-deps chromium
 
       - name: End-to-end tests
-        run: npm run test:e2e
+        run: npm run test:e2e -- --shard=${{ matrix.shard }}/4
 
+      # Named per shard: upload-artifact@v4 rejects two uploads sharing a name.
       - name: Upload test report on failure
         if: failure()
         uses: actions/upload-artifact@v4
         with:
-          name: playwright-report
+          name: playwright-report-${{ matrix.shard }}
           path: playwright-report/
           retention-days: 7
 
-      # 5. Build the Vite project
+  deploy:
+    name: Build & Deploy
+    runs-on: ubuntu-latest
+    needs: test
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      # Rebuilt here rather than carried from a shard: the build takes ~2s, and uploading and
+      # downloading dist/ as an artifact would cost more than that in both directions.
       - name: Build
         run: npm run build
 
-      # 6. Deploy to Firebase Hosting
       # (the moving v0 tag points at v0.11.0+, which already runs on Node 24)
       - name: Deploy to Firebase
         uses: FirebaseExtended/action-hosting-deploy@v0
