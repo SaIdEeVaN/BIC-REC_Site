@@ -6,6 +6,9 @@ export default defineConfig({
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 1 : 0,
+  // Playwright defaults to half the cores. The deploy waits on this suite, and the runner has nothing
+  // else to do, so use all of them — it took the full run from ~3m to under 2m with no new flakes.
+  workers: process.env.CI ? '100%' : undefined,
   reporter: process.env.CI ? 'github' : 'list',
   use: {
     baseURL: 'http://localhost:4173',

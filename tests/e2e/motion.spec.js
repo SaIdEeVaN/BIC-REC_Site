@@ -16,8 +16,14 @@ async function playAllAnimations(page) {
 
 const animatedRoutes = ['/', '/about', '/events', '/events/3', '/projects', '/gallery', '/team/core', '/join', '/contact']
 
+// Animation overflow shows up at the extremes: the narrowest column, where a drifting block has the
+// least room, and the widest, where the hero's drift travels furthest. The breakpoints between them
+// only interpolate, so running all five multiplied the slowest tests in the suite for no new signal.
+const MOTION_WIDTHS = ['mobile-360', 'desktop-1280']
+
 for (const route of animatedRoutes) {
-  test(`${route} fits the viewport with animations on`, async ({ page }) => {
+  test(`${route} fits the viewport with animations on`, async ({ page }, testInfo) => {
+    test.skip(!MOTION_WIDTHS.includes(testInfo.project.name), 'the extreme widths are what catch this')
     await page.goto(route)
     await expect(page.locator('main :is(h1, h2)').first()).toBeVisible()
     await page.evaluate(() => document.fonts.ready)

@@ -44,8 +44,27 @@ jobs:
       - name: Lint
         run: npm run lint
 
+      # The browser is ~130MB and re-downloading it cost ~25s of every deploy. Cache it against the
+      # Playwright version, so it is only fetched again when that version actually changes. The OS
+      # libraries it needs aren't part of the cache, so those are still installed on a hit.
+      - name: Playwright version
+        id: playwright
+        run: echo "version=$(node -p "require('@playwright/test/package.json').version")" >> "$GITHUB_OUTPUT"
+
+      - name: Cache Playwright browser
+        id: playwright-cache
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ steps.playwright.outputs.version }}
+
       - name: Install Playwright browser
+        if: steps.playwright-cache.outputs.cache-hit != 'true'
         run: npx playwright install --with-deps chromium
+
+      - name: Install Playwright system dependencies
+        if: steps.playwright-cache.outputs.cache-hit == 'true'
+        run: npx playwright install-deps chromium
 
       - name: End-to-end tests
         run: npm run test:e2e
