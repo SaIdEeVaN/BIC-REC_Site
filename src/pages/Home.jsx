@@ -82,7 +82,7 @@ function HeroSignal() {
     <div className="hero-signal" aria-hidden="true">
       <motion.div
         className="hero-grid"
-        animate={{ x: [0, 18, 0], y: [0, -12, 0], rotate: [-6, -3, -6] }}
+        animate={{ rotate: [-6, -3, -6] }}
         transition={{ duration: 14, repeat: Infinity, ease: 'easeInOut' }}
       />
       {HERO_NODES.map((node) => (

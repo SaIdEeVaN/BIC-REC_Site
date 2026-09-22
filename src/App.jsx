@@ -2,7 +2,7 @@ import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-route
 import { lazy, Suspense, useEffect } from 'react'
 import { MotionConfig } from 'motion/react'
 import Navbar from './components/Navbar'
-import { RouteShutter } from './components/motion'
+import { MouseTracker, RouteShutter } from './components/motion'
 import Footer from './components/Footer'
 import Home from './pages/Home'
 import { metaFor } from './seo'
@@ -64,6 +64,7 @@ export default function App() {
       <MotionConfig reducedMotion="user">
       <RouteEffects />
       <RouteShutter />
+      <MouseTracker />
       <div className="flex min-h-screen flex-col bg-bone text-ink">
         <a href="#main" className="btn btn-amber skip-link">Skip to content</a>
         <Navbar />

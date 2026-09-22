@@ -678,6 +678,42 @@
     border-style: dashed;
   }
 
+  .global-cursor {
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: 80;
+    width: 30px;
+    height: 30px;
+    pointer-events: none;
+    border: 3px solid var(--mint);
+    box-shadow: 5px 5px 0 var(--ink);
+    translate: -50% -50%;
+  }
+
+  .global-cursor::before,
+  .global-cursor::after {
+    content: '';
+    position: absolute;
+    background: var(--mint);
+  }
+
+  .global-cursor::before {
+    left: 50%;
+    top: -9px;
+    width: 3px;
+    height: 45px;
+    translate: -50% 0;
+  }
+
+  .global-cursor::after {
+    left: -9px;
+    top: 50%;
+    width: 45px;
+    height: 3px;
+    translate: 0 -50%;
+  }
+
   .hero-node {
     position: absolute;
     width: 12px;
