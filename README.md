@@ -60,6 +60,8 @@ The UI follows a **neo-brutalist design system** — hard geometry, 3px ink rule
 | [Vite](https://vitejs.dev/) | Build tool & Dev server |
 | [Tailwind CSS](https://tailwindcss.com/) | Styling (tokens in `tailwind.config.js`) |
 | [React Router v7](https://reactrouter.com/) | Client-side routing |
+| [Motion](https://motion.dev/) | Animation (see [Motion](#motion)) |
+| [Playwright](https://playwright.dev/) | End-to-end tests |
 | Archivo + IBM Plex Mono | Typefaces (Google Fonts) |
 | [Firebase Hosting](https://firebase.google.com/products/hosting) | Deployment |
 
@@ -69,8 +71,8 @@ The UI follows a **neo-brutalist design system** — hard geometry, 3px ink rule
 
 ### Prerequisites
 
-- [Node.js](https://nodejs.org/) v18 or higher
-- [npm](https://www.npmjs.com/) v9 or higher
+- [Node.js](https://nodejs.org/) 20 (20.19+), 22 (22.13+) or 24+ — the ranges Vite 8 and ESLint 10 both support. CI uses 22.
+- [npm](https://www.npmjs.com/) v9 or higher (ships with Node)
 
 ### Installation
 
@@ -92,10 +94,10 @@ The site will be available at **http://localhost:5173**
 
 ```bash
 npm run dev       # Start dev server with hot reload
-npm run build     # Build for production (outputs to /dist) + write per-page share tags
+npm run build     # Build for production (outputs to /dist) + per-page share tags, sitemap.xml, robots.txt
 npm run preview   # Preview the production build locally
 npm run lint      # ESLint
-npm run test:e2e  # Playwright: every page at 360/390/1280px — no sideways scroll, correct title + share tags
+npm run test:e2e  # Playwright: every page at five widths (360–1280px) — no sideways scroll, correct title + share tags
 npm run og-image  # Re-render public/og-image.png from scripts/og-image.html
 ```
 
@@ -144,55 +146,53 @@ Everything respects the OS "reduce motion" setting (`MotionConfig reducedMotion=
 
 ### Page titles & share previews
 
-Titles and descriptions for every route live in [`src/seo.js`](src/seo.js). The app updates the tab title as you navigate, and `npm run build` writes a separate HTML file per route (e.g. `dist/events/2.html`) so link previews on WhatsApp, LinkedIn, etc. show the right page. Firebase serves those files via `cleanUrls` in `firebase.json`. New events in `src/data/events.js` are picked up automatically.
+Titles and descriptions for every route live in [`src/seo.js`](src/seo.js). The app updates the tab title as you navigate, and `npm run build` writes a separate HTML file per route (e.g. `dist/events/2.html`) so link previews on WhatsApp, LinkedIn, etc. show the right page. Firebase serves those files via `cleanUrls` in `firebase.json`. The same route list is written out as `dist/sitemap.xml`, with a `dist/robots.txt` pointing crawlers at it. New events and members in `src/data/` are picked up by all three automatically.
 
 ---
 
 ## 📁 Project Structure
 
 ```
-BIC-WEBSITE/
-├── .github/
-│   └── workflows/
-│       └── firebase-deploy.yml   # CI/CD auto-deploy workflow
-├── public/                       # Static assets
+BIC-REC_Site/
+├── .github/workflows/
+│   └── firebase-deploy.yml       # Lint + e2e on every PR and push; deploys pushes to main
+├── public/                       # favicon.svg, og-image.png
+├── scripts/
+│   ├── prerender-meta.js         # Post-build: per-route share tags, sitemap.xml, robots.txt
+│   ├── og-image.html             # Source for public/og-image.png
+│   └── render-og-image.js        # `npm run og-image`
 ├── src/
-│   ├── assets/                   # Images and media
+│   ├── assets/
+│   │   ├── logo/
+│   │   └── members/              # Member photos — drop in <slug>.jpg, see its README
 │   ├── components/
 │   │   ├── kit/                  # Design-system primitives (Button, Chip, Ledger, TrackCards, ChainRail,
 │   │   │                         #   NodeMesh, Confirmations, BlockClock, ...)
+│   │   ├── motion/               # Animation kit — see Motion above
 │   │   ├── Navbar.jsx
 │   │   ├── Footer.jsx
 │   │   ├── EventRow.jsx
 │   │   └── MemberCell.jsx
-│   ├── assets/members/           # Member photos — drop in <slug>.jpg, see its README
-│   ├── lib/chain.js              # Block numbers, display hashes, sealed dates
-│   ├── lib/memberPhotos.js       # Resolves a member's photo from their slug
-│   ├── lib/mesh.js               # Peer-mesh topology drawn by NodeMesh
-│   ├── pages/                    # Route-level page components
-│   │   ├── Home.jsx
-│   │   ├── Events.jsx
-│   │   ├── EventDetail.jsx
-│   │   ├── About.jsx
-│   │   ├── Achievements.jsx
-│   │   ├── BoardMembers.jsx
-│   │   ├── CoreMembers.jsx
-│   │   ├── Gallery.jsx
-│   │   ├── Projects.jsx
-│   │   ├── Resources.jsx
-│   │   ├── News.jsx
-│   │   ├── JoinUs.jsx
-│   │   ├── Contact.jsx
-│   │   └── NotFound.jsx
-│   ├── data/                     # Static data files
+│   ├── data/                     # Events, members, news, achievements, resources; club.js holds
+│   │                             #   the club's email and social links
+│   ├── lib/
+│   │   ├── chain.js              # Block numbers, display hashes, sealed dates
+│   │   ├── initials.js           # Initials for members without a photo
+│   │   ├── memberPhotos.js       # Resolves a member's photo from their slug
+│   │   └── mesh.js               # Peer-mesh topology drawn by NodeMesh
+│   ├── pages/                    # One component per route — the route table is in App.jsx
 │   ├── App.jsx                   # Root component & routing
 │   ├── main.jsx                  # App entry point
+│   ├── seo.js                    # Title, description and canonical URL for every route
 │   └── index.css                 # Global styles
+├── tests/e2e/                    # Playwright specs
 ├── .firebaserc                   # Firebase project config
+├── DESIGN_SYSTEM.md              # The design spec
 ├── firebase.json                 # Firebase hosting config
+├── package.json
+├── playwright.config.js
 ├── tailwind.config.js
-├── vite.config.js
-└── package.json
+└── vite.config.js
 ```
 
 ---
@@ -212,15 +212,15 @@ firebase deploy --only hosting
 
 ## ⚙️ CI/CD
 
-This project uses **GitHub Actions** for automatic deployments. Every push to the `main` branch triggers:
+[`.github/workflows/firebase-deploy.yml`](.github/workflows/firebase-deploy.yml) runs on every pull request to `main` and every push to it:
 
-1. ✅ Install dependencies (`npm ci`)
-2. ✅ Build the project (`npm run build`)
-3. ✅ Deploy to Firebase Hosting
+1. **Lint** — `npm run lint`
+2. **Test** — the full Playwright suite, split across four runners
+3. **Deploy** — on a push to `main`, or a manual run from the Actions tab: build, then publish to Firebase Hosting's live channel
 
-The workflow is defined in [`.github/workflows/firebase-deploy.yml`](.github/workflows/firebase-deploy.yml).
+A pull request runs lint and test as a check on the PR and never deploys. On `main`, a failure in either stops the deploy. A manual run deploys whichever branch it is started on, so start it on `main`.
 
-> **Note:** Requires a `FIREBASE_SERVICE_ACCOUNT` secret to be set in the repository's GitHub Actions secrets.
+> **Note:** Deploying requires a `FIREBASE_SERVICE_ACCOUNT` secret in the repository's GitHub Actions secrets.
 
 ---
 

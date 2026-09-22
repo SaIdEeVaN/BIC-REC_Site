@@ -23,6 +23,7 @@ import { facultyCoordinators } from '../data/members'
 import { stats as clubStats } from '../data/achievements'
 import { meshFacts } from '../lib/mesh'
 import { blockNo, shortHash } from '../lib/chain'
+import { CLUB_INSTAGRAM } from '../data/club'
 
 // Read from the club's figures rather than written out again here — the two used to be separate lists
 // and ended up contradicting each other. `events & workshops` is the roll-up of both counts, so it
@@ -45,8 +46,6 @@ const pillars = [
 
 const HERO_WORDS = ['Build.', 'Innovate.', 'Decentralize.']
 const BAND_WORDS = ['Workshops', 'Hackathons', 'Guest lectures', 'Live projects']
-
-const INSTAGRAM = 'https://www.instagram.com/bic.rec?utm_source=ig_web_button_share_sheet&igsi=ZDNlZDc0MzIxNw=='
 
 // Hero load sequence (seconds): eyebrow types 0 → words shunt up .15–.6 → lead unseals .7 →
 // buttons drop .9 → next-event card slams 1.05 → chain draws and a packet starts travelling.
@@ -116,7 +115,7 @@ function NoUpcomingEvent() {
       <h2 className="t-card mt-5">Next event coming soon</h2>
       <p className="t-small mt-3">New workshops and hackathons are announced on Instagram first.</p>
       <div className="mt-5 flex flex-wrap gap-x-5 gap-y-2">
-        <a href={INSTAGRAM} target="_blank" rel="noopener noreferrer" className={linkClass}>
+        <a href={CLUB_INSTAGRAM} target="_blank" rel="noopener noreferrer" className={linkClass}>
           Follow @bic.rec
         </a>
         <Link to="/events" className={linkClass}>

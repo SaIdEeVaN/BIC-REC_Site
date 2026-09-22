@@ -3,6 +3,7 @@ import { Button, Chip, EmptyState, InkCTA, Ledger, LedgerRow, PageHeader, Tabs }
 import { Mine, Scramble } from '../components/motion'
 import { news, newsCategories } from '../data/news'
 import { shortHash } from '../lib/chain'
+import { CLUB_INSTAGRAM, CLUB_LINKEDIN } from '../data/club'
 
 const categories = ['All', ...newsCategories]
 
@@ -72,11 +73,11 @@ export default function News() {
       <InkCTA title="Stay in the loop" body="Follow us on social media to never miss an update.">
         <Button
           variant="onInk"
-          href="https://www.instagram.com/bic.rec?utm_source=ig_web_button_share_sheet&igsi=ZDNlZDc0MzIxNw=="
+          href={CLUB_INSTAGRAM}
         >
           Instagram
         </Button>
-        <Button variant="ghostOnInk" href="https://www.linkedin.com/company/bicrec">LinkedIn</Button>
+        <Button variant="ghostOnInk" href={CLUB_LINKEDIN}>LinkedIn</Button>
       </InkCTA>
     </>
   )
