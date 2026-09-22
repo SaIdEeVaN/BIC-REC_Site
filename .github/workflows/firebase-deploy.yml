@@ -4,6 +4,12 @@ on:
   push:
     branches:
       - main
+  # Run the same gate on pull requests, so breakage is caught before it reaches main rather than
+  # after: a push to main is a deploy, and a red suite there means main is already carrying the bad
+  # commit. The deploy job is held to pushes only — see its `if` below.
+  pull_request:
+    branches:
+      - main
   workflow_dispatch:
 
 # Pushing twice in quick succession raced two deploys to the live channel, and whichever
@@ -91,6 +97,9 @@ jobs:
     name: Build & Deploy
     runs-on: ubuntu-latest
     needs: test
+    # Pushes to main deploy; pull requests only run the gate above. Without this the same workflow
+    # would publish a PR's build straight to the live channel.
+    if: github.event_name != 'pull_request'
 
     steps:
       - name: Checkout repository
