@@ -15,7 +15,6 @@ export const events = [
 Participants received a beginner's toolkit including curated reading materials, a GitHub resource list, and access to the club's exclusive Discord server. The workshop was designed to be accessible to students from all backgrounds, including non-technical streams.
 
 The event was a massive success with overwhelming positive feedback and a 95% satisfaction rate. It set the foundation for the Blockchain Innovation Club's journey at REC.`,
-    poster: null,
     speakers: [],
     highlights: [
       '60+ students attended from 8 departments',
@@ -26,7 +25,6 @@ The event was a massive success with overwhelming positive feedback and a 95% sa
       'Beginner resource toolkit provided',
     ],
     registrationLink: '#',
-    photos: [],
     certificate: true,
   },
   {
@@ -43,7 +41,6 @@ The event was a massive success with overwhelming positive feedback and a 95% sa
 Industry mentors from Kerala Blockchain Association and leading Web3 companies guided teams throughout the marathon event, providing technical support and business insights. The energy was electric as teams worked through the night to bring their ideas to life.
 
 All 12 teams successfully demonstrated working prototypes. The top 3 teams won cash prizes worth ₹50,000 combined and were recommended for incubation support at the KBA innovation hub.`,
-    poster: null,
     speakers: [],
     highlights: [
       '12 teams, 60+ participants over 24 hours',
@@ -54,7 +51,6 @@ All 12 teams successfully demonstrated working prototypes. The top 3 teams won c
       'All participants received completion certificates',
     ],
     registrationLink: '#',
-    photos: [],
     certificate: true,
   },
   {
@@ -71,7 +67,6 @@ All 12 teams successfully demonstrated working prototypes. The top 3 teams won c
 Topics covered included automated market makers (AMMs), yield farming strategies, liquidity pools, staking mechanisms, governance tokens, and the risks involved in DeFi participation. Real-world protocol walkthroughs on Uniswap, Aave, and Compound made abstract concepts tangible.
 
 The lecture drew attendees not just from REC but also from nearby colleges, making it one of the most well-attended events in the club's history with 100+ participants.`,
-    poster: null,
     speakers: [],
     highlights: [
       '100+ attendees from multiple colleges',
@@ -81,7 +76,6 @@ The lecture drew attendees not just from REC but also from nearby colleges, maki
       'Networking session with industry professional',
     ],
     registrationLink: '#',
-    photos: [],
     certificate: false,
   },
   {
@@ -98,7 +92,6 @@ The lecture drew attendees not just from REC but also from nearby colleges, maki
 You will learn Solidity programming from scratch, understand smart contract security vulnerabilities, use professional tools like Remix IDE and Hardhat, and deploy your first smart contract on the Ethereum Sepolia testnet. By end of day, every participant will have built and deployed a working DApp.
 
 Prerequisites: Basic JavaScript or programming knowledge. Bring your laptop with MetaMask installed (we'll help set it up).`,
-    poster: null,
     speakers: [],
     highlights: [
       'Write and understand Solidity syntax from scratch',
@@ -108,7 +101,6 @@ Prerequisites: Basic JavaScript or programming knowledge. Bring your laptop with
       'Take-home project to continue building',
     ],
     registrationLink: 'https://forms.google.com',
-    photos: [],
     certificate: true,
   },
   {
@@ -125,7 +117,6 @@ Prerequisites: Basic JavaScript or programming knowledge. Bring your laptop with
 The event features a rapid-fire round, a visual round with crypto chart analysis, and a technical round with smart contract code snippets. There will be general awareness questions too, so teams with mixed backgrounds are welcome!
 
 Exciting cash prizes for the top 3 teams, special recognition for the best individual performer, and certificates for all participants.`,
-    poster: null,
     speakers: [],
     highlights: [
       '5 rounds of increasing difficulty',
@@ -136,7 +127,6 @@ Exciting cash prizes for the top 3 teams, special recognition for the best indiv
       'Certificates for all participants',
     ],
     registrationLink: 'https://forms.google.com',
-    photos: [],
     certificate: true,
   },
   {
@@ -153,7 +143,6 @@ Exciting cash prizes for the top 3 teams, special recognition for the best indiv
 The evening features 5-minute lightning talks by club members, project demonstrations, open floor discussions on trending Web3 topics, and unstructured networking time. Whether you're a beginner or an expert, this is the perfect space to share what you've been learning and building.
 
 Refreshments will be provided. This event is free and open to all REC students.`,
-    poster: null,
     speakers: [],
     highlights: [
       'Lightning talks by club members (5 min each)',
@@ -164,7 +153,6 @@ Refreshments will be provided. This event is free and open to all REC students.`
       'Relaxed networking and community building',
     ],
     registrationLink: '#',
-    photos: [],
     certificate: false,
   },
 ]

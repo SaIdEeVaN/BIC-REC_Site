@@ -21,7 +21,6 @@ export const achievements = [
     date: 'August 2025',
     category: 'Collaboration',
     description: 'BIC became an official student chapter partner of the Kerala Blockchain Association, gaining access to industry mentors, resources, and events.',
-    icon: '🤝',
   },
   {
     id: 3,
@@ -29,6 +28,5 @@ export const achievements = [
     date: 'December 2025',
     category: 'Milestone',
     description: 'Within the first year of founding, BIC engaged over 500 students across 12 departments at REC through workshops, events, and online sessions.',
-    icon: '👥',
   },
 ]
