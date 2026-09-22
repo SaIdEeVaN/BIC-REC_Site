@@ -64,7 +64,9 @@ export default function App() {
       <MotionConfig reducedMotion="user">
       <RouteEffects />
       <RouteShutter />
-      <div className="flex min-h-screen flex-col bg-bone text-ink">
+      <div className="relative isolate flex min-h-screen flex-col text-ink">
+        {/* The ruled sheet every page sits on, behind the whole app and the full height of it. */}
+        <div className="paper" aria-hidden="true" />
         <a href="#main" className="btn btn-amber skip-link">Skip to content</a>
         <Navbar />
         <main id="main" className="flex-1">
