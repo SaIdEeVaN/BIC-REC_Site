@@ -4,6 +4,18 @@ import MemberCell from '../components/MemberCell'
 import { boardGroups, facultyCoordinators } from '../data/members'
 import { pad2 } from '../lib/chain'
 import { initials } from '../lib/initials'
+import { photoFor } from '../lib/memberPhotos'
+
+// Same fallback as MemberCell: the photo when one has been dropped in under the coordinator's slug, their
+// initials until then. The name sits right beside it, so the image is decorative and carries no alt text.
+function CoordinatorPortrait({ coordinator }) {
+  const photo = photoFor(coordinator.slug)
+  return photo ? (
+    <img src={photo} alt="" className="h-full w-full object-cover" loading="lazy" />
+  ) : (
+    initials(coordinator.name)
+  )
+}
 
 // Block numbers run on from one group to the next, so the whole board reads as a single chain.
 let seats = 0
@@ -31,16 +43,16 @@ export default function BoardMembers() {
         <div className="wrap section">
           <Slam color={AMBER} className="on-ink bg-ink p-6 text-bone shadow-amber md:p-10">
             <p className="meta">faculty coordinators</p>
-            {/* Names like MUNEESHWARI need ~320px at the md heading size: initials stack above the name on phones,
+            {/* Names like MUNEESHWARI need ~320px at the md heading size: the portrait stacks above the name on phones,
                 and the two coordinators only sit side by side once each column is wide enough (xl). */}
             <ul className="mt-6 grid gap-8 xl:grid-cols-2">
               {facultyCoordinators.map((coordinator) => (
                 <li key={coordinator.name} className="flex min-w-0 flex-col gap-4 sm:flex-row sm:items-center sm:gap-5">
                   <span
                     aria-hidden="true"
-                    className="grid h-20 w-20 shrink-0 place-items-center bg-amber text-[28px] font-black tracking-[-.04em] text-ink"
+                    className="grid h-20 w-20 shrink-0 place-items-center overflow-hidden bg-amber text-[28px] font-black tracking-[-.04em] text-ink"
                   >
-                    {initials(coordinator.name)}
+                    <CoordinatorPortrait coordinator={coordinator} />
                   </span>
                   <div className="min-w-0">
                     <h2 className="t-h3">{coordinator.name}</h2>
