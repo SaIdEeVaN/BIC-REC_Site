@@ -21,6 +21,19 @@ Two backgrounds per screen: bone and ink. Amber is an accent on small surfaces (
 
 The one place mint is used at size is `<Desync>`, where it and amber are the two forked copies of a label. That is a hover state lasting 420ms, never a resting one, and at most one element per screen carries it.
 
+## Paper
+
+The page is a ruled sheet, not a flat field. Behind the whole app sits one grid on a 96px module, ruled
+2px in bone one step down (`#E4DCCA`); `.on-ink` sections carry the same grid ruled in ink one step up
+(`#201B16`), so a screen reads as one sheet whichever way up a section is. The rules have hard edges like
+every other rule on the site — a repeating two-stop gradient, never a fade.
+
+The sheet is not a third background: it is bone and ink moved a step, and it is never a surface anything
+is set on. A panel that needs to read as a surface fills itself `bg-bone` and covers the sheet (stat
+cells, confirmation cells, cards on a shadow); an outlined panel that is just structure — a `dl` of
+readouts, a `ul` of rows — lets it through, because it is drawn *on* the sheet. The grid lives on `.paper`
+and `.on-ink` in `index.css`, so no page opts in.
+
 ## Type
 
 - **Archivo** — headings and UI. Weights 700 / 800 / 900 only.
@@ -150,5 +163,6 @@ Rules:
 
 - No rounded corners, drop shadows with blur, gradients, or opacity-based greys.
 - No icons drawn as illustration — geometry and rules do the work.
-- No third background color. No second accent beyond amber + mint.
+- No third background color. The paper grid is bone and ink moved a step, not a surface — see Paper.
+- No second accent beyond amber + mint.
 - No lowercase headlines, no body text below 13.5px, no rule thinner than 2px.

@@ -14,6 +14,12 @@
     --muted: #4a4238;
     --mono: 'IBM Plex Mono', ui-monospace, Menlo, Consolas, monospace;
 
+    /* Paper. The page is a ruled sheet, not a flat field: the same rule the layout is drawn with, one
+       step off its background so it is felt rather than read. Not a third colour — bone and ink, moved. */
+    --rule-bone: #e4dcca;
+    --rule-ink: #201b16;
+    --module: 96px;
+
     /* Motion. --m scales every reveal distance from one place. */
     --m: 1;
     --reveal-rise: calc(26px * var(--m));
@@ -80,6 +86,35 @@
 }
 
 @layer components {
+  /* Drafting paper — the site's background, on every page at once.
+     A grid on the 96px module, ruled with two-stop repeating gradients: hard stops, so each rule has an
+     edge like every other rule on the site rather than fading into the sheet. One layer behind the whole
+     app, and the same grid inverted on `.on-ink`, so a page reads as one sheet whichever way up a section
+     is. `background-origin: border-box` keeps an inverted section's grid in register with the page's
+     through its own 3px edge. */
+  .paper,
+  .on-ink {
+    background-image:
+      repeating-linear-gradient(to right, var(--rule) 0 2px, transparent 2px var(--module)),
+      repeating-linear-gradient(to bottom, var(--rule) 0 2px, transparent 2px var(--module));
+    background-origin: border-box;
+  }
+
+  /* Behind the app rather than fixed to the viewport: the sheet has to scroll with the inverted sections,
+     or their rules would slide against its. `isolate` on the app shell is what keeps a negative z-index
+     behind the content without falling behind the page's own background. */
+  .paper {
+    --rule: var(--rule-bone);
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+  }
+
+  .on-ink {
+    --rule: var(--rule-ink);
+  }
+
   /* Layout */
   .wrap {
     width: 100%;
