@@ -7,12 +7,15 @@
 // It is deliberately left off the grid at /team/board: a page listing twenty-five addresses at once is a
 // far easier scrape than twenty-five pages holding one each. Keep it that way when adding to MemberCell.
 //
-// `slug` is two things at once: the member's address at /team/board/<slug>, and the name their photo
-// file must carry. Drop src/assets/members/<slug>.jpg (or .jpeg/.png/.webp) in and it appears — see
-// lib/memberPhotos.js. Until then the cell falls back to their initials.
+// `slug` is two things at once for the student board: the member's address at /team/board/<slug>, and the
+// name their photo file must carry. Drop src/assets/members/<slug>.jpg (or .jpeg/.png/.webp) in and it
+// appears — see lib/memberPhotos.js. Until then the cell falls back to their initials.
+//
+// The faculty coordinators carry a slug for the photo alone. They have no page of their own: routes, the
+// sitemap and the e2e suite all walk `boardMembers`, which is the student board only.
 export const facultyCoordinators = [
-  { name: 'Dr. Muneeshwari R', email: 'muneeshwari.p@rajalakshmi.edu.in' },
-  { name: 'Dr. Manoranjini J', email: 'manoranjini.j@rajalakshmi.edu.in' },
+  { name: 'Dr. Muneeshwari R', slug: 'muneeshwari-r', email: 'muneeshwari.p@rajalakshmi.edu.in' },
+  { name: 'Dr. Manoranjini J', slug: 'manoranjini-j', email: 'manoranjini.j@rajalakshmi.edu.in' },
 ]
 
 export const boardGroups = [
