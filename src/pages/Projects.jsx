@@ -1,11 +1,11 @@
 import { Button, PageHeader } from '../components/kit'
 import { shortHash } from '../lib/chain'
 import { Marquee, Mine, Reveal, SplitText } from '../components/motion'
+import { CLUB_INSTAGRAM } from '../data/club'
 
 // No student projects are ready to publish yet, so this page holds the slot rather than listing any.
 // The previous listing — builds list, filters and the StackChart tech breakdown — is in git at e8c152d:
 // `git show e8c152d:src/pages/Projects.jsx` and `git show e8c152d:src/components/StackChart.jsx`.
-const INSTAGRAM = 'https://www.instagram.com/bic.rec?utm_source=ig_web_button_share_sheet&igsi=ZDNlZDc0MzIxNw=='
 
 const BAND_WORDS = ['Building', 'In progress', 'Watch this space', 'Soon']
 
@@ -44,7 +44,7 @@ export default function Projects() {
             </p>
             <div className="mt-9 flex flex-wrap gap-5">
               <Button to="/contact?subject=Project%20pitch" variant="onInk">Pitch a project</Button>
-              <Button href={INSTAGRAM} variant="ghostOnInk">Follow @bic.rec</Button>
+              <Button href={CLUB_INSTAGRAM} variant="ghostOnInk">Follow @bic.rec</Button>
             </div>
           </Reveal>
         </div>

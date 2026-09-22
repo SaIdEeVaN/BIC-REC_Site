@@ -1,11 +1,11 @@
 import { Button } from '../components/kit'
 import { shortHash } from '../lib/chain'
 import { Desync, Marquee, Mine, Reveal, Scramble, SplitText, Typewriter, Wipe } from '../components/motion'
+import { CLUB_INSTAGRAM } from '../data/club'
 
 // Core team selections haven't been announced yet, so this page holds the slot rather than listing
 // anyone. Add the roster here (a grid of MemberCell, filtered by Tabs) below the wait, inside the
 // same section, once the results are out.
-const INSTAGRAM = 'https://www.instagram.com/bic.rec?utm_source=ig_web_button_share_sheet&igsi=ZDNlZDc0MzIxNw=='
 
 const BAND_WORDS = ['Soon', 'Stay tuned', 'Watch this space', 'Any day now']
 
@@ -72,7 +72,7 @@ export default function CoreMembers() {
                 first — every core member will be listed here once they&apos;re out.
               </p>
               <div className="mt-9 flex flex-wrap gap-5">
-                <Button href={INSTAGRAM} variant="onInk">Follow @bic.rec</Button>
+                <Button href={CLUB_INSTAGRAM} variant="onInk">Follow @bic.rec</Button>
                 <Button to="/team/board" variant="ghostOnInk">Meet the board</Button>
               </div>
             </Reveal>

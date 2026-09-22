@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 import { shortHash } from '../lib/chain'
-import { CLUB_MAILTO } from '../data/club'
+import { CLUB_INSTAGRAM, CLUB_LINKEDIN, CLUB_MAILTO } from '../data/club'
 import { BlockClock } from './kit'
 import { Desync, Roll, Scramble, SplitText } from './motion'
 
@@ -21,8 +21,8 @@ const moreLinks = [
 ]
 
 const socialLinks = [
-  { label: 'Instagram', href: 'https://www.instagram.com/bic.rec?utm_source=ig_web_button_share_sheet&igsi=ZDNlZDc0MzIxNw==' },
-  { label: 'LinkedIn', href: 'https://www.linkedin.com/company/bicrec' },
+  { label: 'Instagram', href: CLUB_INSTAGRAM },
+  { label: 'LinkedIn', href: CLUB_LINKEDIN },
   { label: 'Email', href: CLUB_MAILTO },
 ]
 

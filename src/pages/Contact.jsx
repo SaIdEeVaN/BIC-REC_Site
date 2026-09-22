@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { Button, Chip, PageHeader } from '../components/kit'
 import { shortHash } from '../lib/chain'
-import { CLUB_EMAIL, CLUB_MAILTO } from '../data/club'
+import { CLUB_EMAIL, CLUB_INSTAGRAM, CLUB_LINKEDIN, CLUB_MAILTO } from '../data/club'
 import { LiftCell, Mine, Reveal, Slam, SplitText, Stamp } from '../components/motion'
 
 const EMPTY = { name: '', email: '', subject: '', message: '' }
@@ -20,8 +20,8 @@ const contactInfo = [
 ]
 
 const socials = [
-  { label: 'Instagram', handle: '@bic.rec', href: 'https://www.instagram.com/bic.rec?utm_source=ig_web_button_share_sheet&igsi=ZDNlZDc0MzIxNw==' },
-  { label: 'LinkedIn', handle: 'blockchain innovation club', href: 'https://www.linkedin.com/company/bicrec' },
+  { label: 'Instagram', handle: '@bic.rec', href: CLUB_INSTAGRAM },
+  { label: 'LinkedIn', handle: 'blockchain innovation club', href: CLUB_LINKEDIN },
   { label: 'Email', handle: CLUB_EMAIL, href: CLUB_MAILTO },
 ]
 
