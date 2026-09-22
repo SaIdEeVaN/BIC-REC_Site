@@ -38,14 +38,6 @@ const pillars = [
 
 const HERO_WORDS = ['Build.', 'Innovate.', 'Decentralize.']
 const BAND_WORDS = ['Workshops', 'Hackathons', 'Guest lectures', 'Live projects']
-const HERO_NODES = [
-  { left: '10%', top: '18%', delay: 0 },
-  { left: '24%', top: '52%', delay: 0.4 },
-  { left: '42%', top: '28%', delay: 0.9 },
-  { left: '58%', top: '62%', delay: 1.2 },
-  { left: '76%', top: '36%', delay: 0.7 },
-  { left: '88%', top: '58%', delay: 1.5 },
-]
 
 const INSTAGRAM = 'https://www.instagram.com/bic.rec?utm_source=ig_web_button_share_sheet&igsi=ZDNlZDc0MzIxNw=='
 
@@ -74,27 +66,6 @@ function Drop({ delay, children }) {
     >
       {children}
     </motion.div>
-  )
-}
-
-function HeroSignal() {
-  return (
-    <div className="hero-signal" aria-hidden="true">
-      <motion.div
-        className="hero-grid"
-        animate={{ rotate: [-6, -3, -6] }}
-        transition={{ duration: 14, repeat: Infinity, ease: 'easeInOut' }}
-      />
-      {HERO_NODES.map((node) => (
-        <motion.span
-          key={`${node.left}-${node.top}`}
-          className="hero-node"
-          style={{ left: node.left, top: node.top }}
-          animate={{ scale: [0.8, 1.2, 0.8], opacity: [0.35, 1, 0.35] }}
-          transition={{ duration: 3.4, repeat: Infinity, ease: 'easeInOut', delay: node.delay }}
-        />
-      ))}
-    </div>
   )
 }
 
@@ -210,8 +181,7 @@ export default function Home() {
   return (
     <>
       {/* overflow-x-clip: drifting hero lines slide past the page edge without making the page scroll sideways. */}
-      <section ref={heroRef} className="hero-shell overflow-x-clip border-b-3 border-ink">
-        <HeroSignal />
+      <section ref={heroRef} className="overflow-x-clip border-b-3 border-ink">
         <div className="wrap pb-8 pt-8 md:pb-12 md:pt-14">
           <p className="meta mb-6">
             <Typewriter text="rajalakshmi engineering college · blockchain student chapter" speed={0.02} />

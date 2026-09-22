@@ -14,12 +14,6 @@
     --muted: #4a4238;
     --mono: 'IBM Plex Mono', ui-monospace, Menlo, Consolas, monospace;
 
-    /* Paper. The page is a ruled sheet, not a flat field: the same rule the layout is drawn with, one
-       step off its background so it is felt rather than read. Not a third colour — bone and ink, moved. */
-    --rule-bone: #e4dcca;
-    --rule-ink: #201b16;
-    --module: 96px;
-
     /* Motion. --m scales every reveal distance from one place. */
     --m: 1;
     --reveal-rise: calc(26px * var(--m));
@@ -86,35 +80,6 @@
 }
 
 @layer components {
-  /* Drafting paper — the site's background, on every page at once.
-     A grid on the 96px module, ruled with two-stop repeating gradients: hard stops, so each rule has an
-     edge like every other rule on the site rather than fading into the sheet. One layer behind the whole
-     app, and the same grid inverted on `.on-ink`, so a page reads as one sheet whichever way up a section
-     is. `background-origin: border-box` keeps an inverted section's grid in register with the page's
-     through its own 3px edge. */
-  .paper,
-  .on-ink {
-    background-image:
-      repeating-linear-gradient(to right, var(--rule) 0 2px, transparent 2px var(--module)),
-      repeating-linear-gradient(to bottom, var(--rule) 0 2px, transparent 2px var(--module));
-    background-origin: border-box;
-  }
-
-  /* Behind the app rather than fixed to the viewport: the sheet has to scroll with the inverted sections,
-     or their rules would slide against its. `isolate` on the app shell is what keeps a negative z-index
-     behind the content without falling behind the page's own background. */
-  .paper {
-    --rule: var(--rule-bone);
-    position: absolute;
-    inset: 0;
-    z-index: -1;
-    pointer-events: none;
-  }
-
-  .on-ink {
-    --rule: var(--rule-ink);
-  }
-
   /* Layout */
   .wrap {
     width: 100%;
@@ -674,108 +639,6 @@
 
   .skip-link:focus {
     top: 16px;
-  }
-
-  .hero-shell {
-    position: relative;
-    isolation: isolate;
-  }
-
-  .hero-signal {
-    position: absolute;
-    inset: 0;
-    z-index: -1;
-    overflow: hidden;
-    pointer-events: none;
-    background:
-      linear-gradient(135deg, rgba(217, 164, 65, 0.08), transparent 38%, transparent 62%, rgba(47, 217, 196, 0.08)),
-      linear-gradient(0deg, rgba(20, 17, 14, 0.02), rgba(20, 17, 14, 0.02));
-  }
-
-  .hero-grid {
-    position: absolute;
-    inset: 6% 8%;
-    border: 3px solid rgba(20, 17, 14, 0.18);
-    transform: rotate(-6deg);
-    box-shadow: inset 0 0 0 3px rgba(237, 230, 216, 0.25);
-  }
-
-  .hero-grid::before,
-  .hero-grid::after {
-    content: '';
-    position: absolute;
-    inset: 12% 14%;
-    border: 2px solid rgba(20, 17, 14, 0.12);
-  }
-
-  .hero-grid::after {
-    inset: 25% 28%;
-    border-style: dashed;
-  }
-
-  .global-cursor {
-    position: fixed;
-    left: 0;
-    top: 0;
-    z-index: 80;
-    width: 30px;
-    height: 30px;
-    pointer-events: none;
-    border: 3px solid var(--mint);
-    box-shadow: 5px 5px 0 var(--ink);
-    translate: -50% -50%;
-  }
-
-  .global-cursor::before,
-  .global-cursor::after {
-    content: '';
-    position: absolute;
-    background: var(--mint);
-  }
-
-  .global-cursor::before {
-    left: 50%;
-    top: -9px;
-    width: 3px;
-    height: 45px;
-    translate: -50% 0;
-  }
-
-  .global-cursor::after {
-    left: -9px;
-    top: 50%;
-    width: 45px;
-    height: 3px;
-    translate: 0 -50%;
-  }
-
-  .hero-node {
-    position: absolute;
-    width: 12px;
-    height: 12px;
-    border: 2px solid var(--ink);
-    background: var(--amber);
-    box-shadow: 0 0 0 4px rgba(217, 164, 65, 0.18);
-  }
-
-  @keyframes hero-sweep {
-    0% {
-      transform: translateX(-12%) skewX(-10deg);
-      opacity: 0;
-    }
-
-    12% {
-      opacity: 1;
-    }
-
-    55% {
-      opacity: 0.7;
-    }
-
-    100% {
-      transform: translateX(12%) skewX(-10deg);
-      opacity: 0;
-    }
   }
 
   /* Scroll reveal ─ the site's default entrance. Paired with <Reveal>, driven by one shared
