@@ -4,7 +4,7 @@
 import { mkdir, readFile, writeFile } from 'node:fs/promises'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
-import { metaFor, renderSeoTags, staticRoutes } from '../src/seo.js'
+import { SITE_URL, metaFor, renderSeoTags, staticRoutes } from '../src/seo.js'
 
 const dist = fileURLToPath(new URL('../dist/', import.meta.url))
 const SEO_BLOCK = /<!-- seo:start -->[\s\S]*?<!-- seo:end -->/
@@ -23,3 +23,21 @@ for (const route of staticRoutes) {
 }
 
 console.log(`prerender-meta: wrote share tags for ${staticRoutes.length} routes`)
+
+// The same route list, handed to crawlers. Every route here already has its own prerendered file with a
+// canonical link, so the sitemap and the pages agree by construction. No <lastmod>: nothing in the build
+// knows when a route's content actually changed, and a made-up date is worse than none.
+//
+// Routes are built from numeric event ids and [a-z0-9-] member slugs, so no URL here needs XML escaping.
+const urls = staticRoutes.map((route) => `  <url><loc>${metaFor(route).url}</loc></url>`).join('\n')
+
+await writeFile(
+  join(dist, 'sitemap.xml'),
+  `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls}\n</urlset>\n`
+)
+
+// Firebase serves a file that exists before it applies the catch-all rewrite, so both of these are
+// reachable at the root rather than being swallowed by the SPA fallback.
+await writeFile(join(dist, 'robots.txt'), `User-agent: *\nAllow: /\n\nSitemap: ${SITE_URL}/sitemap.xml\n`)
+
+console.log(`prerender-meta: wrote sitemap.xml (${staticRoutes.length} urls) and robots.txt`)

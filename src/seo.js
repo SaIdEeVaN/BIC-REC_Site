@@ -4,7 +4,7 @@
 import { events, getEventById } from './data/events.js'
 import { boardMembers, getMemberBySlug } from './data/members.js'
 
-const SITE_URL = 'https://bicrec.web.app'
+export const SITE_URL = 'https://bicrec.web.app'
 
 const DEFAULT_DESCRIPTION =
   'A student-driven community dedicated to exploring Blockchain, Web3, and emerging technologies at Rajalakshmi Engineering College.'
