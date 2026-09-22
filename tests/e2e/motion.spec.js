@@ -1,5 +1,6 @@
 import { test, expect } from '@playwright/test'
 import { measureOverflow, overflowMessage } from './overflow.js'
+import { stats } from '../../src/data/achievements.js'
 
 test.use({ reducedMotion: 'no-preference' })
 
@@ -40,8 +41,12 @@ test('home animations land on the real content', async ({ page }, testInfo) => {
   await page.goto('/')
   await playAllAnimations(page)
 
-  // Number tickers finish on their values; decrypted hashes resolve to the real hash.
-  await expect(page.locator('dd span[aria-hidden="true"]', { hasText: /^60\+$/ })).toBeVisible()
+  // Number tickers finish on their values; decrypted hashes resolve to the real hash. The member count
+  // is read from the club's figures rather than written out here, so correcting a number doesn't fail
+  // a test about whether the ticker arrives.
+  await expect(
+    page.locator('dd span[aria-hidden="true"]').filter({ hasText: new RegExp(`^${stats.members}$`) })
+  ).toBeVisible()
   await expect(page.locator('span[aria-hidden="true"]', { hasText: /^0xb51…e50$/ }).first()).toBeVisible()
 })
 

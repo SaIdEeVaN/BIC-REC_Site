@@ -3,18 +3,24 @@ import { Scramble } from '../components/motion'
 import { stats, achievements } from '../data/achievements'
 import { shortHash } from '../lib/chain'
 
+// Exact counts carry no `+` — only students reached, which is the one figure that is a floor rather
+// than a tally. Projects and hackathons are gone rather than shown as zero: the club hasn't run one yet,
+// and /projects says so in its own words.
+// Four of these currently read 1, so the label has to agree with the number: "1 workshops" undercuts a
+// page whose whole job is stating what the club has actually done.
+const cell = (value, one, many = `${one}s`) => ({ value: `${value}`, label: value === 1 ? one : many })
+
 const statItems = [
-  { label: 'workshops', value: `${stats.workshops}+` },
-  { label: 'events hosted', value: `${stats.events}+` },
-  { label: 'students', value: `${stats.students}+` },
-  { label: 'projects built', value: `${stats.projects}+` },
-  { label: 'hackathons', value: `${stats.hackathons}` },
-  { label: 'collaborations', value: `${stats.collaborations}` },
+  cell(stats.members, 'member'),
+  cell(stats.events, 'event'),
+  cell(stats.workshops, 'workshop'),
+  cell(stats.immersionPrograms, 'immersion program'),
+  { label: 'students reached', value: `${stats.studentsReached}+` },
+  cell(stats.collaborations, 'collaboration'),
 ]
 
 const recognition = [
   { title: 'Kerala Blockchain Association', body: 'Official student chapter partner.' },
-  { title: 'Rajalakshmi Engineering College', body: 'Best Innovation Club — Annual Day 2025.' },
 ]
 
 export default function Achievements() {

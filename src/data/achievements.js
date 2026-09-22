@@ -1,10 +1,17 @@
+// The club's real figures, in one place. Home and /achievements both read them from here: they used to
+// each carry their own set and drifted into contradicting one another — Home said 60+ members and 15+
+// workshops while /achievements said 500+ students and 20+ workshops, on the same site.
+//
+// `members` and `studentsReached` count different things and are not interchangeable: 25 is the working
+// force on /team/board, 500+ is how many students those 25 have reached through sessions. Counts here are
+// exact, so only `studentsReached` is rendered with a `+`.
 export const stats = {
-  workshops: 20,
-  events: 15,
-  students: 500,
-  projects: 5,
-  hackathons: 3,
-  collaborations: 2,
+  members: 25,
+  events: 2, // Titanium '26, the national-level technical symposium
+  workshops: 1, // DeFi Unlocked
+  immersionPrograms: 1, // international students hosted on campus for a blockchain programme
+  studentsReached: 500,
+  collaborations: 1, // Kerala Blockchain Association
 }
 
 export const achievements = [
@@ -23,21 +30,5 @@ export const achievements = [
     category: 'Milestone',
     description: 'Within the first year of founding, BIC engaged over 500 students across 12 departments at REC through workshops, events, and online sessions.',
     icon: '👥',
-  },
-  {
-    id: 4,
-    title: 'Best Innovation Club — REC Annual Day 2025',
-    date: 'October 2025',
-    category: 'Recognition',
-    description: 'BIC was recognized as the Best Innovation Club at Rajalakshmi Engineering College Annual Day for its contribution to technology awareness and student development.',
-    icon: '🏅',
-  },
-  {
-    id: 6,
-    title: 'Featured in The New Indian Express — Tech Edition',
-    date: 'January 2026',
-    category: 'Media',
-    description: 'BIC and its Blockchain Fundamentals Workshop were featured in The New Indian Express technology section, highlighting student-led blockchain education in Chennai.',
-    icon: '📰',
   },
 ]

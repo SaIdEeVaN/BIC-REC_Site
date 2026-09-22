@@ -20,19 +20,26 @@ import {
 import EventRow from '../components/EventRow'
 import { events, getFeaturedEvents, getUpcomingEvents } from '../data/events'
 import { facultyCoordinators } from '../data/members'
+import { stats as clubStats } from '../data/achievements'
 import { meshFacts } from '../lib/mesh'
 import { blockNo, shortHash } from '../lib/chain'
 
+// Read from the club's figures rather than written out again here — the two used to be separate lists
+// and ended up contradicting each other. `events & workshops` is the roll-up of both counts, so it
+// can't drift from the six cells on /achievements either.
 const stats = [
-  { value: '12+', label: 'annual events' },
-  { value: '60+', label: 'active members' },
+  { value: `${clubStats.members}`, label: 'members' },
   { value: '1+', label: 'years active' },
-  { value: '15+', label: 'workshops' },
+  { value: `${clubStats.events + clubStats.workshops}`, label: 'events & workshops' },
+  {
+    value: `${clubStats.immersionPrograms}`,
+    label: clubStats.immersionPrograms === 1 ? 'immersion program' : 'immersion programs',
+  },
 ]
 
 const pillars = [
   { title: 'Technical skills', body: 'Workshops, hackathons and live projects to make you industry-ready.' },
-  { title: 'Strong community', body: 'A network of 60+ driven students who push each other to excel in Web3.' },
+  { title: 'Strong community', body: 'A working force of 25 members who push each other to excel in Web3.' },
   { title: 'Decentralized future', body: 'Direct connection to the global blockchain and Web3 professional network.' },
 ]
 
@@ -143,7 +150,7 @@ function Network() {
               </Desync>
             </h2>
             <p className="t-lead mt-5 max-w-[52ch]">
-              Sixty-plus members on one shared record. A workshop runs on Tuesday, the notes have propagated
+              Twenty-five members on one shared record. A workshop runs on Tuesday, the notes have propagated
               by Wednesday, and the next build starts from where the last one finished.
             </p>
           </Reveal>

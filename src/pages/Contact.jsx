@@ -2,9 +2,9 @@ import { useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { Button, Chip, PageHeader } from '../components/kit'
 import { shortHash } from '../lib/chain'
+import { CLUB_EMAIL, CLUB_MAILTO } from '../data/club'
 import { LiftCell, Mine, Reveal, Slam, SplitText, Stamp } from '../components/motion'
 
-const CLUB_EMAIL = 'kbaclub@rajalakshmil.edu.in'
 const EMPTY = { name: '', email: '', subject: '', message: '' }
 
 // The site has no backend, so the message is handed to the visitor's own email app, addressed to the club.
@@ -14,7 +14,7 @@ const mailtoFor = (form) =>
   )}`
 
 const contactInfo = [
-  { label: 'email us', value: 'kbaclub@rajalakshmil.edu.in', href: 'mailto:kbaclub@rajalakshmil.edu.in' },
+  { label: 'email us', value: CLUB_EMAIL, href: CLUB_MAILTO },
   { label: 'location', value: 'Rajalakshmi Engineering College, Thandalam, Chennai – 602105' },
   { label: 'follow us', value: 'Find us on Instagram & LinkedIn' },
 ]
@@ -22,7 +22,7 @@ const contactInfo = [
 const socials = [
   { label: 'Instagram', handle: '@bic.rec', href: 'https://www.instagram.com/bic.rec?utm_source=ig_web_button_share_sheet&igsi=ZDNlZDc0MzIxNw==' },
   { label: 'LinkedIn', handle: 'blockchain innovation club', href: 'https://www.linkedin.com/company/bicrec' },
-  { label: 'Email', handle: 'kbaclub@rajalakshmil.edu.in', href: 'mailto:kbaclub@rajalakshmil.edu.in' },
+  { label: 'Email', handle: CLUB_EMAIL, href: CLUB_MAILTO },
 ]
 
 function Field({ label, as: Tag = 'input', ...props }) {
@@ -122,7 +122,7 @@ export default function Contact() {
                     Open the email again
                   </a>{' '}
                   or write to{' '}
-                  <a href={`mailto:${CLUB_EMAIL}`} className="break-all font-bold underline decoration-2 underline-offset-4">
+                  <a href={CLUB_MAILTO} className="break-all font-bold underline decoration-2 underline-offset-4">
                     {CLUB_EMAIL}
                   </a>
                   .

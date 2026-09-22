@@ -59,5 +59,5 @@ test('the contact form hands the message to an email app addressed to the club',
 
   await expect(page.getByRole('heading', { name: 'Check your email app' })).toBeVisible()
   const retry = page.getByRole('link', { name: 'Open the email again' })
-  await expect(retry).toHaveAttribute('href', /^mailto:kbaclub@rajalakshmil\.edu\.in\?subject=Workshop%20collaboration&body=Hello%20BIC!/)
+  await expect(retry).toHaveAttribute('href', /^mailto:kbaclub@rajalakshmi\.edu\.in\?subject=Workshop%20collaboration&body=Hello%20BIC!/)
 })
