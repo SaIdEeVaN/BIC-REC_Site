@@ -112,7 +112,7 @@ Animation uses [Motion](https://motion.dev) (`motion/react`) through a small kit
 | `Slam` | A card drops from a long hard shadow onto its resting shadow |
 | `Scramble` | Mono text decrypts through hex glyphs (hashes, block numbers) |
 | `CountUp` / `Typewriter` | Number ticker / typed text with a hard block caret |
-| `Magnetic` | Buttons lean toward the mouse pointer |
+| `Magnetic` | Buttons lean toward the mouse pointer, reaching for it from `radius` away and easing off as it leaves |
 | `ScrollProgress` / `RouteShutter` | Amber scroll bar in the header / ink shutter on page change |
 | `Stamp` | Chips and statuses are stamped onto the page, oversized and askew |
 | `LiftCell` | Grid cells are picked up onto a hard shadow on hover; with `shuffle`, filtered grids reflow cell by cell |
@@ -133,6 +133,12 @@ Every `PageHeader` title and `EmptyState` heading forks on hover, so that accent
 without each one opting in.
 
 Hover motion that needs no JavaScript lives in `src/index.css`: label roll, the ink sweep on linked ledger rows, the rising fill on ghost buttons and footer socials, the header logo lift and the form-field focus lift.
+
+Anything that follows the pointer reads it from `motion/pointerField.js` — one window listener, coalesced
+into a frame and shared by every tracker, so a tracker knows where the pointer is before it arrives and
+stays true while the page scrolls under a pointer that hasn't moved. A tracker measures a box it isn't the
+one moving (`Magnetic` translates an inner span), because measuring the element you are translating feeds
+its own displacement into the next reading.
 
 Everything respects the OS "reduce motion" setting (`MotionConfig reducedMotion="user"` plus `useCanAnimate()`), which renders the final state immediately. Scroll-triggered animations must observe an element that isn't clipped at rest — see `useReveal` in `core.js`.
 
