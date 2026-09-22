@@ -2,7 +2,7 @@ import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-route
 import { lazy, Suspense, useEffect } from 'react'
 import { MotionConfig } from 'motion/react'
 import Navbar from './components/Navbar'
-import { RouteShutter } from './components/motion'
+import { MouseTracker, RouteShutter } from './components/motion'
 import Footer from './components/Footer'
 import Home from './pages/Home'
 import { metaFor } from './seo'
@@ -64,6 +64,7 @@ export default function App() {
       <MotionConfig reducedMotion="user">
       <RouteEffects />
       <RouteShutter />
+      <MouseTracker />
       <div className="relative isolate flex min-h-screen flex-col text-ink">
         {/* The ruled sheet every page sits on, behind the whole app and the full height of it. */}
         <div className="paper" aria-hidden="true" />
