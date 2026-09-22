@@ -641,6 +641,72 @@
     top: 16px;
   }
 
+  .hero-shell {
+    position: relative;
+    isolation: isolate;
+  }
+
+  .hero-signal {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    overflow: hidden;
+    pointer-events: none;
+    background:
+      linear-gradient(135deg, rgba(217, 164, 65, 0.08), transparent 38%, transparent 62%, rgba(47, 217, 196, 0.08)),
+      linear-gradient(0deg, rgba(20, 17, 14, 0.02), rgba(20, 17, 14, 0.02));
+  }
+
+  .hero-grid {
+    position: absolute;
+    inset: 6% 8%;
+    border: 3px solid rgba(20, 17, 14, 0.18);
+    transform: rotate(-6deg);
+    box-shadow: inset 0 0 0 3px rgba(237, 230, 216, 0.25);
+  }
+
+  .hero-grid::before,
+  .hero-grid::after {
+    content: '';
+    position: absolute;
+    inset: 12% 14%;
+    border: 2px solid rgba(20, 17, 14, 0.12);
+  }
+
+  .hero-grid::after {
+    inset: 25% 28%;
+    border-style: dashed;
+  }
+
+  .hero-node {
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    border: 2px solid var(--ink);
+    background: var(--amber);
+    box-shadow: 0 0 0 4px rgba(217, 164, 65, 0.18);
+  }
+
+  @keyframes hero-sweep {
+    0% {
+      transform: translateX(-12%) skewX(-10deg);
+      opacity: 0;
+    }
+
+    12% {
+      opacity: 1;
+    }
+
+    55% {
+      opacity: 0.7;
+    }
+
+    100% {
+      transform: translateX(12%) skewX(-10deg);
+      opacity: 0;
+    }
+  }
+
   /* Scroll reveal ─ the site's default entrance. Paired with <Reveal>, driven by one shared
      IntersectionObserver. Transitioning `translate` only keeps this on the compositor, which is
      what lets every block on a long page carry one. Never opacity: nothing on this site fades. */
