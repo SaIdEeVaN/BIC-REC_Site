@@ -17,6 +17,10 @@ function CoordinatorPortrait({ coordinator }) {
   )
 }
 
+// The coordinators' email and LinkedIn read as one line of plain links on the ink panel. Member pages use
+// the bordered `fill-up` button instead, but its ink border would vanish against ink here.
+const contactLink = 'underline decoration-2 underline-offset-4'
+
 // Block numbers run on from one group to the next, so the whole board reads as a single chain.
 let seats = 0
 const groups = boardGroups.map((group) => {
@@ -56,12 +60,16 @@ export default function BoardMembers() {
                   </span>
                   <div className="min-w-0">
                     <h2 className="t-h3">{coordinator.name}</h2>
-                    <a
-                      href={`mailto:${coordinator.email}`}
-                      className="mt-2 inline-block break-all font-mono text-[12.5px] underline decoration-2 underline-offset-4"
-                    >
-                      {coordinator.email}
-                    </a>
+                    <p className="mt-2 flex flex-wrap gap-x-5 gap-y-1 font-mono text-[12.5px]">
+                      <a href={`mailto:${coordinator.email}`} className={`break-all ${contactLink}`}>
+                        {coordinator.email}
+                      </a>
+                      {coordinator.linkedin && (
+                        <a href={coordinator.linkedin} target="_blank" rel="noopener noreferrer" className={`whitespace-nowrap ${contactLink}`}>
+                          LinkedIn ↗<span className="sr-only"> (opens in a new tab)</span>
+                        </a>
+                      )}
+                    </p>
                   </div>
                 </li>
               ))}
