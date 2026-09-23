@@ -14,8 +14,18 @@
 // The faculty coordinators carry a slug for the photo alone. They have no page of their own: routes, the
 // sitemap and the e2e suite all walk `boardMembers`, which is the student board only.
 export const facultyCoordinators = [
-  { name: 'Dr. Muneeshwari R', slug: 'muneeshwari-r', email: 'muneeshwari.p@rajalakshmi.edu.in' },
-  { name: 'Dr. Manoranjini J', slug: 'manoranjini-j', email: 'manoranjini.j@rajalakshmi.edu.in' },
+  {
+    name: 'Dr. Muneeshwari R',
+    slug: 'muneeshwari-r',
+    email: 'muneeshwari.p@rajalakshmi.edu.in',
+    linkedin: 'https://www.linkedin.com/in/dr-muneeshwari-p-84aba561/',
+  },
+  {
+    name: 'Dr. Manoranjini J',
+    slug: 'manoranjini-j',
+    email: 'manoranjini.j@rajalakshmi.edu.in',
+    linkedin: 'https://www.linkedin.com/in/dr-manoranjini-j-14b0482b4/',
+  },
 ]
 
 export const boardGroups = [
