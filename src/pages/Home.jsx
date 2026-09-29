@@ -89,7 +89,7 @@ function NextEvent({ event }) {
           </Chip>
           <Chip>{event.type}</Chip>
         </div>
-        <h2 className="t-card mt-4 decoration-[3px] underline-offset-[5px] group-hover:underline">{event.title}</h2>
+        <h2 className="t-card mt-4 underline decoration-2 underline-offset-[5px] group-hover:decoration-[3px]">{event.title}</h2>
         <p className="mt-4 font-mono text-[12.5px]">
           {event.date}
           <br />

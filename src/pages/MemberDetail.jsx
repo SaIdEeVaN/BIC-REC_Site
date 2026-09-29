@@ -37,7 +37,7 @@ function Neighbour({ member, direction }) {
   return (
     <Link to={`/team/board/${member.slug}`} className="row-link group block bg-bone p-5 md:p-6">
       <p className="meta">{label}</p>
-      <p className="t-row mt-2 decoration-[3px] underline-offset-[5px] group-hover:underline">{member.name}</p>
+      <p className="t-row mt-2 underline decoration-2 underline-offset-[5px] group-hover:decoration-[3px]">{member.name}</p>
       {member.role && <p className="meta mt-2">{member.role.toLowerCase()}</p>}
     </Link>
   )

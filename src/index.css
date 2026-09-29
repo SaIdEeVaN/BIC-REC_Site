@@ -383,6 +383,12 @@
     color: var(--muted);
   }
 
+  /* An invalid field sits on an amber shadow, focused or not, next to its error line. */
+  .field[aria-invalid='true'],
+  .field[aria-invalid='true']:focus {
+    box-shadow: 6px 6px 0 var(--amber);
+  }
+
   /* Focus picks the field up off the page onto its hard shadow. */
   .field:focus {
     outline: none;
@@ -397,6 +403,16 @@
     font-size: 12.5px;
     font-weight: 500;
     text-transform: lowercase;
+  }
+
+  /* Text links carry a standing underline so they read as links rather than labels, on touch screens too,
+     where there is no hover to reveal one. A rolling label (<Roll>) is an inline grid, which its link's own
+     underline doesn't reach into, so both copies carry one. */
+  .u-link,
+  .u-link .roll > span {
+    text-decoration-line: underline;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 4px;
   }
 
   /* Whole-row links in ledgers: inset outline so it isn't hidden by neighbouring rows */

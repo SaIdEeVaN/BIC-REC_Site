@@ -36,7 +36,7 @@ export default function News() {
                     date={item.date}
                     main={
                       <>
-                        <h3 className={`t-row ${internal ? 'decoration-[3px] underline-offset-[5px] group-hover:underline' : ''}`}>
+                        <h3 className={`t-row ${internal ? 'underline decoration-2 underline-offset-[5px] group-hover:decoration-[3px]' : ''}`}>
                           {item.title}
                         </h3>
                         <p className="t-small mt-2">{item.description}</p>

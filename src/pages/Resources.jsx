@@ -35,7 +35,7 @@ export default function Resources() {
                 date={<Chip>{r.type}</Chip>}
                 main={
                   <>
-                    <h3 className="t-row decoration-[3px] underline-offset-[5px] group-hover:underline">{r.title}</h3>
+                    <h3 className="t-row underline decoration-2 underline-offset-[5px] group-hover:decoration-[3px]">{r.title}</h3>
                     <p className="t-small mt-2">{r.description}</p>
                   </>
                 }

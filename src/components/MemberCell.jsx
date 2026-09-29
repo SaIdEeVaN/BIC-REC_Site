@@ -42,7 +42,7 @@ const MemberCell = forwardRef(function MemberCell({ member, index, shuffle = fal
             <Scramble text={blockNo(index + 1)} delay={delay + 0.1} replay={replay} />
           </span>
         </div>
-        <Heading className="t-card mt-5 decoration-[3px] underline-offset-[5px] group-hover:underline">
+        <Heading className="t-card mt-5 underline decoration-2 underline-offset-[5px] group-hover:decoration-[3px]">
           {member.name}
         </Heading>
         {member.role && <p className="mt-2 font-mono text-[12.5px] font-medium lowercase">{member.role}</p>}

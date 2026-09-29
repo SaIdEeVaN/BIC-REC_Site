@@ -26,7 +26,7 @@ const socialLinks = [
   { label: 'Email', href: CLUB_MAILTO },
 ]
 
-const linkClass = 'roll-host text-[15px] font-extrabold uppercase'
+const linkClass = 'u-link roll-host text-[15px] font-extrabold uppercase'
 
 function FooterNav({ title, links, children }) {
   return (

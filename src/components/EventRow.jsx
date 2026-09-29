@@ -21,7 +21,7 @@ export default function EventRow({ event, index = 0 }) {
       }
       main={
         <>
-          <h3 className="t-row decoration-[3px] underline-offset-[5px] group-hover:underline">{event.title}</h3>
+          <h3 className="t-row underline decoration-2 underline-offset-[5px] group-hover:decoration-[3px]">{event.title}</h3>
           <p className="t-small mt-2">{event.description}</p>
         </>
       }

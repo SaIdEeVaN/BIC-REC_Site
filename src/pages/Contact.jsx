@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { Button, Chip, PageHeader } from '../components/kit'
 import { shortHash } from '../lib/chain'
@@ -6,6 +6,11 @@ import { CLUB_EMAIL, CLUB_INSTAGRAM, CLUB_LINKEDIN, CLUB_MAILTO } from '../data/
 import { LiftCell, Mine, Reveal, Slam, SplitText, Stamp } from '../components/motion'
 
 const EMPTY = { name: '', email: '', subject: '', message: '' }
+
+// Format only, not the college domain: companies, speakers and other clubs write in through this form too.
+const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/
+const EMAIL_ERROR = 'enter valid email id'
+const emailErrorFor = (value) => (EMAIL_PATTERN.test(value.trim()) ? '' : EMAIL_ERROR)
 
 // The site has no backend, so the message is handed to the visitor's own email app, addressed to the club.
 const mailtoFor = (form) =>
@@ -25,12 +30,28 @@ const socials = [
   { label: 'Email', handle: CLUB_EMAIL, href: CLUB_MAILTO },
 ]
 
-function Field({ label, as: Tag = 'input', ...props }) {
+function Field({ label, as: Tag = 'input', error, inputRef, ...props }) {
+  const errorId = error ? `${props.name}-error` : undefined
   return (
-    <label className="block">
-      <span className="field-label">{label}</span>
-      <Tag required className="field" {...props} />
-    </label>
+    <div>
+      <label className="block">
+        <span className="field-label">{label}</span>
+        <Tag
+          ref={inputRef}
+          required
+          className="field"
+          aria-invalid={error ? true : undefined}
+          aria-describedby={errorId}
+          {...props}
+        />
+      </label>
+      {error && (
+        <p id={errorId} className="mt-2 text-[14px] font-bold">
+          <span className="font-mono text-[12px] font-medium">error · </span>
+          {error}
+        </p>
+      )}
+    </div>
   )
 }
 
@@ -39,6 +60,16 @@ export default function Contact() {
   // Links like /contact?subject=Membership%20application pre-fill the subject.
   const [form, setForm] = useState(() => ({ ...EMPTY, subject: searchParams.get('subject') ?? '' }))
   const [submitted, setSubmitted] = useState(false)
+  // The email is checked when the visitor leaves the field (or tries to send), then live as they fix it.
+  const [emailChecked, setEmailChecked] = useState(false)
+  const emailRef = useRef(null)
+  const emailError = emailErrorFor(form.email)
+
+  // The browser's own submit check uses the same rule and message, so the form can't go out with a bad address.
+  // `submitted` is a dependency because the field is a new element each time the form comes back.
+  useEffect(() => {
+    emailRef.current?.setCustomValidity(emailError)
+  }, [emailError, submitted])
 
   const handleChange = (e) => setForm((f) => ({ ...f, [e.target.name]: e.target.value }))
 
@@ -90,7 +121,7 @@ export default function Contact() {
                     {...(s.href.startsWith('http') ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
                     className="group flex flex-col gap-1 py-5"
                   >
-                    <span className="t-card decoration-[3px] underline-offset-[5px] group-hover:underline">
+                    <span className="t-card underline decoration-2 underline-offset-[5px] group-hover:decoration-[3px]">
                       {s.label}
                     </span>
                     <span className="meta break-all">{s.handle}</span>
@@ -133,6 +164,7 @@ export default function Contact() {
                   onClick={() => {
                     setSubmitted(false)
                     setForm(EMPTY)
+                    setEmailChecked(false)
                   }}
                 >
                   Write another message
@@ -143,7 +175,18 @@ export default function Contact() {
                 <h2 className="t-h3">Send a message</h2>
                 <div className="grid gap-5 md:grid-cols-2">
                   <Field label="your name" type="text" name="name" placeholder="John Doe" value={form.name} onChange={handleChange} />
-                  <Field label="email address" type="email" name="email" placeholder="john@example.com" value={form.email} onChange={handleChange} />
+                  <Field
+                    label="email address"
+                    type="email"
+                    name="email"
+                    placeholder="john@example.com"
+                    value={form.email}
+                    onChange={handleChange}
+                    onBlur={(e) => e.target.value.trim() && setEmailChecked(true)}
+                    onInvalid={() => setEmailChecked(true)}
+                    inputRef={emailRef}
+                    error={emailChecked ? emailError : ''}
+                  />
                 </div>
                 <Field
                   label="subject"
