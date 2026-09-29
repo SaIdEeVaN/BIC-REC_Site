@@ -15,7 +15,7 @@ async function playAllAnimations(page) {
   await page.waitForTimeout(2000)
 }
 
-const animatedRoutes = ['/', '/about', '/events', '/events/3', '/projects', '/gallery', '/team/core', '/join', '/contact']
+const animatedRoutes = ['/', '/about', '/events', '/events/3', '/projects', '/gallery', '/join', '/contact']
 
 // Animation overflow shows up at the extremes: the narrowest column, where a drifting block has the
 // least room, and the widest, where the hero's drift travels furthest. The breakpoints between them

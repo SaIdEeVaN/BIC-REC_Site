@@ -12,3 +12,7 @@ export const CLUB_MAILTO = `mailto:${CLUB_EMAIL}`
 // (`utm_source` and an `igsi` share id), which tag every visit as coming from one person's share tap.
 export const CLUB_INSTAGRAM = 'https://www.instagram.com/bic.rec/'
 export const CLUB_LINKEDIN = 'https://www.linkedin.com/company/bicrec'
+
+// Recruitment results live on their own site (the result_bic repo, deployed as a second Firebase site in
+// this project). /team/core sends visitors there until the core team roster is published.
+export const RECRUITMENT_RESULTS_URL = 'https://bicrec-results.web.app'

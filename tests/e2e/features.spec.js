@@ -1,5 +1,6 @@
 import { test, expect } from '@playwright/test'
 import { isUpcoming } from '../../src/data/events.js'
+import { RECRUITMENT_RESULTS_URL } from '../../src/data/club.js'
 
 // Behaviour is identical at every width, so these run once.
 const once = (testInfo) => test.skip(testInfo.project.name !== 'desktop-1280', 'same behaviour at every width')
@@ -60,4 +61,22 @@ test('the contact form hands the message to an email app addressed to the club',
   await expect(page.getByRole('heading', { name: 'Check your email app' })).toBeVisible()
   const retry = page.getByRole('link', { name: 'Open the email again' })
   await expect(retry).toHaveAttribute('href', /^mailto:kbaclub@rajalakshmi\.edu\.in\?subject=Workshop%20collaboration&body=Hello%20BIC!/)
+})
+
+test('Core Members sends visitors to the recruitment results site', async ({ page }, testInfo) => {
+  once(testInfo)
+  // Stand in for the results site, so the test never depends on it being up.
+  await page.route(`${RECRUITMENT_RESULTS_URL}/**`, (route) =>
+    route.fulfill({ contentType: 'text/html', body: '<h1>Recruitment results</h1>' }),
+  )
+
+  await page.goto('/team/core')
+  await expect(page).toHaveURL(`${RECRUITMENT_RESULTS_URL}/`)
+
+  // The footer link navigates inside the app, so it's the client-side redirect doing the work here.
+  await page.goto('/')
+  await page.locator('footer').getByRole('link', { name: 'Core Members' }).click()
+  await expect(page).toHaveURL(`${RECRUITMENT_RESULTS_URL}/`)
+  await page.goBack()
+  await expect(page).toHaveURL(/localhost:4173\/$/)
 })
