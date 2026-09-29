@@ -4,10 +4,8 @@ import { MotionConfig } from 'motion/react'
 import Navbar from './components/Navbar'
 import { RouteShutter } from './components/motion'
 import Footer from './components/Footer'
-import ExternalRedirect from './components/ExternalRedirect'
 import Home from './pages/Home'
 import { metaFor } from './seo'
-import { RECRUITMENT_RESULTS_URL } from './data/club'
 
 // Home ships in the main bundle; every other page is its own chunk, fetched on first visit.
 const About = lazy(() => import('./pages/About'))
@@ -16,6 +14,7 @@ const EventDetail = lazy(() => import('./pages/EventDetail'))
 const Gallery = lazy(() => import('./pages/Gallery'))
 const BoardMembers = lazy(() => import('./pages/BoardMembers'))
 const MemberDetail = lazy(() => import('./pages/MemberDetail'))
+const CoreMembers = lazy(() => import('./pages/CoreMembers'))
 const Projects = lazy(() => import('./pages/Projects'))
 const Achievements = lazy(() => import('./pages/Achievements'))
 const News = lazy(() => import('./pages/News'))
@@ -78,9 +77,7 @@ export default function App() {
               <Route path="/gallery" element={<Gallery />} />
               <Route path="/team/board" element={<BoardMembers />} />
               <Route path="/team/board/:slug" element={<MemberDetail />} />
-              {/* Core team results are on the results site. Once the roster is published, point this back at
-                  pages/CoreMembers.jsx and drop the redirect in firebase.json. */}
-              <Route path="/team/core" element={<ExternalRedirect to={RECRUITMENT_RESULTS_URL} />} />
+              <Route path="/team/core" element={<CoreMembers />} />
               <Route path="/projects" element={<Projects />} />
               <Route path="/achievements" element={<Achievements />} />
               <Route path="/news" element={<News />} />

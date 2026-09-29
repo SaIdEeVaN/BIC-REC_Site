@@ -63,20 +63,12 @@ test('the contact form hands the message to an email app addressed to the club',
   await expect(retry).toHaveAttribute('href', /^mailto:kbaclub@rajalakshmi\.edu\.in\?subject=Workshop%20collaboration&body=Hello%20BIC!/)
 })
 
-test('Core Members sends visitors to the recruitment results site', async ({ page }, testInfo) => {
+test('Core Members sends candidates to the recruitment results site', async ({ page }, testInfo) => {
   once(testInfo)
-  // Stand in for the results site, so the test never depends on it being up.
-  await page.route(`${RECRUITMENT_RESULTS_URL}/**`, (route) =>
-    route.fulfill({ contentType: 'text/html', body: '<h1>Recruitment results</h1>' }),
-  )
 
   await page.goto('/team/core')
-  await expect(page).toHaveURL(`${RECRUITMENT_RESULTS_URL}/`)
-
-  // The footer link navigates inside the app, so it's the client-side redirect doing the work here.
-  await page.goto('/')
-  await page.locator('footer').getByRole('link', { name: 'Core Members' }).click()
-  await expect(page).toHaveURL(`${RECRUITMENT_RESULTS_URL}/`)
-  await page.goBack()
-  await expect(page).toHaveURL(/localhost:4173\/$/)
+  await expect(page.locator('main').getByRole('link', { name: 'Check your result' })).toHaveAttribute(
+    'href',
+    RECRUITMENT_RESULTS_URL,
+  )
 })

@@ -14,5 +14,5 @@ export const CLUB_INSTAGRAM = 'https://www.instagram.com/bic.rec/'
 export const CLUB_LINKEDIN = 'https://www.linkedin.com/company/bicrec'
 
 // Recruitment results live on their own site (the result_bic repo, deployed as a second Firebase site in
-// this project). /team/core sends visitors there until the core team roster is published.
+// this project). The Core Members page links there until the roster is published.
 export const RECRUITMENT_RESULTS_URL = 'https://bicrec-results.web.app'

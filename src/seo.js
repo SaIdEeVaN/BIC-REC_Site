@@ -27,6 +27,10 @@ const PAGES = {
     title: 'Leadership',
     description: 'The people guiding, managing, and growing the Blockchain Innovation Club at REC.',
   },
+  '/team/core': {
+    title: 'Core team',
+    description: 'Core team results are out — check yours with the email you applied with and your roll number.',
+  },
   '/projects': {
     title: 'Projects',
     description: "The club's first blockchain projects are in progress — each will be published here as it ships.",

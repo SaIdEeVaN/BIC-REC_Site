@@ -4,7 +4,6 @@
     "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
     "cleanUrls": true,
     "trailingSlash": false,
-    "redirects": [{ "source": "/team/core", "destination": "https://bicrec-results.web.app", "type": 302 }],
     "rewrites": [{ "source": "**", "destination": "/index.html" }],
     "headers": [
       {
