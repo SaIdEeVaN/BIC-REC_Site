@@ -3,6 +3,7 @@
 // so keep this file free of browser-only or Vite-only code.
 import { events, getEventById } from './data/events.js'
 import { boardMembers, getMemberBySlug } from './data/members.js'
+import { RECRUITMENT_RESULTS_OPEN } from './data/club.js'
 
 export const SITE_URL = 'https://bicrec.web.app'
 
@@ -29,7 +30,9 @@ const PAGES = {
   },
   '/team/core': {
     title: 'Core team',
-    description: 'Core team results are out — check yours with the email you applied with and your roll number.',
+    description: RECRUITMENT_RESULTS_OPEN
+      ? 'Core team results are out — check yours with the email you applied with and your roll number.'
+      : 'Core team selections are being finalised — results will be published here once they are out.',
   },
   '/projects': {
     title: 'Projects',

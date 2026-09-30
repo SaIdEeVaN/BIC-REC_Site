@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test'
 import { isUpcoming } from '../../src/data/events.js'
-import { RECRUITMENT_RESULTS_URL } from '../../src/data/club.js'
+import { RECRUITMENT_RESULTS_OPEN, RECRUITMENT_RESULTS_URL } from '../../src/data/club.js'
 
 // Behaviour is identical at every width, so these run once.
 const once = (testInfo) => test.skip(testInfo.project.name !== 'desktop-1280', 'same behaviour at every width')
@@ -84,12 +84,17 @@ test('the contact form refuses an invalid email address', async ({ page }, testI
   await expect(page.getByText('enter valid email id')).toHaveCount(0)
 })
 
-test('Core Members sends candidates to the recruitment results site', async ({ page }, testInfo) => {
+test('Core Members follows the recruitment results switch', async ({ page }, testInfo) => {
   once(testInfo)
 
   await page.goto('/team/core')
-  await expect(page.locator('main').getByRole('link', { name: 'Check your result' })).toHaveAttribute(
-    'href',
-    RECRUITMENT_RESULTS_URL,
-  )
+  const hero = page.locator('main h2.t-hero')
+  const check = page.locator('main').getByRole('link', { name: 'Check your result' })
+  if (RECRUITMENT_RESULTS_OPEN) {
+    await expect(hero).toContainText(/check/i)
+    await expect(check).toHaveAttribute('href', RECRUITMENT_RESULTS_URL)
+  } else {
+    await expect(hero).toContainText(/coming/i)
+    await expect(check).toHaveCount(0)
+  }
 })
