@@ -24,10 +24,10 @@ the other one, never transparency. They are for that background drawing only, ne
 
 | Grain | On bone | On ink | Use |
 | --- | --- | --- | --- |
-| Link | `#D7D1C4` | `#2A2622` | Resting links |
-| Node | `#C8C2B6` | `#3B3732` | Resting block outlines, peers that heard a block, broadcast paths |
-| Packet | `#9F998F` | `#625E57` | Transactions in flight, a block being mined |
-| Label | `#807C73` | `#807C73` | `mining ·` / `block # · sealed` readouts |
+| Link | `#CAC4B8` | `#37332E` | Resting links |
+| Node | `#B5AFA4` | `#4C4842` | Resting block outlines, peers that heard a block, broadcast paths |
+| Packet | `#807C73` | `#807C73` | Transactions in flight, a block being mined |
+| Label | `#66625B` | `#9B958B` | `mining ·` / `block # · sealed` readouts |
 
 The one place mint is used at size is `<Desync>`, where it and amber are the two forked copies of a label. That is a hover state lasting 420ms, never a resting one, and at most one element per screen carries it.
 
