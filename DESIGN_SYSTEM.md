@@ -17,7 +17,32 @@ Hard geometry, no softness. Nothing is rounded, nothing is blurred, nothing fade
 | Mint | `#2FD9C4` | Live/shipped signal only. Never on large areas |
 | Muted ink | `#4A4238` | Metadata, past dates, hashes |
 
+| Coal | `#14110E` | Text on amber and mint. Ink in the light theme; stays dark in the dark theme |
+
 Two backgrounds per screen: bone and ink. Amber is an accent on small surfaces (buttons, one stat cell, one status pill). Mint appears at most twice per screen.
+
+## Dark theme
+
+Opt-in from the square, half-inked toggle in the header (the foot of the menu on phones below `sm`), and
+remembered on the visitor's device. It is the same page printed in negative, not a second palette:
+
+| Token | Dark value | Role |
+| --- | --- | --- |
+| `--bone` | `#14110E` | The page — ink becomes the paper |
+| `--ink` | `#EDE6D8` | Rules, type and hard shadows — bone becomes the ink |
+| `--muted` | `#B0A595` | Metadata, at the ~8:1 contrast muted has on bone |
+| `.on-ink` | `#2A241D` | Ink sections keep their light-theme roles on charcoal, so they stay dark bands instead of turning into bright slabs |
+
+Amber, mint and coal don't change. What that asks of new code:
+
+- **Colour through the tokens.** Tailwind's `ink`/`bone`/`amber` and the `INK`/`AMBER` exports in
+  `motion/core.js` are CSS variables, so they follow the theme without a re-render. A hex value won't.
+- **Text on amber or mint is `text-coal`**, never `text-ink`, which turns light in the dark theme.
+- **A dark strip that isn't a section still takes `.on-ink`** (the ticker, the kinetic band, the route shutter),
+  or the dark theme inverts it into a light one.
+- **SVG attributes can't hold `var()`.** Draw rules with `stroke="currentColor"` under a `text-ink`/`text-bone`
+  class and fill with `fill-*` classes; animate something other than the colour (`NodeMesh` switches an amber
+  rect on and off over the resting fill).
 
 The one place mint is used at size is `<Desync>`, where it and amber are the two forked copies of a label. That is a hover state lasting 420ms, never a resting one, and at most one element per screen carries it.
 

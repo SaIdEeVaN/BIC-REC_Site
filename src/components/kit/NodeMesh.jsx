@@ -1,6 +1,6 @@
 import { motion } from 'motion/react'
 import { HOPS, LINKS, NODES } from '../../lib/mesh'
-import { AMBER, BONE, EASE, INK, useReveal } from '../motion/core'
+import { EASE, useReveal } from '../motion/core'
 
 // Peers, and the news travelling between them. Squares are nodes, 3px rules are the links. On reveal the
 // links draw and the node outlines follow; from then on a broadcast leaves the origin and reaches the
@@ -23,9 +23,11 @@ const PACKET = 0.28 // share of a link the travelling dash covers
 const NODE = 20
 
 // `ink` is the mesh on a bone section, `bone` the mesh on an ink one. Amber is the block, either way.
+// Classes rather than colours, so the mesh follows the dark theme: rules are currentColor, a resting node
+// is filled with the section's own background.
 const TONES = {
-  ink: { rule: INK, rest: BONE },
-  bone: { rule: BONE, rest: INK },
+  ink: { rule: 'text-ink', rest: 'fill-bone' },
+  bone: { rule: 'text-bone', rest: 'fill-ink' },
 }
 
 // `height` is Tailwind height classes for the drawing itself: the mesh scales to fit whatever box it is
@@ -37,7 +39,7 @@ export default function NodeMesh({ tone = 'ink', height = 'h-[190px] md:h-[340px
 
   return (
     <div ref={ref} aria-hidden="true" className={className}>
-      <svg viewBox="0 0 600 300" preserveAspectRatio="xMidYMid meet" className={`block w-full ${height}`}>
+      <svg viewBox="0 0 600 300" preserveAspectRatio="xMidYMid meet" className={`block w-full ${height} ${rule}`}>
         {LINKS.map(([from, to], i) => {
           const a = NODES[from]
           const b = NODES[to]
@@ -47,7 +49,7 @@ export default function NodeMesh({ tone = 'ink', height = 'h-[190px] md:h-[340px
             <g key={i}>
               <motion.line
                 {...line}
-                stroke={rule}
+                stroke="currentColor"
                 initial={canAnimate ? { pathLength: 0 } : false}
                 animate={{ pathLength: on ? 1 : 0 }}
                 transition={{ duration: 0.45, ease: EASE, delay: 0.1 + a.hop * 0.18 }}
@@ -55,7 +57,7 @@ export default function NodeMesh({ tone = 'ink', height = 'h-[190px] md:h-[340px
               {canAnimate && on && (
                 <motion.line
                   {...line}
-                  stroke={AMBER}
+                  className="stroke-amber"
                   initial={{ pathLength: PACKET, pathOffset: -PACKET }}
                   animate={{ pathLength: PACKET, pathOffset: [-PACKET, 1] }}
                   transition={{
@@ -78,27 +80,32 @@ export default function NodeMesh({ tone = 'ink', height = 'h-[190px] md:h-[340px
 
           return (
             <g key={i}>
-              {/* The fill is its own rect so the outline can be drawn on entrance while the fill
-                  keeps its own forever-repeating round — one animation each, no fighting. */}
-              <motion.rect
-                {...box}
-                fill={rest}
-                initial={canAnimate ? { fill: rest } : false}
-                animate={canAnimate && on ? { fill: [AMBER, AMBER, rest] } : undefined}
-                transition={{
-                  duration: held,
-                  // Held amber for all but the last flicker of its turn, so it switches hard rather than fading out.
-                  times: [0, 0.97, 1],
-                  ease: 'linear',
-                  repeat: Infinity,
-                  repeatDelay: CYCLE - held,
-                  delay: ENTRANCE + lit,
-                }}
-              />
+              {/* The fill is its own rects so the outline can be drawn on entrance while the fill
+                  keeps its own forever-repeating round — one animation each, no fighting. The amber block
+                  is laid over the resting fill and switched on and off, since an SVG attribute can't
+                  animate between theme colours. */}
+              <rect {...box} className={rest} />
+              {canAnimate && (
+                <motion.rect
+                  {...box}
+                  className="fill-amber"
+                  initial={{ opacity: 0 }}
+                  animate={on ? { opacity: [1, 1, 0] } : undefined}
+                  transition={{
+                    duration: held,
+                    // Held amber for all but the last flicker of its turn, so it switches hard rather than fading out.
+                    times: [0, 0.97, 1],
+                    ease: 'linear',
+                    repeat: Infinity,
+                    repeatDelay: CYCLE - held,
+                    delay: ENTRANCE + lit,
+                  }}
+                />
+              )}
               <motion.rect
                 {...box}
                 fill="none"
-                stroke={rule}
+                stroke="currentColor"
                 strokeWidth="3"
                 vectorEffect="non-scaling-stroke"
                 initial={canAnimate ? { pathLength: 0 } : false}

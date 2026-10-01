@@ -34,10 +34,10 @@ export default function EventRow({ event, index = 0 }) {
       status={
         <>
           <span className="block">
-            {upcoming && <span aria-hidden="true" className="blink mr-2 inline-block h-2 w-2 bg-ink align-middle" />}
+            {upcoming && <span aria-hidden="true" className="blink mr-2 inline-block h-2 w-2 bg-coal align-middle" />}
             {upcoming ? 'Upcoming' : 'Sealed'}
           </span>
-          <span className={`meta mt-2 block ${upcoming ? 'text-ink' : ''}`}>
+          <span className={`meta mt-2 block ${upcoming ? 'text-coal' : ''}`}>
             <Scramble text={shortHash(event.slug)} delay={index * 0.07 + 0.3} />
           </span>
         </>

@@ -111,7 +111,7 @@ export default function EventDetail() {
                       </>
                     }
                     side={<span className="text-[18px] font-black">{w.prize}</span>}
-                    status={<span className={`meta ${i === 0 ? 'text-ink' : ''}`}>{shortHash(w.team)}</span>}
+                    status={<span className={`meta ${i === 0 ? 'text-coal' : ''}`}>{shortHash(w.team)}</span>}
                   />
                 ))}
               </Ledger>
@@ -145,8 +145,8 @@ export default function EventDetail() {
                     <dd className="mt-1 text-[15px] font-bold">{value}</dd>
                   </div>
                 ))}
-                <div className={`border-t-3 border-ink px-4 py-3 ${upcoming ? 'bg-amber' : ''}`}>
-                  <dt className={`meta ${upcoming ? 'text-ink' : ''}`}>registration</dt>
+                <div className={`border-t-3 border-ink px-4 py-3 ${upcoming ? 'bg-amber text-coal' : ''}`}>
+                  <dt className={`meta ${upcoming ? 'text-coal' : ''}`}>registration</dt>
                   <dd className="mt-1 font-mono text-[12.5px] font-medium uppercase">{registration}</dd>
                 </div>
               </dl>

@@ -14,7 +14,7 @@ export default function RouteShutter() {
     <motion.div
       key={location.key}
       aria-hidden="true"
-      className="pointer-events-none fixed inset-0 z-[70] origin-top border-b-[6px] border-amber bg-ink"
+      className="on-ink pointer-events-none fixed inset-0 z-[70] origin-top border-b-[6px] border-amber bg-ink"
       initial={{ scaleY: 1 }}
       animate={{ scaleY: 0 }}
       transition={{ duration: 0.6, ease: EASE, delay: 0.05 }}

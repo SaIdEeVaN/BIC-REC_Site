@@ -55,7 +55,7 @@ export default function Marquee({ words, speed = 2 }) {
   })
 
   return (
-    <div ref={ref} aria-hidden="true" className="overflow-hidden whitespace-nowrap bg-ink py-4 text-bone md:py-6">
+    <div ref={ref} aria-hidden="true" className="on-ink overflow-hidden whitespace-nowrap bg-ink py-4 text-bone md:py-6">
       <motion.div className="t-band flex w-max" style={canAnimate ? { x } : undefined}>
         <Run words={words} />
         <Run words={words} />

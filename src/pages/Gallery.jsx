@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { AnimatePresence, motion } from 'motion/react'
 import { PageHeader, Tabs } from '../components/kit'
-import { EASE, INK, LiftCell, Mine, Reveal, Scramble, stagger, useReveal } from '../components/motion'
+import { EASE, LiftCell, Mine, Reveal, Scramble, stagger, useReveal } from '../components/motion'
 import { blockNo, pad2, shortHash } from '../lib/chain'
 
 const allPhotos = [
@@ -36,9 +36,9 @@ function Frame({ id, index }) {
 
   return (
     <div ref={ref} className="relative aspect-[4/3] border-b-3 border-ink">
-      <svg aria-hidden="true" className="absolute inset-0 h-full w-full">
-        <motion.line x1="0" y1="0" x2="100%" y2="100%" stroke={INK} strokeWidth="3" {...draw(0.1)} />
-        <motion.line x1="100%" y1="0" x2="0" y2="100%" stroke={INK} strokeWidth="3" {...draw(0.3)} />
+      <svg aria-hidden="true" className="absolute inset-0 h-full w-full text-ink">
+        <motion.line x1="0" y1="0" x2="100%" y2="100%" stroke="currentColor" strokeWidth="3" {...draw(0.1)} />
+        <motion.line x1="100%" y1="0" x2="0" y2="100%" stroke="currentColor" strokeWidth="3" {...draw(0.3)} />
       </svg>
       <span className="meta absolute left-0 top-0 border-b-3 border-r-3 border-ink bg-bone px-2 py-1 text-ink">
         <Scramble text={blockNo(id)} delay={stagger(index % 4)} />

@@ -49,6 +49,7 @@ The UI follows a **neo-brutalist design system** — hard geometry, 3px ink rule
 - 📚 **Resources** — Learning materials and links
 - 🤝 **Join Us** — Membership and application info
 - 📬 **Contact** — Contact form and club details
+- 🌙 **Dark theme** — Opt-in from the header toggle, remembered per device (see [DESIGN_SYSTEM.md](DESIGN_SYSTEM.md#dark-theme))
 
 ---
 
@@ -179,7 +180,8 @@ BIC-REC_Site/
 │   │   ├── chain.js              # Block numbers, display hashes, sealed dates
 │   │   ├── initials.js           # Initials for members without a photo
 │   │   ├── memberPhotos.js       # Resolves a member's photo from their slug
-│   │   └── mesh.js               # Peer-mesh topology drawn by NodeMesh
+│   │   ├── mesh.js               # Peer-mesh topology drawn by NodeMesh
+│   │   └── theme.js              # Dark theme: the visitor's choice, saved on their device
 │   ├── pages/                    # One component per route — the route table is in App.jsx
 │   ├── App.jsx                   # Root component & routing
 │   ├── main.jsx                  # App entry point

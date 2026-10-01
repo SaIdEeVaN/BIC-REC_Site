@@ -1,24 +1,24 @@
 import { motion } from 'motion/react'
-import { AMBER, BONE, EASE, INK, SLAM, useReveal } from '../motion/core'
+import { EASE, SLAM, useReveal } from '../motion/core'
 
 const DRAW = 0.9
 
 // The chain, drawn: one 3px rail, a 16px square per block with two diagonal branches; the last is the amber head.
 // Animated: the rail draws left to right, each block slams in as the line reaches it, then a packet
-// keeps travelling along the chain.
+// keeps travelling along the chain. Rules are currentColor and fills are classes, so it follows the theme.
 export default function ChainRail({ nodes = 6, delay = 0, className = '' }) {
   const [ref, active, canAnimate] = useReveal()
   const on = !canAnimate || active
 
   return (
     <div ref={ref} aria-hidden="true" className={`relative h-16 ${className}`}>
-      <svg className="block h-16 w-full overflow-visible">
+      <svg className="block h-16 w-full overflow-visible text-ink">
         <motion.line
           x1="0"
           y1="32"
           x2="100%"
           y2="32"
-          stroke={INK}
+          stroke="currentColor"
           strokeWidth="3"
           initial={canAnimate ? { pathLength: 0 } : false}
           animate={{ pathLength: on ? 1 : 0 }}
@@ -33,15 +33,15 @@ export default function ChainRail({ nodes = 6, delay = 0, className = '' }) {
                 animate={{ scale: on ? 1 : 0 }}
                 transition={{ ...SLAM, delay: delay + at * DRAW }}
               >
-                <line x1="-8" y1="24" x2="-21" y2="11" stroke={INK} strokeWidth="3" strokeLinecap="square" />
-                <line x1="-8" y1="40" x2="-21" y2="53" stroke={INK} strokeWidth="3" strokeLinecap="square" />
+                <line x1="-8" y1="24" x2="-21" y2="11" stroke="currentColor" strokeWidth="3" strokeLinecap="square" />
+                <line x1="-8" y1="40" x2="-21" y2="53" stroke="currentColor" strokeWidth="3" strokeLinecap="square" />
                 <rect
                   x="-8"
                   y="24"
                   width="16"
                   height="16"
-                  fill={i === nodes - 1 ? AMBER : BONE}
-                  stroke={INK}
+                  className={i === nodes - 1 ? 'fill-amber' : 'fill-bone'}
+                  stroke="currentColor"
                   strokeWidth="3"
                 />
               </motion.g>

@@ -4,9 +4,11 @@ import { observeReveal } from './revealObserver'
 
 // Motion language for DESIGN_SYSTEM.md: things shunt, slam, draw and decrypt. Nothing fades or blurs.
 
-export const INK = '#14110E'
-export const BONE = '#EDE6D8'
-export const AMBER = '#D9A441'
+// CSS variables, not hex, so the hard shadows Motion draws follow the dark theme (and an ink section's own
+// palette within it) like every other colour. Motion keeps a var() inside a shadow string as it animates.
+// SVG attributes can't take var(): drawings colour themselves with currentColor and fill-*/stroke-* classes.
+export const INK = 'var(--ink)'
+export const AMBER = 'var(--amber)'
 
 // Sharp in-out: blocks shunt into place rather than drift.
 export const EASE = [0.77, 0, 0.175, 1]

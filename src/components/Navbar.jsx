@@ -4,6 +4,7 @@ import { motion } from 'motion/react'
 import logo from '../assets/logo/BIC logo.jpeg'
 import { Ticker } from './kit'
 import { EASE, Roll, SNAP, Scramble, ScrollProgress } from './motion'
+import { setTheme, useTheme } from '../lib/theme'
 
 const links = [
   { to: '/', label: 'Home', end: true },
@@ -16,6 +17,39 @@ const links = [
 // Desktop nav: one shared ink block slides to whichever item (or Join) is active.
 function ActiveFill() {
   return <motion.span layoutId="nav-active" aria-hidden="true" className="absolute inset-0 bg-ink" transition={SNAP} />
+}
+
+// A square, half inked: the ink shunts across to the other half when the theme flips.
+function ThemeGlyph({ dark }) {
+  return (
+    <span aria-hidden="true" className="relative block h-[22px] w-[22px] shrink-0 overflow-hidden border-3 border-ink">
+      <span
+        className={`absolute inset-y-0 left-0 w-1/2 bg-ink transition-transform duration-300 ease-[cubic-bezier(0.77,0,0.175,1)] ${
+          dark ? '' : 'translate-x-full'
+        }`}
+      />
+    </span>
+  )
+}
+
+// One button for the theme: a header cell where the bar has room for it (sm and up), and a row at the
+// foot of the menu on narrower phones, where Join and Menu already take what the bar has left.
+function ThemeToggle({ className, children }) {
+  const dark = useTheme() === 'dark'
+
+  return (
+    <button
+      type="button"
+      aria-pressed={dark}
+      aria-label="Dark theme"
+      title={dark ? 'Switch to the light theme' : 'Switch to the dark theme'}
+      className={className}
+      onClick={() => setTheme(dark ? 'light' : 'dark')}
+    >
+      {children}
+      <ThemeGlyph dark={dark} />
+    </button>
+  )
 }
 
 export default function Navbar() {
@@ -81,7 +115,7 @@ export default function Navbar() {
             to="/join"
             className={({ isActive }) =>
               `roll-host relative ml-auto flex items-center border-l-3 border-ink bg-amber px-4 text-[14px] font-extrabold uppercase md:px-6 lg:ml-0 ${
-                isActive ? 'text-bone' : 'text-ink'
+                isActive ? 'text-bone' : 'text-coal'
               }`
             }
           >
@@ -94,6 +128,8 @@ export default function Navbar() {
               </>
             )}
           </NavLink>
+
+          <ThemeToggle className="hidden w-[64px] items-center justify-center border-l-3 border-ink sm:flex md:w-[76px]" />
 
           <button
             type="button"
@@ -114,7 +150,7 @@ export default function Navbar() {
         >
           {open &&
             links.map((link, i) => (
-              <div key={link.to} className="overflow-hidden border-b-3 border-ink last:border-b-0">
+              <div key={link.to} className="overflow-hidden border-t-3 border-ink first:border-t-0">
                 <motion.div
                   initial={{ x: '-100%' }}
                   animate={{ x: '0%' }}
@@ -134,6 +170,19 @@ export default function Navbar() {
                 </motion.div>
               </div>
             ))}
+          {open && (
+            <div className="overflow-hidden border-t-3 border-ink sm:hidden">
+              <motion.div
+                initial={{ x: '-100%' }}
+                animate={{ x: '0%' }}
+                transition={{ duration: 0.45, ease: EASE, delay: links.length * 0.05 }}
+              >
+                <ThemeToggle className="flex w-full items-center justify-between bg-bone px-4 py-4 text-[24px] font-black uppercase tracking-[-.03em]">
+                  Dark theme
+                </ThemeToggle>
+              </motion.div>
+            </div>
+          )}
         </nav>
 
         <ScrollProgress />

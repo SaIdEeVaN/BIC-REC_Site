@@ -24,6 +24,15 @@
     <meta name="twitter:image" content="https://bicrec.web.app/og-image.png" />
     <!-- seo:end -->
     <meta name="theme-color" content="#EDE6D8" />
+    <script>
+      // Applies a saved dark theme before the first paint, so the light page never flashes first (src/lib/theme.js).
+      try {
+        if (localStorage.getItem('bic-theme') === 'dark') {
+          document.documentElement.dataset.theme = 'dark'
+          document.querySelector('meta[name="theme-color"]').content = '#14110E'
+        }
+      } catch (e) {}
+    </script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;700;800;900&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />

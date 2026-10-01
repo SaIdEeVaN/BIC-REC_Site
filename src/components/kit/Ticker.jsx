@@ -25,7 +25,7 @@ export default function Ticker() {
   const canAnimate = useCanAnimate()
 
   return (
-    <div aria-hidden="true" className="overflow-hidden whitespace-nowrap bg-ink py-[7px] text-bone">
+    <div aria-hidden="true" className="on-ink overflow-hidden whitespace-nowrap bg-ink py-[7px] text-bone">
       <motion.div
         className="flex w-max px-4 font-mono text-[12px] leading-none md:px-[44px]"
         animate={canAnimate ? { x: ['0%', '-50%'] } : undefined}

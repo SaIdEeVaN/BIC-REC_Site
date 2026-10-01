@@ -54,7 +54,7 @@ export default function BoardMembers() {
                 <li key={coordinator.name} className="flex min-w-0 flex-col gap-4 sm:flex-row sm:items-center sm:gap-5">
                   <span
                     aria-hidden="true"
-                    className="grid h-20 w-20 shrink-0 place-items-center overflow-hidden bg-amber text-[28px] font-black tracking-[-.04em] text-ink"
+                    className="grid h-20 w-20 shrink-0 place-items-center overflow-hidden bg-amber text-[28px] font-black tracking-[-.04em] text-coal"
                   >
                     <CoordinatorPortrait coordinator={coordinator} />
                   </span>

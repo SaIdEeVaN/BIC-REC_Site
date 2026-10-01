@@ -7,6 +7,9 @@ const COLS = {
   6: 'grid-cols-2 md:grid-cols-3 lg:grid-cols-6',
 }
 
+const FILL_DELAY = 0.9
+const FILL_DURATION = 0.55
+
 // Equal cells split by 3px rules (the ink background shows through the gap); one cell is amber.
 // Animated: figures count up, and the amber cell fills from the bottom once the numbers land.
 export default function StatBar({ items, highlight = 0, className = '' }) {
@@ -21,12 +24,16 @@ export default function StatBar({ items, highlight = 0, className = '' }) {
     >
       {items.map((item, i) => {
         const lit = i === highlight
+        const filled = lit && (active || !canAnimate)
         return (
           <div
             key={item.label}
             className={`relative flex flex-col-reverse justify-end gap-2 px-5 py-5 md:px-6 md:py-7 ${
               lit && !canAnimate ? 'bg-amber' : 'bg-bone'
-            }`}
+            } ${filled ? 'text-coal' : ''}`}
+            // The figures turn coal once the amber is halfway up behind them — a change only the dark
+            // theme can see, where they start out light on the dark cell.
+            style={lit && canAnimate ? { transition: `color 0s linear ${FILL_DELAY + FILL_DURATION / 2}s` } : undefined}
           >
             {lit && canAnimate && (
               <motion.span
@@ -34,7 +41,7 @@ export default function StatBar({ items, highlight = 0, className = '' }) {
                 className="absolute inset-0 origin-bottom bg-amber"
                 initial={{ scaleY: 0 }}
                 animate={{ scaleY: active ? 1 : 0 }}
-                transition={{ duration: 0.55, ease: EASE, delay: 0.9 }}
+                transition={{ duration: FILL_DURATION, ease: EASE, delay: FILL_DELAY }}
               />
             )}
             <dt className="relative font-mono text-[12px] font-medium lowercase">{item.label}</dt>

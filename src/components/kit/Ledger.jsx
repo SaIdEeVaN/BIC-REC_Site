@@ -30,7 +30,7 @@ const LayoutContext = createContext(LAYOUTS.lg)
 
 const CELL = 'bg-bone p-4 md:p-5'
 const STATUS_TONE = {
-  pending: 'bg-amber',
+  pending: 'bg-amber text-coal',
   confirmed: 'bg-bone',
 }
 

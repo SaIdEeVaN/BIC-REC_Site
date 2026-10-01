@@ -47,7 +47,7 @@ export default function News() {
                       <>
                         <span className="block">{internal ? 'Read more' : latest ? 'Latest' : 'Sealed'}</span>
                         {/* The newest update is the head of the chain — its hash is still being found. */}
-                        <span className={`meta mt-2 block ${latest ? 'text-ink' : ''}`}>
+                        <span className={`meta mt-2 block ${latest ? 'text-coal' : ''}`}>
                           {latest ? (
                             <Mine text={shortHash(item.title)} />
                           ) : (

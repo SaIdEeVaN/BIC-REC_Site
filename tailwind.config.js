@@ -1,17 +1,19 @@
 /** @type {import('tailwindcss').Config} */
 // Neo-brutalist tokens — see DESIGN_SYSTEM.md.
 // Colors, radii and border widths are replaced (not extended) so off-system values can't creep in.
+// Colors point at the CSS variables in src/index.css, which the dark theme redefines.
 export default {
   content: ['./index.html', './src/**/*.{js,jsx}'],
   theme: {
     colors: {
       transparent: 'transparent',
       current: 'currentColor',
-      ink: '#14110E',
-      bone: '#EDE6D8',
-      amber: '#D9A441',
-      mint: '#2FD9C4',
-      muted: '#4A4238',
+      ink: 'var(--ink)',
+      bone: 'var(--bone)',
+      amber: 'var(--amber)',
+      mint: 'var(--mint)',
+      muted: 'var(--muted)',
+      coal: 'var(--coal)',
     },
     borderRadius: {
       none: '0',
@@ -28,12 +30,12 @@ export default {
         mono: ['"IBM Plex Mono"', 'ui-monospace', 'Menlo', 'Consolas', 'monospace'],
       },
       boxShadow: {
-        ink: '7px 7px 0 #14110E',
-        'ink-6': '6px 6px 0 #14110E',
-        'ink-5': '5px 5px 0 #14110E',
-        amber: '7px 7px 0 #D9A441',
-        'amber-6': '6px 6px 0 #D9A441',
-        bone: '6px 6px 0 #EDE6D8',
+        ink: '7px 7px 0 var(--ink)',
+        'ink-6': '6px 6px 0 var(--ink)',
+        'ink-5': '5px 5px 0 var(--ink)',
+        amber: '7px 7px 0 var(--amber)',
+        'amber-6': '6px 6px 0 var(--amber)',
+        bone: '6px 6px 0 var(--bone)',
       },
     },
   },
