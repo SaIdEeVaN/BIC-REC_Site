@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom'
 import { shortHash } from '../lib/chain'
 import { CLUB_INSTAGRAM, CLUB_LINKEDIN, CLUB_MAILTO } from '../data/club'
 import { BlockClock } from './kit'
+import ChainField from './ChainField'
 import { Desync, Roll, Scramble, SplitText } from './motion'
 
 const quickLinks = [
@@ -48,7 +49,8 @@ function FooterNav({ title, links, children }) {
 
 export default function Footer() {
   return (
-    <footer className="on-ink border-t-3 border-bone bg-ink text-bone">
+    <footer className="on-ink relative isolate border-t-3 border-bone bg-ink text-bone">
+      <ChainField tone="ink" contained />
       <div className="wrap section grid gap-12 md:grid-cols-2 lg:grid-cols-[1.6fr_1fr_1fr]">
         <div className="md:col-span-2 lg:col-span-1">
           {/* The wordmark forks on hover — the one hover accent over the entrance the characters run. */}

@@ -1,10 +1,12 @@
 import { Children } from 'react'
 import { Magnetic, SplitText, Wipe } from '../motion'
+import ChainField from '../ChainField'
 
 // Inverted call-to-action section.
 export default function InkCTA({ title, body, aside, children }) {
   return (
-    <section className="on-ink bg-ink text-bone">
+    <section className="on-ink relative isolate bg-ink text-bone">
+      <ChainField tone="ink" contained />
       <div className="wrap section grid gap-10 lg:grid-cols-[1fr_380px] lg:items-end">
         <div>
           <h2 className="t-cta max-w-[14ch]">

@@ -4,6 +4,7 @@ import { MotionConfig } from 'motion/react'
 import Navbar from './components/Navbar'
 import { RouteShutter } from './components/motion'
 import Footer from './components/Footer'
+import ChainField from './components/ChainField'
 import Home from './pages/Home'
 import { metaFor } from './seo'
 
@@ -64,7 +65,9 @@ export default function App() {
       <MotionConfig reducedMotion="user">
       <RouteEffects />
       <RouteShutter />
-      <div className="flex min-h-screen flex-col bg-bone text-ink">
+      {/* Isolated, so the chain field (z -10) sits above this background but under everything on it. */}
+      <div className="isolate flex min-h-screen flex-col bg-bone text-ink">
+        <ChainField />
         <a href="#main" className="btn btn-amber skip-link">Skip to content</a>
         <Navbar />
         <main id="main" className="flex-1">
