@@ -2,7 +2,6 @@ import { Button } from '../components/kit'
 import { shortHash } from '../lib/chain'
 import { Desync, Marquee, Mine, Reveal, Scramble, SplitText, Typewriter, Wipe } from '../components/motion'
 import { CLUB_INSTAGRAM, RECRUITMENT_RESULTS_OPEN, RECRUITMENT_RESULTS_URL } from '../data/club'
-import ChainField from '../components/ChainField'
 
 // Two states, switched by RECRUITMENT_RESULTS_OPEN in data/club.js:
 // - closed: selections are still being finalised, so the page holds the slot ("Results coming soon").
@@ -38,8 +37,7 @@ export default function CoreMembers() {
 
   return (
     <>
-      <section className="on-ink relative isolate border-b-3 border-ink bg-ink text-bone">
-        <ChainField tone="ink" contained />
+      <section className="on-ink border-b-3 border-ink bg-ink text-bone">
         <div className="wrap section">
           <div className="grid gap-10 lg:grid-cols-[1fr_300px] lg:items-end">
             <div>

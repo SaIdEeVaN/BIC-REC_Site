@@ -2,7 +2,6 @@ import { Button, PageHeader } from '../components/kit'
 import { shortHash } from '../lib/chain'
 import { Marquee, Mine, Reveal, SplitText } from '../components/motion'
 import { CLUB_INSTAGRAM } from '../data/club'
-import ChainField from '../components/ChainField'
 
 // No student projects are ready to publish yet, so this page holds the slot rather than listing any.
 // The previous listing — builds list, filters and the StackChart tech breakdown — is in git at e8c152d:
@@ -20,8 +19,7 @@ export default function Projects() {
         aside={[['builds', 'pending']]}
       />
 
-      <section className="on-ink relative isolate border-b-3 border-ink bg-ink text-bone">
-        <ChainField tone="ink" contained />
+      <section className="on-ink border-b-3 border-ink bg-ink text-bone">
         <div className="wrap section">
           {/* Not sealed because it hasn't been found yet — so show the search, not a settled hash. */}
           <p className="meta">

@@ -24,7 +24,6 @@ import { stats as clubStats } from '../data/achievements'
 import { meshFacts } from '../lib/mesh'
 import { blockNo, shortHash } from '../lib/chain'
 import { CLUB_INSTAGRAM } from '../data/club'
-import ChainField from '../components/ChainField'
 
 // Read from the club's figures rather than written out again here — the two used to be separate lists
 // and ended up contradicting each other. `events & workshops` is the roll-up of both counts, so it
@@ -139,8 +138,7 @@ function Network() {
   const title = 'A network, not a classroom.'
 
   return (
-    <section className="on-ink relative isolate border-b-3 border-bone bg-ink text-bone">
-      <ChainField tone="ink" contained />
+    <section className="on-ink border-b-3 border-bone bg-ink text-bone">
       <div className="wrap section">
         <div className="grid gap-10 lg:grid-cols-[1fr_300px] lg:items-end">
           <Reveal>

@@ -19,16 +19,6 @@ Hard geometry, no softness. Nothing is rounded, nothing is blurred, nothing fade
 
 Two backgrounds per screen: bone and ink. Amber is an accent on small surfaces (buttons, one stat cell, one status pill). Mint appears at most twice per screen.
 
-The chain field behind every page (see Motion) draws in **grain tints**: solid steps of its own background towards
-the other one, never transparency. They are for that background drawing only, never for text or UI.
-
-| Grain | On bone | On ink | Use |
-| --- | --- | --- | --- |
-| Link | `#CAC4B8` | `#37332E` | Resting links |
-| Node | `#B5AFA4` | `#4C4842` | Resting block outlines, peers that heard a block, broadcast paths |
-| Packet | `#807C73` | `#807C73` | Transactions in flight, a block being mined |
-| Label | `#66625B` | `#9B958B` | `mining ·` / `block # · sealed` readouts |
-
 The one place mint is used at size is `<Desync>`, where it and amber are the two forked copies of a label. That is a hover state lasting 420ms, never a resting one, and at most one element per screen carries it.
 
 ## Type
@@ -125,8 +115,7 @@ nothing on this site fades in.
 | Mined value | `<Mine>` — a hash churns through candidates until its difficulty zeros lock in |
 | Hover accent | `<Desync>` — the label forks into an amber and a mint copy, then snaps back |
 | Depth | `<Drift>` — a block travels a little against the page as it scrolls past |
-| Ambient loop | `<NodeMesh>` — a broadcast reaching the peer mesh, forever |
-| Background | `<ChainField>` — the chain behind every page: transactions travel the links, a block is mined (its hash churns), seals amber with its number and is broadcast two hops. Bone field fixed behind the page; ink sections carry their own. Blocks are only mined where nothing on the page sits on top. Canvas, 24fps, paused off screen; a still frame under reduced motion |
+| Ambient loop | `<NodeMesh>` — the one motion on the site that never finishes; everything else fires once |
 | Depth | `<Confirmations>` — cells fill left to right for each block sealed on top of this one |
 
 Rules:
@@ -144,7 +133,7 @@ Rules:
   on the same cadence — the two read as one event.
 - **Every `<PageHeader>` title and `<EmptyState>` heading forks on hover.** It is set once in those two
   components, so pages do not opt in and cannot drift apart on it.
-- **Loops earn their place.** Reveals fire once by design. The ticker, the kinetic band, the chain field behind the page, the chain rail's
+- **Loops earn their place.** Reveals fire once by design. The ticker, the kinetic band, the chain rail's
   packet and the peer mesh are the only things that run forever, and each is describing something that is
   genuinely still happening.
 - **Stagger is `Math.min(i, 12) * 45ms`** — `stagger(i)` in `motion/core.js`. Capped, because the 30th row
