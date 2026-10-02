@@ -61,11 +61,12 @@ The volunteers spent time with the children, starting with introductions in one 
     title: 'Byte the Dust: A Cyber Forensics',
     slug: 'byte-the-dust',
     date: 'February 12, 2026',
+    venue: 'Rajalakshmi Engineering College',
     type: 'Technical Event',
-    description: 'A cyber forensics challenge: each team was handed a case and had to work out what happened.',
+    description: 'A cyber forensics challenge at Titanium 2026: each team was handed a case and had to work out what happened.',
     about: `Byte the Dust was a cyber forensics challenge. Each team was given a case and had to apply the process of cyber and digital forensics to it: identify the evidence, preserve it, analyse it, and document what happened.
 
-It was held on 12 February 2026, the day before Hack to Blockchain.`,
+It was the first of the club’s two events at Titanium 2026, the national-level technical symposium at Rajalakshmi Engineering College, held on 12 February 2026, the day before Hack to Blockchain.`,
   },
   {
     id: 6,
@@ -75,8 +76,8 @@ It was held on 12 February 2026, the day before Hack to Blockchain.`,
     venue: 'Rajalakshmi Engineering College',
     type: 'Technical Event',
     album: 'hack-to-blockchain-2026',
-    description: 'The club’s event at Titanium 2026, with Notion: a session on blockchain consensus, then certificates and goodies.',
-    about: `Hack to Blockchain was the club’s event at Titanium 2026, the national-level technical symposium at Rajalakshmi Engineering College, with Notion.
+    description: 'The club’s second event at Titanium 2026, with Notion: a session on blockchain consensus, then certificates and goodies.',
+    about: `Hack to Blockchain was the club’s second event at Titanium 2026, the national-level technical symposium at Rajalakshmi Engineering College, the day after Byte the Dust. It was run with Notion.
 
 It opened with a session on consensus: thousands of computers keep the same ledger, so who decides which block is correct? The network has to agree without a leader. It closed with certificates and Notion goodies handed out on stage.`,
   },
