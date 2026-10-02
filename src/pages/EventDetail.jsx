@@ -6,13 +6,21 @@ import { albumPath, albums } from '../data/gallery'
 import { blockNo, isRealLink, sealedDate, shortHash, stripEmoji } from '../lib/chain'
 import { thumbUrl } from '../lib/galleryPhotos'
 
+// From md the strip is as many columns as it has photos, so a short album leaves no empty slot (spelled out for Tailwind).
+const STRIP_COLUMNS = { 1: 'md:grid-cols-1', 2: 'md:grid-cols-2', 3: 'md:grid-cols-3', 4: 'md:grid-cols-4' }
+
 // The event's album from the gallery: its first four photos, and the way to all of them on the album's own page.
+// Two across on phones, where an odd last photo takes the full width.
 function EventPhotos({ album }) {
+  const photos = album.photos.slice(0, 4)
   return (
     <>
-      <ul className="cells grid grid-cols-2 md:grid-cols-4">
-        {album.photos.slice(0, 4).map((photo) => (
-          <li key={photo.n} className="bg-ink">
+      <ul className={`cells grid grid-cols-2 ${STRIP_COLUMNS[photos.length]}`}>
+        {photos.map((photo, i) => (
+          <li
+            key={photo.n}
+            className={`bg-ink ${photos.length % 2 === 1 && i === photos.length - 1 ? 'col-span-2 md:col-span-1' : ''}`}
+          >
             <img
               src={thumbUrl(album, photo)}
               alt={photo.alt}

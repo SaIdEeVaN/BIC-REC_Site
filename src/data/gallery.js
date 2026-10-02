@@ -64,6 +64,28 @@ export const albums = [
     ],
   },
   {
+    slug: 'home-of-hope-visit-2026',
+    title: 'Home of Hope Visit',
+    date: 'January 26, 2026',
+    datetime: '2026-01-26',
+    tags: ['outreach', 'community'],
+    description:
+      'The club visited Home of Hope Children’s Home near Porur, a unit of the Rose Bedeiah Foundation and home to 30 children and 7 staff. The children’s faces are blurred for their privacy.',
+    photos: [
+      { n: 1, alt: 'The club’s volunteers together outside Home of Hope Children’s Home.', caption: 'The team at Home of Hope.' },
+      {
+        n: 2,
+        alt: 'Club volunteers stand in a line introducing themselves to the children, who sit on the floor facing them. The children’s faces are blurred.',
+        caption: 'Getting to know each other.',
+      },
+      {
+        n: 3,
+        alt: 'The children sit on the floor in a circle around the club’s volunteers inside the home. The children’s faces are blurred.',
+        caption: 'Everyone in one circle.',
+      },
+    ],
+  },
+  {
     slug: 'european-immersion-2026',
     title: 'European Immersion Program',
     date: 'January 6, 2026',

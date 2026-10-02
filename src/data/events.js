@@ -45,6 +45,19 @@ They worked alongside the club’s members and faculty in the lab, with Blockver
   },
   {
     id: 4,
+    title: 'Home of Hope Visit',
+    slug: 'home-of-hope-visit',
+    date: 'January 26, 2026',
+    venue: 'Home of Hope Children’s Home, near Porur',
+    type: 'Outreach',
+    album: 'home-of-hope-visit-2026',
+    description: 'A visit to Home of Hope Children’s Home near Porur, home to 30 children and 7 staff.',
+    about: `On 26 January 2026 the club visited Home of Hope Children’s Home near Porur, a unit of the Rose Bedeiah Foundation, where 30 children live with 7 staff.
+
+The volunteers spent time with the children, starting with introductions in one big circle.`,
+  },
+  {
+    id: 5,
     title: 'Byte the Dust: A Cyber Forensics',
     slug: 'byte-the-dust',
     date: 'February 12, 2026',
@@ -55,7 +68,7 @@ They worked alongside the club’s members and faculty in the lab, with Blockver
 It was held on 12 February 2026, the day before Hack to Blockchain.`,
   },
   {
-    id: 5,
+    id: 6,
     title: 'Hack to Blockchain',
     slug: 'hack-to-blockchain',
     date: 'February 13, 2026',
@@ -68,7 +81,7 @@ It was held on 12 February 2026, the day before Hack to Blockchain.`,
 It opened with a session on consensus: thousands of computers keep the same ledger, so who decides which block is correct? The network has to agree without a leader. It closed with certificates and Notion goodies handed out on stage.`,
   },
   {
-    id: 6,
+    id: 7,
     title: 'DeFi Unlocked',
     slug: 'defi-unlocked',
     date: 'April 11, 2026',
