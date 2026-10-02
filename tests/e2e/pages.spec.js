@@ -5,7 +5,7 @@ import { albumPath, albums } from '../../src/data/gallery.js'
 import { boardMembers, coreTeamMembers, memberPath, teamMembers } from '../../src/data/members.js'
 import { findOversizedHeadingWords, measureOverflow, overflowMessage } from './overflow.js'
 
-// 48 routes, but only 13 distinct layouts: the other 35 are three templates — an event, an album and a member
+// 47 routes, but only 12 distinct layouts: the other 35 are three templates — an event, an album and a member
 // (board or core) — rendered with different text. Laying out the 24th member proves nothing the 1st didn't,
 // so what gets measured is every distinct layout plus the worst case of each template. Long content
 // is what breaks these pages, and the worst case is derived from the data rather than pinned to a

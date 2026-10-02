@@ -20,7 +20,6 @@ const CoreTeam = lazy(() => import('./pages/CoreTeam'))
 const Associates = lazy(() => import('./pages/Associates'))
 const Projects = lazy(() => import('./pages/Projects'))
 const Achievements = lazy(() => import('./pages/Achievements'))
-const News = lazy(() => import('./pages/News'))
 const Resources = lazy(() => import('./pages/Resources'))
 const Contact = lazy(() => import('./pages/Contact'))
 const NotFound = lazy(() => import('./pages/NotFound'))
@@ -86,10 +85,11 @@ export default function App() {
               <Route path="/team/associates" element={<Associates />} />
               <Route path="/projects" element={<Projects />} />
               <Route path="/achievements" element={<Achievements />} />
-              <Route path="/news" element={<News />} />
               <Route path="/resources" element={<Resources />} />
               {/* Recruitment is over; an old link to the Join page lands on the associates and their results. */}
               <Route path="/join" element={<Navigate to="/team/associates" replace />} />
+              {/* The News page was removed on 2 Oct 2026; old links land on the events instead. */}
+              <Route path="/news" element={<Navigate to="/events" replace />} />
               <Route path="/contact" element={<Contact />} />
               <Route path="*" element={<NotFound />} />
             </Routes>

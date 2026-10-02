@@ -145,7 +145,7 @@ const groups = [
       {
         name: "Karthick Raja R",
         slug: "karthick-raja-r",
-        role: "PR Lead",
+        role: "PR and Outreach Lead",
         department: "ECE",
         email: "karthickraja.r.2024.ece@rajalakshmi.edu.in",
         linkedin: "https://www.linkedin.com/in/karthick-raja-033359381",
@@ -154,7 +154,7 @@ const groups = [
       {
         name: "Sabari Girivasan S",
         slug: "sabari-girivasan-s",
-        role: "PR Co-Lead",
+        role: "PR and Outreach Co-Lead",
         department: "CSE",
         email: "sabarigirivasan.s.2025.cse@rajalakshmi.edu.in",
         linkedin: "https://www.linkedin.com/in/sabari-girivasan-s-9b8989291",
@@ -169,7 +169,7 @@ const groups = [
       {
         name: "Arjun K",
         slug: "arjun-k",
-        role: "Tech Lead",
+        role: "Technical Lead",
         department: "AIML",
         email: "arjun.k.2024.aiml@rajalakshmi.edu.in",
         linkedin: "https://www.linkedin.com/in/arjun-k08062006",
@@ -178,7 +178,7 @@ const groups = [
       {
         name: "Sanjayram M",
         slug: "sanjayram-m",
-        role: "Tech Co-Lead",
+        role: "Technical Co-Lead",
         department: "CSE",
         email: "sanjayram.m.2024.cse@rajalakshmi.edu.in",
         linkedin: "https://www.linkedin.com/in/sanjayram-m-025969331",
@@ -235,7 +235,7 @@ const groups = [
       {
         name: "Muhilan S",
         slug: "muhilan-s",
-        role: "Research Lead",
+        role: "Research and Innovation Lead",
         department: "CSD",
         email: "muhilan.s.2024.csd@rajalakshmi.edu.in",
         linkedin: "https://www.linkedin.com/in/muhilan-s-6a2120332",

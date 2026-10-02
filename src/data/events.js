@@ -49,8 +49,10 @@ They worked alongside the club’s members and faculty in the lab, with Blockver
     slug: 'byte-the-dust',
     date: 'February 12, 2026',
     type: 'Technical Event',
-    description: 'A cyber forensics event by the Blockchain Innovation Club.',
-    about: 'Byte the Dust: A Cyber Forensics was held by the Blockchain Innovation Club on 12 February 2026, the day before Hack to Blockchain.',
+    description: 'A cyber forensics challenge: each team was handed a case and had to work out what happened.',
+    about: `Byte the Dust was a cyber forensics challenge. Each team was given a case and had to apply the process of cyber and digital forensics to it: identify the evidence, preserve it, analyse it, and document what happened.
+
+It was held on 12 February 2026, the day before Hack to Blockchain.`,
   },
   {
     id: 5,
@@ -74,7 +76,8 @@ It opened with a session on consensus: thousands of computers keep the same ledg
     type: 'Workshop',
     album: 'defi-unlocked-2026',
     description: 'A hands-on workshop: a wallet, a transaction, a Solidity smart contract and a token of your own.',
-    about: `DeFi Unlocked was a hands-on workshop in the lab. Participants didn’t just learn about crypto, they built their own: they set up a wallet, made a transaction, wrote a Solidity smart contract in Remix and deployed it to the Sepolia testnet, and made a token of their own.
+    speakers: [{ name: 'Janakiraman K', role: 'Cryptocortex Crew' }],
+    about: `DeFi Unlocked was a hands-on workshop in the lab, led by Janakiraman K of Cryptocortex Crew. Participants didn’t just learn about crypto, they built their own: they set up a wallet, made a transaction, wrote a Solidity smart contract in Remix and deployed it to the Sepolia testnet, and made a token of their own.
 
 It closed with questions and answers, and pointers for carrying on: Remix, CryptoZombies, LearnWeb3, Sepolia Etherscan and Uniswap.`,
   },

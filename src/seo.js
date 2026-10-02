@@ -51,10 +51,6 @@ const PAGES = {
     title: 'Achievements',
     description: "A journey of learning, building, and winning — here's what the club has accomplished together.",
   },
-  '/news': {
-    title: 'News',
-    description: 'The latest news, announcements, and achievements from the Blockchain Innovation Club.',
-  },
   '/resources': {
     title: 'Resources',
     description: 'Handpicked resources curated by the BIC team to help you master Blockchain and Web3.',

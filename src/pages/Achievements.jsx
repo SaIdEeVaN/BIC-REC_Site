@@ -6,7 +6,7 @@ import { shortHash } from '../lib/chain'
 // Exact counts carry no `+` — only students reached, which is the one figure that is a floor rather
 // than a tally. Projects and hackathons are gone rather than shown as zero: the club hasn't run one yet,
 // and /projects says so in its own words.
-// Four of these currently read 1, so the label has to agree with the number: "1 workshops" undercuts a
+// Some of these read 1, so the label has to agree with the number: "1 workshops" undercuts a
 // page whose whole job is stating what the club has actually done.
 const cell = (value, one, many = `${one}s`) => ({ value: `${value}`, label: value === 1 ? one : many })
 

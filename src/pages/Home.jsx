@@ -27,12 +27,11 @@ import { blockNo, shortHash } from '../lib/chain'
 import { CLUB_INSTAGRAM } from '../data/club'
 
 // Read from the club's figures rather than written out again here — the two used to be separate lists
-// and ended up contradicting each other. `events & workshops` is the roll-up of both counts, so it
-// can't drift from the six cells on /achievements either.
+// and ended up contradicting each other. The events count is every event on /events (workshops included).
 const stats = [
   { value: `${clubStats.members}`, label: 'members' },
   { value: '1+', label: 'years active' },
-  { value: `${clubStats.events + clubStats.workshops}`, label: 'events & workshops' },
+  { value: `${clubStats.events}`, label: 'events & workshops' },
   {
     value: `${clubStats.immersionPrograms}`,
     label: clubStats.immersionPrograms === 1 ? 'immersion program' : 'immersion programs',
@@ -41,7 +40,7 @@ const stats = [
 
 const pillars = [
   { title: 'Technical skills', body: 'Workshops, hackathons and live projects to make you industry-ready.' },
-  { title: 'Strong community', body: 'A working force of 25 members who push each other to excel in Web3.' },
+  { title: 'Strong community', body: `A working force of ${clubStats.members} members who push each other to excel in Web3.` },
   { title: 'Decentralized future', body: 'Direct connection to the global blockchain and Web3 professional network.' },
 ]
 

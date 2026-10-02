@@ -49,6 +49,14 @@ test('recruitment is over: an old /join link lands on the associates page', asyn
   await expect(page.locator('header').getByRole('link', { name: 'Join', exact: true })).toHaveCount(0)
 })
 
+test('the News page is gone: an old /news link lands on the events', async ({ page }, testInfo) => {
+  once(testInfo)
+
+  await page.goto('/news')
+  await expect(page).toHaveURL('/events')
+  await expect(page.locator('footer').getByRole('link', { name: 'News' })).toHaveCount(0)
+})
+
 test('the contact form hands the message to an email app addressed to the club', async ({ page }, testInfo) => {
   once(testInfo)
 
