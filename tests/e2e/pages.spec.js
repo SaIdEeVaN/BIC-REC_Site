@@ -1,11 +1,11 @@
 import { test, expect } from '@playwright/test'
 import { metaFor, renderSeoTags, staticRoutes } from '../../src/seo.js'
 import { events } from '../../src/data/events.js'
-import { boardMembers } from '../../src/data/members.js'
+import { boardMembers, coreTeamMembers, memberPath, teamMembers } from '../../src/data/members.js'
 import { findOversizedHeadingWords, measureOverflow, overflowMessage } from './overflow.js'
 
-// 43 routes, but only 12 distinct layouts: the other 31 are two templates — an event and a board
-// member — rendered with different text. Laying out the 25th member proves nothing the 1st didn't,
+// 45 routes, but only 14 distinct layouts: the other 31 are two templates — an event and a member
+// (board or core) — rendered with different text. Laying out the 25th member proves nothing the 1st didn't,
 // so what gets measured is every distinct layout plus the worst case of each template. Long content
 // is what breaks these pages, and the worst case is derived from the data rather than pinned to a
 // name, so it follows the roster instead of going stale when it changes.
@@ -13,18 +13,20 @@ const longestBy = (items, pick) => items.reduce((a, b) => (pick(b).length >= pic
 
 const templated = new Set([
   ...events.map((e) => `/events/${e.id}`),
-  ...boardMembers.map((m) => `/team/board/${m.slug}`),
+  ...teamMembers.map(memberPath),
 ])
 
 const worstCase = [
   `/events/${longestBy(events, (e) => e.title).id}`,
-  `/team/board/${longestBy(boardMembers, (m) => m.name).slug}`,
-  `/team/board/${longestBy(boardMembers, (m) => m.email ?? '').slug}`,
-  // Not every difference is text length. The first and last member have one neighbour rather than
-  // two, so their previous/next row is a different grid — that asymmetry has already shipped a bug
+  memberPath(longestBy(teamMembers, (m) => m.name)),
+  memberPath(longestBy(teamMembers, (m) => m.email ?? '')),
+  // Not every difference is text length. The first and last member of each team have one neighbour rather
+  // than two, so their previous/next row is a different grid — that asymmetry has already shipped a bug
   // once (an empty cell showing the ink background as a black slab), so both ends stay covered.
-  `/team/board/${boardMembers[0].slug}`,
-  `/team/board/${boardMembers.at(-1).slug}`,
+  memberPath(boardMembers[0]),
+  memberPath(boardMembers.at(-1)),
+  memberPath(coreTeamMembers[0]),
+  memberPath(coreTeamMembers.at(-1)),
 ]
 
 const routes = [

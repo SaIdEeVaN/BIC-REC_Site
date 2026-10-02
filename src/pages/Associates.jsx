@@ -3,38 +3,44 @@ import { AnimatePresence } from 'motion/react'
 import { Button, Chip, SectionHeading, Tabs } from '../components/kit'
 import { blockNo, shortHash } from '../lib/chain'
 import { Desync, LiftCell, Marquee, Mine, Reveal, Scramble, SplitText, Typewriter, Wipe } from '../components/motion'
-import { CORE_TEAMS, coreMembers, roleOf } from '../data/coreMembers'
+import MeetUs from '../components/MeetUs'
+import { associates, roleOf } from '../data/associates'
+import { DOMAINS } from '../data/domains'
 import { CLUB_INSTAGRAM, RECRUITMENT_RESULTS_OPEN, RECRUITMENT_RESULTS_URL } from '../data/club'
 
 // Two states, switched by RECRUITMENT_RESULTS_OPEN in data/club.js:
 // - closed: selections are still being finalised, so the page holds the slot ("Results coming soon").
 // - open: results are published on the results site, so the page sends candidates there to check their own.
-// Neither lists anyone by itself: the roster below the band (CoreRoster) appears once data/coreMembers.js has
-// the new team in it.
+// Neither lists anyone by itself: the roster below the band (AssociateRoster) appears once data/associates.js
+// has the new associates in it.
 const STATES = {
   closed: {
-    lead: 'Selections for the core team are still being finalised. Everyone who makes it in will be listed here the moment results are out.',
+    lead: 'Selections for the 2026–27 intake are still being finalised. Every new associate will be listed here the moment results are out.',
     status: ['selection', 'pending'],
     hero: ['Results', 'coming', 'soon'],
-    body: 'Applications have closed and the intake is being finalised. Results are announced on Instagram first — every core member will be listed here once they’re out.',
+    body: 'Applications have closed and the intake is being finalised. Results are announced on Instagram first — every new associate will be listed here once they’re out.',
     band: ['Soon', 'Stay tuned', 'Watch this space', 'Any day now'],
   },
   open: {
-    lead: 'The core team intake is closed and the results are live. Everyone who applied can check their own result.',
+    lead: 'The 2026–27 intake is closed and the results are live. Everyone who applied can check their own result.',
     status: ['results', 'live'],
     hero: ['Check', 'your', 'result'],
-    body: 'Applied to the core team? Sign in on the results page with the email you applied with, and use your roll number as the password.',
+    body: 'Applied to BIC/REC this year? Sign in on the results page with the email you applied with, and use your roll number as the password.',
     band: ['Check your result', 'Email + roll number', 'Results are live', 'Welcome to the chain'],
   },
 }
 
-const TITLE = 'Core members'
+const TITLE = 'Associate members'
+
+// The page's "about": who the associates are, below the results band.
+const ABOUT =
+  'Associates are the club’s newest members, selected through the 2026–27 recruitment. Each one joins one of the seven domains and works alongside its core team on events, builds, design and media: the first step towards leading a domain.'
 
 // The page is one ink section rather than a bone <PageHeader> stacked on an ink block: the whole page
 // is about one thing, and a rule across the middle of it split that in two. The header keeps
 // PageHeader's layout and entrance — eyebrow types, title shunts up and forks on hover, lead unseals,
 // the status decrypts — with its rules and curtain in bone, because it now sits on ink.
-export default function CoreMembers() {
+export default function Associates() {
   const open = RECRUITMENT_RESULTS_OPEN
   const { lead, status, hero, body, band } = STATES[open ? 'open' : 'closed']
 
@@ -45,7 +51,7 @@ export default function CoreMembers() {
           <div className="grid gap-10 lg:grid-cols-[1fr_300px] lg:items-end">
             <div>
               <p className="meta mb-5">
-                <Typewriter text="core team intake" />
+                <Typewriter text="associate intake · 2026–27" />
               </p>
               <h1 className="t-title max-w-[13ch]">
                 <Desync text={TITLE}>
@@ -74,11 +80,11 @@ export default function CoreMembers() {
             <p className="meta">
               {open ? (
                 <>
-                  results sealed · <Scramble text={shortHash('core-members')} />
+                  results sealed · <Scramble text={shortHash('associates')} />
                 </>
               ) : (
                 <>
-                  block #—— · mining <Mine text={shortHash('core-members')} zeros={4} duration={2.4} />
+                  block #—— · mining <Mine text={shortHash('associates')} zeros={4} duration={2.4} />
                 </>
               )}
             </p>
@@ -105,7 +111,7 @@ export default function CoreMembers() {
                 ) : (
                   <>
                     <Button href={CLUB_INSTAGRAM} variant="onInk">Follow @bic.rec</Button>
-                    <Button to="/team/board" variant="ghostOnInk">Meet the board</Button>
+                    <Button to="/team/core" variant="ghostOnInk">Meet the core team</Button>
                   </>
                 )}
               </div>
@@ -116,36 +122,44 @@ export default function CoreMembers() {
 
       <Marquee words={band} />
 
-      {coreMembers.length > 0 && <CoreRoster />}
+      <section className="border-b-3 border-ink">
+        <div className="wrap section">
+          <SectionHeading eyebrow="about the associates" title="The newest blocks on the chain" lead={ABOUT} />
+        </div>
+      </section>
+
+      {associates.length > 0 && <AssociateRoster />}
+
+      <MeetUs current="associates" />
     </>
   )
 }
 
 const ALL = 'All'
-// Only the teams that have someone in them, in the club's order.
-const TEAMS = CORE_TEAMS.filter((team) => coreMembers.some((m) => m.team === team))
+// Only the domains that have someone in them, in the club's order.
+const TEAMS = DOMAINS.filter((team) => associates.some((m) => m.team === team))
 
-// The new core team: one cell per member, filtered by team. Members have no pages of their own (yet), so the
+// The associates: one cell per member, filtered by domain. Associates have no pages of their own (yet), so the
 // cells are plain text, not links.
-function CoreRoster() {
+function AssociateRoster() {
   const [filter, setFilter] = useState(ALL)
-  const shown = filter === ALL ? coreMembers : coreMembers.filter((m) => m.team === filter)
+  const shown = filter === ALL ? associates : associates.filter((m) => m.team === filter)
 
   return (
-    <section aria-labelledby="core-roster">
+    <section aria-labelledby="associates-roster" className="border-b-3 border-ink">
       <div className="wrap section">
         <SectionHeading
-          eyebrow={`the new core team · ${coreMembers.length} members · ${TEAMS.length} teams`}
-          title="Meet the core team"
+          eyebrow={`the 2026–27 associates · ${associates.length} members · ${TEAMS.length} domains`}
+          title="Meet the associates"
         />
-        <Tabs label="Filter the core team by team" options={[ALL, ...TEAMS]} value={filter} onChange={setFilter} />
+        <Tabs label="Filter the associates by domain" options={[ALL, ...TEAMS]} value={filter} onChange={setFilter} />
         {/* Positioned so leaving cells can be popped out of the flow while the rest slide into place. Columns stay
             wide enough for the longest names (~15 letters at the card size) at every breakpoint. */}
-        <ul id="core-roster" className="cells relative mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        <ul id="associates-roster" className="cells relative mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           <AnimatePresence mode="popLayout" initial={false}>
             {shown.map((member) => (
               <LiftCell key={`${member.team}-${member.name}`} shuffle className="flex flex-col bg-bone p-5">
-                <p className="meta">{blockNo(coreMembers.indexOf(member) + 1)}</p>
+                <p className="meta">{blockNo(associates.indexOf(member) + 1)}</p>
                 <h3 className="t-card mt-4">{member.name}</h3>
                 {member.department && <p className="meta mt-2">{member.department.toLowerCase()}</p>}
                 <div className="mt-auto pt-5">

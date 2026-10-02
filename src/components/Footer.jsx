@@ -15,6 +15,7 @@ const moreLinks = [
   { name: 'Projects', path: '/projects' },
   { name: 'Board Members', path: '/team/board' },
   { name: 'Core Members', path: '/team/core' },
+  { name: 'Associate Members', path: '/team/associates' },
   { name: 'Achievements', path: '/achievements' },
   { name: 'News', path: '/news' },
   { name: 'Resources', path: '/resources' },

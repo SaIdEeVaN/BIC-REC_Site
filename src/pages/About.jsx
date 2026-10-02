@@ -1,5 +1,6 @@
 import { Button, InkCTA, PageHeader, SectionHeading, TrackCards } from '../components/kit'
 import { Marquee } from '../components/motion'
+import MeetUs from '../components/MeetUs'
 
 const BAND_WORDS = ['Blockchain', 'Web3', 'Smart contracts', 'DeFi']
 
@@ -35,6 +36,11 @@ export default function About() {
           <TrackCards items={story} />
         </div>
       </section>
+
+      <MeetUs
+        className="border-t-3 border-ink"
+        lead="The club is run by its members, in three teams: the board leads the club, the core team runs its seven domains, and the associates are its newest members."
+      />
 
       <section className="border-t-3 border-ink">
         <div className="wrap section">

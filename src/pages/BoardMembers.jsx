@@ -1,5 +1,6 @@
 import { PageHeader, SectionHeading } from '../components/kit'
 import { AMBER, Reveal, Slam } from '../components/motion'
+import MeetUs from '../components/MeetUs'
 import MemberCell from '../components/MemberCell'
 import { boardGroups, facultyCoordinators } from '../data/members'
 import { pad2 } from '../lib/chain'
@@ -21,6 +22,10 @@ function CoordinatorPortrait({ coordinator }) {
 // the bordered `fill-up` button instead, but its ink border would vanish against ink here.
 const contactLink = 'underline decoration-2 underline-offset-4'
 
+// The page's "about": who the board is.
+const ABOUT =
+  'The board is the club’s student leadership. The core board (the President, the Vice President and the club’s ambassadors) leads the club and speaks for it, and the executive team runs operations and technology and keeps the club’s records and accounts. With the faculty coordinators, they set the club’s direction for the year.'
+
 // Block numbers run on from one group to the next, so the whole board reads as a single chain.
 let seats = 0
 const groups = boardGroups.map((group) => {
@@ -34,7 +39,7 @@ export default function BoardMembers() {
     <>
       <PageHeader
         eyebrow="club leadership"
-        title="Meet our leadership"
+        title="Board members"
         lead="The faculty coordinators and student board guiding, managing, and growing the Blockchain Innovation Club at REC."
         aside={[
           ['faculty', pad2(facultyCoordinators.length)],
@@ -42,6 +47,12 @@ export default function BoardMembers() {
           ['groups', pad2(groups.length)],
         ]}
       />
+
+      <section className="border-b-3 border-ink">
+        <div className="wrap section">
+          <SectionHeading eyebrow="about the board" title="Who sets the club’s course" lead={ABOUT} />
+        </div>
+      </section>
 
       <section className="border-b-3 border-ink">
         <div className="wrap section">
@@ -78,7 +89,7 @@ export default function BoardMembers() {
         </div>
       </section>
 
-      <section>
+      <section className="border-b-3 border-ink">
         <div className="wrap section">
           <SectionHeading eyebrow="student leaders" title="The board" />
           <div className="flex flex-col gap-10 md:gap-14">
@@ -100,6 +111,8 @@ export default function BoardMembers() {
           </div>
         </div>
       </section>
+
+      <MeetUs current="board" />
     </>
   )
 }

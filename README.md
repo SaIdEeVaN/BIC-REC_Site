@@ -42,7 +42,7 @@ The UI follows a **neo-brutalist design system** — hard geometry, 3px ink rule
 - 🏠 **Home** — Stacked hero, chain rail, stat bar and event ledger
 - 📅 **Events** — Filterable event ledger with detail pages
 - 🏆 **Achievements** — Club milestones and accomplishments
-- 👥 **Team** — Board member profiles; Core Members points candidates to their recruitment result ([bicrec-results.web.app](https://bicrec-results.web.app))
+- 👥 **Meet us** — The club's three teams, each with its own page: board members and core members (with profiles), and the associates (the newest members, and the way to the recruitment results at [bicrec-results.web.app](https://bicrec-results.web.app))
 - 🖼️ **Gallery** — Photo frames by category
 - 📰 **News** — Latest club updates
 - 🔧 **Projects** — Blockchain projects by the club

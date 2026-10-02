@@ -9,6 +9,7 @@ import { setTheme, useTheme } from '../lib/theme'
 const links = [
   { to: '/', label: 'Home', end: true },
   { to: '/about', label: 'About us' },
+  { to: '/team', label: 'Meet us' },
   { to: '/events', label: 'Events' },
   { to: '/gallery', label: 'Gallery' },
   { to: '/contact', label: 'Contact us' },
@@ -83,7 +84,7 @@ export default function Navbar() {
               <span className="text-[22px] font-black uppercase tracking-[-.04em] md:text-[26px]">
                 <Scramble text="BIC/REC" trigger="mount" duration={0.6} replay={replay} />
               </span>
-              <span className="meta mt-1 hidden sm:block">blockchain innovation club</span>
+              <span className="meta mt-1 hidden whitespace-nowrap sm:block">blockchain innovation club</span>
             </span>
           </Link>
 
@@ -94,7 +95,7 @@ export default function Navbar() {
                 to={link.to}
                 end={link.end}
                 className={({ isActive }) =>
-                  `roll-host relative flex items-center border-l-3 border-ink px-5 text-[14px] font-extrabold uppercase ${
+                  `roll-host relative flex items-center whitespace-nowrap border-l-3 border-ink px-3.5 text-[14px] font-extrabold uppercase xl:px-5 ${
                     isActive ? 'text-bone' : ''
                   }`
                 }

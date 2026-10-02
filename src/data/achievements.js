@@ -3,8 +3,8 @@
 // workshops while /achievements said 500+ students and 20+ workshops, on the same site.
 //
 // `members` and `studentsReached` count different things and are not interchangeable: 25 is the working
-// force on /team/board, 500+ is how many students those 25 have reached through sessions. Counts here are
-// exact, so only `studentsReached` is rendered with a `+`.
+// force on /team/board and /team/core, 500+ is how many students those 25 have reached through sessions.
+// Counts here are exact, so only `studentsReached` is rendered with a `+`.
 export const stats = {
   members: 25,
   events: 2, // Titanium '26, the national-level technical symposium

@@ -16,7 +16,7 @@ const whyJoin = [
 
 const BAND_WORDS = ['Builders', 'Organizers', 'Creatives', 'Communicators', 'Writers']
 
-// The club's domains, by their official names and in the club's own order (CORE_TEAMS in data/coreMembers.js).
+// The club's domains, by their official names and in the club's own order (DOMAINS in data/domains.js).
 const openRoles = [
   { team: 'Event', skills: ['Planning', 'Coordination', 'Management'] },
   { team: 'PR and Outreach', skills: ['Social Media', 'Communication', 'Outreach'] },

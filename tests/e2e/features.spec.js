@@ -1,7 +1,8 @@
 import { test, expect } from '@playwright/test'
 import { isUpcoming } from '../../src/data/events.js'
 import { RECRUITMENT_RESULTS_OPEN, RECRUITMENT_RESULTS_URL } from '../../src/data/club.js'
-import { coreMembers } from '../../src/data/coreMembers.js'
+import { associates } from '../../src/data/associates.js'
+import { boardMembers, coreTeamMembers, memberPath } from '../../src/data/members.js'
 
 // Behaviour is identical at every width, so these run once.
 const once = (testInfo) => test.skip(testInfo.project.name !== 'desktop-1280', 'same behaviour at every width')
@@ -85,10 +86,10 @@ test('the contact form only takes a college email address', async ({ page }, tes
   await expect(page.getByText('enter valid email id')).toHaveCount(0)
 })
 
-test('Core Members follows the recruitment results switch', async ({ page }, testInfo) => {
+test('the Associates page follows the recruitment results switch', async ({ page }, testInfo) => {
   once(testInfo)
 
-  await page.goto('/team/core')
+  await page.goto('/team/associates')
   const hero = page.locator('main h2.t-hero')
   const check = page.locator('main').getByRole('link', { name: 'Check your result' })
   if (RECRUITMENT_RESULTS_OPEN) {
@@ -100,17 +101,56 @@ test('Core Members follows the recruitment results switch', async ({ page }, tes
   }
 })
 
-test('Core Members lists the new core team once it is published, filtered by team', async ({ page }, testInfo) => {
+test('the Associates page lists the associates once they are published, filtered by domain', async ({ page }, testInfo) => {
   once(testInfo)
 
-  await page.goto('/team/core')
-  const roster = page.locator('#core-roster')
-  if (coreMembers.length === 0) {
+  await page.goto('/team/associates')
+  const roster = page.locator('#associates-roster')
+  if (associates.length === 0) {
     await expect(roster).toHaveCount(0)
     return
   }
-  await expect(roster.locator('li')).toHaveCount(coreMembers.length)
-  const team = coreMembers[0].team
-  await page.getByRole('group', { name: 'Filter the core team by team' }).getByRole('button', { name: team, exact: true }).click()
-  await expect(roster.locator('li')).toHaveCount(coreMembers.filter((m) => m.team === team).length)
+  await expect(roster.locator('li')).toHaveCount(associates.length)
+  const team = associates[0].team
+  await page.getByRole('group', { name: 'Filter the associates by domain' }).getByRole('button', { name: team, exact: true }).click()
+  await expect(roster.locator('li')).toHaveCount(associates.filter((m) => m.team === team).length)
+})
+
+test('Meet us leads to the board, the core team and the associates', async ({ page }, testInfo) => {
+  once(testInfo)
+
+  for (const [name, path] of [
+    ['Board members', '/team/board'],
+    ['Core members', '/team/core'],
+    ['Associate members', '/team/associates'],
+  ]) {
+    await page.goto('/team')
+    await page.locator('main').getByRole('link', { name: new RegExp(name) }).click()
+    await expect(page).toHaveURL(path)
+    // On the team's own page, its cell in the Meet us switcher is marked as the current page.
+    await expect(page.locator('main a[aria-current="page"]')).toHaveAttribute('href', path)
+  }
+})
+
+test('the board and the core team list their own members, each linking to their own page', async ({ page }, testInfo) => {
+  once(testInfo)
+
+  for (const [path, members] of [
+    ['/team/board', boardMembers],
+    ['/team/core', coreTeamMembers],
+  ]) {
+    await page.goto(path)
+    const links = page.locator('main ul.cells a[href^="/team/board/"], main ul.cells a[href^="/team/core/"]')
+    await expect(links).toHaveCount(members.length)
+    await expect(links.first()).toHaveAttribute('href', memberPath(members[0]))
+  }
+})
+
+test("an old /team/board link to a core member's page lands on their page under /team/core", async ({ page }, testInfo) => {
+  once(testInfo)
+
+  const member = coreTeamMembers[0]
+  await page.goto(`/team/board/${member.slug}`)
+  await expect(page).toHaveURL(memberPath(member))
+  await expect(page.locator('main h1')).toContainText(member.name)
 })

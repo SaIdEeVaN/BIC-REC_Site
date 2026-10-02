@@ -1,12 +1,18 @@
-import { Link, useParams } from 'react-router-dom'
+import { Link, Navigate, useParams } from 'react-router-dom'
 import { Button, EmptyState } from '../components/kit'
 import { Desync, Reveal, Scramble, Slam, SplitText } from '../components/motion'
-import { boardMembers, getMemberBySlug } from '../data/members'
+import { boardMembers, coreTeamMembers, getMemberBySlug, memberPath } from '../data/members'
 import { blockNo, shortHash } from '../lib/chain'
 import { initials } from '../lib/initials'
 import { photoFor } from '../lib/memberPhotos'
 
 const linkClass = 'fill-up block border-3 border-ink px-4 py-3 text-[13.5px] font-extrabold uppercase'
+
+// Board and core members each have their own pages, and step through their own team only.
+const TEAMS = {
+  board: { path: '/team/board', name: 'the board', roster: boardMembers },
+  core: { path: '/team/core', name: 'the core team', roster: coreTeamMembers },
+}
 
 // A member's own block. The portrait panel is a square either way: their photo once one is dropped into
 // src/assets/members, their initials on ink until then — the roster can be filled in one face at a time.
@@ -30,12 +36,12 @@ function Portrait({ member }) {
   )
 }
 
-// Steps through the roster in page order, so the board can be read straight through without going back.
+// Steps through the team in page order, so it can be read straight through without going back.
 function Neighbour({ member, direction }) {
   const label = direction < 0 ? '← previous' : 'next →'
 
   return (
-    <Link to={`/team/board/${member.slug}`} className="row-link group block bg-bone p-5 md:p-6">
+    <Link to={memberPath(member)} className="row-link group block bg-bone p-5 md:p-6">
       <p className="meta">{label}</p>
       <p className="t-row mt-2 underline decoration-2 underline-offset-[5px] group-hover:decoration-[3px]">{member.name}</p>
       {member.role && <p className="meta mt-2">{member.role.toLowerCase()}</p>}
@@ -43,9 +49,11 @@ function Neighbour({ member, direction }) {
   )
 }
 
-export default function MemberDetail() {
+// `team`: which address this is ('board' for /team/board/:slug, 'core' for /team/core/:slug).
+export default function MemberDetail({ team = 'board' }) {
   const { slug } = useParams()
   const member = getMemberBySlug(slug)
+  const home = TEAMS[team]
 
   if (!member) {
     return (
@@ -53,15 +61,19 @@ export default function MemberDetail() {
         <EmptyState
           title="Member not found"
           body="There's nobody at this address. They may have left the club, or the link may be out of date."
-          action={<Button variant="onInk" to="/team/board">Back to the board</Button>}
+          action={<Button variant="onInk" to={home.path}>Back to {home.name}</Button>}
         />
       </div>
     )
   }
 
-  const index = boardMembers.findIndex((m) => m.slug === member.slug)
-  const previous = boardMembers[index - 1]
-  const next = boardMembers[index + 1]
+  // Core members' pages used to live under /team/board; an old link lands on the right page.
+  if (member.team !== team) return <Navigate to={memberPath(member)} replace />
+
+  const roster = home.roster
+  const index = roster.findIndex((m) => m.slug === member.slug)
+  const previous = roster[index - 1]
+  const next = roster[index + 1]
   const facts = [
     ['role', member.role],
     ['group', member.group],
@@ -73,10 +85,10 @@ export default function MemberDetail() {
       <header className="border-b-3 border-ink">
         <div className="wrap section">
           <Link
-            to="/team/board"
+            to={home.path}
             className="font-mono text-[12.5px] font-medium underline decoration-2 underline-offset-4"
           >
-            ← back to the board
+            ← back to {home.name}
           </Link>
           <p className="meta mt-8">
             <Scramble

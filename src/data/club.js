@@ -17,7 +17,7 @@ export const CLUB_LINKEDIN = 'https://www.linkedin.com/company/bicrec'
 // this project).
 export const RECRUITMENT_RESULTS_URL = 'https://bicrec-results.web.app'
 
-// The Core Members page's switch. false: "Results coming soon". true: "Check your result", with a button to
-// RECRUITMENT_RESULTS_URL. Flip it only once the real results are published there — until then the results
-// site holds sample data and every candidate would get "no match".
+// The Associates page's switch (/team/associates). false: "Results coming soon". true: "Check your result",
+// with a button to RECRUITMENT_RESULTS_URL. Flip it only once the real results are published there — until
+// then the results site holds sample data and every candidate would get "no match".
 export const RECRUITMENT_RESULTS_OPEN = false

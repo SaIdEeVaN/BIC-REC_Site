@@ -12,9 +12,11 @@ const About = lazy(() => import('./pages/About'))
 const Events = lazy(() => import('./pages/Events'))
 const EventDetail = lazy(() => import('./pages/EventDetail'))
 const Gallery = lazy(() => import('./pages/Gallery'))
+const Team = lazy(() => import('./pages/Team'))
 const BoardMembers = lazy(() => import('./pages/BoardMembers'))
 const MemberDetail = lazy(() => import('./pages/MemberDetail'))
-const CoreMembers = lazy(() => import('./pages/CoreMembers'))
+const CoreTeam = lazy(() => import('./pages/CoreTeam'))
+const Associates = lazy(() => import('./pages/Associates'))
 const Projects = lazy(() => import('./pages/Projects'))
 const Achievements = lazy(() => import('./pages/Achievements'))
 const News = lazy(() => import('./pages/News'))
@@ -75,9 +77,12 @@ export default function App() {
               <Route path="/events" element={<Events />} />
               <Route path="/events/:id" element={<EventDetail />} />
               <Route path="/gallery" element={<Gallery />} />
+              <Route path="/team" element={<Team />} />
               <Route path="/team/board" element={<BoardMembers />} />
-              <Route path="/team/board/:slug" element={<MemberDetail />} />
-              <Route path="/team/core" element={<CoreMembers />} />
+              <Route path="/team/board/:slug" element={<MemberDetail team="board" />} />
+              <Route path="/team/core" element={<CoreTeam />} />
+              <Route path="/team/core/:slug" element={<MemberDetail team="core" />} />
+              <Route path="/team/associates" element={<Associates />} />
               <Route path="/projects" element={<Projects />} />
               <Route path="/achievements" element={<Achievements />} />
               <Route path="/news" element={<News />} />

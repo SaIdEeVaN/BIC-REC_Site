@@ -2,7 +2,7 @@
 // Used at runtime (RouteMeta in App.jsx), at build time (scripts/prerender-meta.js) and by the e2e tests,
 // so keep this file free of browser-only or Vite-only code.
 import { events, getEventById } from './data/events.js'
-import { boardMembers, getMemberBySlug } from './data/members.js'
+import { getMemberBySlug, memberPath, teamMembers } from './data/members.js'
 import { RECRUITMENT_RESULTS_OPEN } from './data/club.js'
 
 export const SITE_URL = 'https://bicrec.web.app'
@@ -24,15 +24,23 @@ const PAGES = {
     title: 'Gallery',
     description: "A visual collection of the club's activities and achievements.",
   },
+  '/team': {
+    title: 'Meet us',
+    description: 'The board, the core team and the associates: meet the people of the Blockchain Innovation Club at REC.',
+  },
   '/team/board': {
-    title: 'Leadership',
-    description: 'The people guiding, managing, and growing the Blockchain Innovation Club at REC.',
+    title: 'Board members',
+    description: 'The faculty coordinators and student board guiding, managing, and growing the Blockchain Innovation Club at REC.',
   },
   '/team/core': {
-    title: 'Core team',
+    title: 'Core members',
+    description: "The leads and co-leads who run the Blockchain Innovation Club's seven domains.",
+  },
+  '/team/associates': {
+    title: 'Associate members',
     description: RECRUITMENT_RESULTS_OPEN
-      ? 'Core team results are out — check yours with the email you applied with and your roll number.'
-      : 'Core team selections are being finalised — results will be published here once they are out.',
+      ? 'The 2026–27 recruitment results are out — check yours with the email you applied with and your roll number.'
+      : 'Selections for the 2026–27 intake are being finalised — results will be published here once they are out.',
   },
   '/projects': {
     title: 'Projects',
@@ -76,9 +84,9 @@ export function metaFor(pathname) {
   const event = eventMatch && getEventById(eventMatch[1])
   if (event) return build(event.title, event.description, path)
 
-  const memberMatch = path.match(/^\/team\/board\/([a-z0-9-]+)$/)
-  const member = memberMatch && getMemberBySlug(memberMatch[1])
-  if (member) {
+  const memberMatch = path.match(/^\/team\/(board|core)\/([a-z0-9-]+)$/)
+  const member = memberMatch && getMemberBySlug(memberMatch[2])
+  if (member && member.team === memberMatch[1]) {
     const detail = [member.role, member.department].filter(Boolean).join(' · ')
     return build(member.name, `${detail} — Blockchain Innovation Club, Rajalakshmi Engineering College.`, path)
   }
@@ -93,7 +101,7 @@ export function metaFor(pathname) {
 export const staticRoutes = [
   ...Object.keys(PAGES),
   ...events.map((e) => `/events/${e.id}`),
-  ...boardMembers.map((m) => `/team/board/${m.slug}`),
+  ...teamMembers.map(memberPath),
 ]
 
 const escapeAttr = (value) =>

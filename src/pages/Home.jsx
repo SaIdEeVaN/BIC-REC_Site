@@ -2,6 +2,7 @@ import { useRef } from 'react'
 import { Link } from 'react-router-dom'
 import { motion, useScroll } from 'motion/react'
 import { Button, ChainRail, Chip, InkCTA, Ledger, SectionHeading, StatBar, TrackCards } from '../components/kit'
+import MeetUs from '../components/MeetUs'
 import {
   Desync,
   Drift,
@@ -262,6 +263,8 @@ export default function Home() {
           </Ledger>
         </div>
       </section>
+
+      <MeetUs className="border-t-3 border-ink" />
 
       <InkCTA
         title="Ready to level up?"

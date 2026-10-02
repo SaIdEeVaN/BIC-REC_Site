@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { motion } from 'motion/react'
 import { blockNo } from '../lib/chain'
 import { initials } from '../lib/initials'
+import { memberPath } from '../data/members'
 import { photoFor } from '../lib/memberPhotos'
 import { LiftCell, SLAM, Scramble, stagger, useReveal } from './motion'
 
@@ -21,7 +22,7 @@ const MemberCell = forwardRef(function MemberCell({ member, index, shuffle = fal
   return (
     <LiftCell ref={ref} shuffle={shuffle} className="bg-bone" onHoverStart={() => setReplay((n) => n + 1)}>
       {/* The observer watches the link, not the cell: LiftCell's own reveal offsets the cell itself. */}
-      <Link ref={revealRef} to={`/team/board/${member.slug}`} className="group flex h-full flex-col p-5">
+      <Link ref={revealRef} to={memberPath(member)} className="group flex h-full flex-col p-5">
         <div className="flex items-start justify-between gap-3">
           <motion.span
             aria-hidden="true"

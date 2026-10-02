@@ -1,18 +1,19 @@
-// Faculty coordinators and the student board, in the groups and order the club publishes them.
+// Faculty coordinators and the student leadership (the board and the core team), in the groups and order the
+// club publishes them. The associates (the newest members) are in data/associates.js.
 //
 // Contact details come from the club's own intake form. Members who predate it carry a name and role
 // only — the cells and the detail page render whatever is present, so a partial record is fine.
 //
 // `email` is shown on a member's own page at the club's request, alongside their LinkedIn and Instagram.
-// It is deliberately left off the grid at /team/board: a page listing twenty-five addresses at once is a
-// far easier scrape than twenty-five pages holding one each. Keep it that way when adding to MemberCell.
+// It is deliberately left off the grids at /team/board and /team/core: a page listing every address at once is a
+// far easier scrape than one page per person holding one each. Keep it that way when adding to MemberCell.
 //
-// `slug` is two things at once for the student board: the member's address at /team/board/<slug>, and the
-// name their photo file must carry. Drop src/assets/members/<slug>.jpg (or .jpeg/.png/.webp) in and it
+// `slug` is two things at once for the student leadership: the member's address (/team/board/<slug> or
+// /team/core/<slug>, see memberPath), and the name their photo file must carry. Drop src/assets/members/<slug>.jpg (or .jpeg/.png/.webp) in and it
 // appears — see lib/memberPhotos.js. Until then the cell falls back to their initials.
 //
 // The faculty coordinators carry a slug for the photo alone. They have no page of their own: routes, the
-// sitemap and the e2e suite all walk `boardMembers`, which is the student board only.
+// sitemap and the e2e suite all walk `teamMembers`, which is the student leadership only.
 export const facultyCoordinators = [
   {
     name: 'Dr. Muneeshwari R',
@@ -28,8 +29,12 @@ export const facultyCoordinators = [
   },
 ]
 
-export const boardGroups = [
+// Every group of the club's leadership, in page order. `team` says which page it belongs to:
+// - 'board': the core board and the executive team, at /team/board.
+// - 'core': the leads and co-leads of each domain (the core team), at /team/core, in the club's domain order.
+const groups = [
   {
+    team: 'board',
     title: "Core board",
     members: [
       {
@@ -71,6 +76,7 @@ export const boardGroups = [
     ],
   },
   {
+    team: 'board',
     title: "Executive team",
     members: [
       {
@@ -112,38 +118,7 @@ export const boardGroups = [
     ],
   },
   {
-    title: "Design",
-    members: [
-      {
-        name: "Kishoreathava S",
-        slug: "kishoreathava-s",
-        role: "Head of Design",
-        department: null,
-        email: null,
-        linkedin: null,
-        instagram: null,
-      },
-      {
-        name: "S. Pratiba",
-        slug: "s-pratiba",
-        role: "Co-Head of Design",
-        department: "CSE (Cyber Security)",
-        email: "pratiba.s.2024.csecs@rajalakshmi.edu.in",
-        linkedin: "https://www.linkedin.com/in/pratiba-s-73042b32b",
-        instagram: "https://www.instagram.com/pratiba.06",
-      },
-      {
-        name: "Janane Jaipratha S",
-        slug: "janane-jaipratha-s",
-        role: "Design Co-Lead",
-        department: "AIML",
-        email: "jananejaipratha.s.2024.aiml@rajalakshmi.edu.in",
-        linkedin: "https://www.linkedin.com/in/jananejaipratha-s-b27302318",
-        instagram: "https://www.instagram.com/janane_10_",
-      },
-    ],
-  },
-  {
+    team: 'core',
     title: "Event",
     members: [
       {
@@ -167,6 +142,7 @@ export const boardGroups = [
     ],
   },
   {
+    team: 'core',
     title: "PR and Outreach",
     members: [
       {
@@ -190,6 +166,7 @@ export const boardGroups = [
     ],
   },
   {
+    team: 'core',
     title: "Technical",
     members: [
       {
@@ -231,6 +208,40 @@ export const boardGroups = [
     ],
   },
   {
+    team: 'core',
+    title: "Design",
+    members: [
+      {
+        name: "Kishoreathava S",
+        slug: "kishoreathava-s",
+        role: "Head of Design",
+        department: null,
+        email: null,
+        linkedin: null,
+        instagram: null,
+      },
+      {
+        name: "S. Pratiba",
+        slug: "s-pratiba",
+        role: "Co-Head of Design",
+        department: "CSE (Cyber Security)",
+        email: "pratiba.s.2024.csecs@rajalakshmi.edu.in",
+        linkedin: "https://www.linkedin.com/in/pratiba-s-73042b32b",
+        instagram: "https://www.instagram.com/pratiba.06",
+      },
+      {
+        name: "Janane Jaipratha S",
+        slug: "janane-jaipratha-s",
+        role: "Design Co-Lead",
+        department: "AIML",
+        email: "jananejaipratha.s.2024.aiml@rajalakshmi.edu.in",
+        linkedin: "https://www.linkedin.com/in/jananejaipratha-s-b27302318",
+        instagram: "https://www.instagram.com/janane_10_",
+      },
+    ],
+  },
+  {
+    team: 'core',
     title: "Research and Innovation",
     members: [
       {
@@ -254,6 +265,7 @@ export const boardGroups = [
     ],
   },
   {
+    team: 'core',
     title: "Visual and Digital Media",
     members: [
       {
@@ -293,11 +305,27 @@ export const boardGroups = [
         instagram: null,
       },
     ],
-  },]
+  },
+]
 
-// Flat roster in page order — what the detail page uses to find a member and to step to the next one.
-export const boardMembers = boardGroups.flatMap((group) =>
-  group.members.map((member) => ({ ...member, group: group.title }))
-)
+// Each member carries their team and group, so a cell or a page can link to them (memberPath) on its own.
+const withTeam = (group) => ({
+  ...group,
+  members: group.members.map((member) => ({ ...member, team: group.team, group: group.title })),
+})
 
-export const getMemberBySlug = (slug) => boardMembers.find((member) => member.slug === slug)
+export const boardGroups = groups.filter((group) => group.team === 'board').map(withTeam)
+export const coreGroups = groups.filter((group) => group.team === 'core').map(withTeam)
+
+// Flat rosters in page order: what the detail page uses to find a member and to step to the next one.
+const flatten = (list) => list.flatMap((group) => group.members)
+
+export const boardMembers = flatten(boardGroups)
+export const coreTeamMembers = flatten(coreGroups)
+// Everyone with a page of their own, board first.
+export const teamMembers = [...boardMembers, ...coreTeamMembers]
+
+// A member's page lives under their team: /team/board/<slug> or /team/core/<slug>.
+export const memberPath = (member) => `/team/${member.team}/${member.slug}`
+
+export const getMemberBySlug = (slug) => teamMembers.find((member) => member.slug === slug)
