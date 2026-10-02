@@ -8,6 +8,7 @@ const quickLinks = [
   { name: 'Home', path: '/' },
   { name: 'About', path: '/about' },
   { name: 'Events', path: '/events' },
+  { name: 'Gallery', path: '/gallery' },
 ]
 
 const moreLinks = [

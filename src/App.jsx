@@ -11,6 +11,7 @@ import { metaFor } from './seo'
 const About = lazy(() => import('./pages/About'))
 const Events = lazy(() => import('./pages/Events'))
 const EventDetail = lazy(() => import('./pages/EventDetail'))
+const Gallery = lazy(() => import('./pages/Gallery'))
 const BoardMembers = lazy(() => import('./pages/BoardMembers'))
 const MemberDetail = lazy(() => import('./pages/MemberDetail'))
 const CoreMembers = lazy(() => import('./pages/CoreMembers'))
@@ -73,6 +74,7 @@ export default function App() {
               <Route path="/about" element={<About />} />
               <Route path="/events" element={<Events />} />
               <Route path="/events/:id" element={<EventDetail />} />
+              <Route path="/gallery" element={<Gallery />} />
               <Route path="/team/board" element={<BoardMembers />} />
               <Route path="/team/board/:slug" element={<MemberDetail />} />
               <Route path="/team/core" element={<CoreMembers />} />
