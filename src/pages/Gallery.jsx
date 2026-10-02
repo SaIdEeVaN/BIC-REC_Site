@@ -1,94 +1,189 @@
-import { useState } from 'react'
-import { AnimatePresence, motion } from 'motion/react'
-import { PageHeader, Tabs } from '../components/kit'
-import { EASE, LiftCell, Mine, Reveal, Scramble, stagger, useReveal } from '../components/motion'
-import { blockNo, pad2, shortHash } from '../lib/chain'
+import { useEffect, useRef, useState } from 'react'
+import { Button, Chip, PageHeader } from '../components/kit'
+import { LiftCell, Reveal } from '../components/motion'
+import { albums, photoCount } from '../data/gallery'
+import { pad2 } from '../lib/chain'
+import { photoUrl, thumbUrl } from '../lib/galleryPhotos'
 
-const allPhotos = [
-  { id: 1, category: 'Workshops', title: 'Blockchain Fundamentals Workshop', date: 'Jan 2026' },
-  { id: 2, category: 'Workshops', title: 'Smart Contract Session', date: 'Apr 2026' },
-  { id: 3, category: 'Hackathons', title: 'Web3 Hackathon 2026', date: 'Feb 2026' },
-  { id: 4, category: 'Hackathons', title: 'Hackathon Final Presentations', date: 'Feb 2026' },
-  { id: 5, category: 'Guest Sessions', title: 'DeFi Expert Session', date: 'Mar 2026' },
-  { id: 6, category: 'Guest Sessions', title: 'KBA Expert Talk', date: 'Nov 2025' },
-  { id: 7, category: 'Team Moments', title: 'Core Team Meeting', date: 'Dec 2025' },
-  { id: 8, category: 'Team Moments', title: 'Club Founding Day', date: 'Aug 2025' },
-  { id: 9, category: 'Events', title: 'Certificate Distribution', date: 'Jan 2026' },
-  { id: 10, category: 'Events', title: 'Community Meetup Prep', date: 'May 2026' },
-  { id: 11, category: 'Club Activities', title: 'Design Team at Work', date: 'Mar 2026' },
-  { id: 12, category: 'Club Activities', title: 'Technical Team Workshop', date: 'Feb 2026' },
-]
+// The full view: a modal <dialog> over the page, so Esc closes it and focus stays inside while it's open. The
+// buttons or the arrow keys step through the album (wrapping round), and the page behind doesn't scroll.
+function Viewer({ view, onStep, onClosed }) {
+  const ref = useRef(null)
+  const open = view !== null
 
-const galleryCats = ['All', 'Workshops', 'Hackathons', 'Guest Sessions', 'Events', 'Team Moments', 'Club Activities']
+  useEffect(() => {
+    const dialog = ref.current
+    if (open && !dialog.open) dialog.showModal()
+    if (!open && dialog.open) dialog.close()
+  }, [open])
 
-// Crossed frame = a reserved photo slot; the cross draws itself when scrolled into view.
-// Swap the <svg> for an <img> once real photos are added.
-function Frame({ id, index }) {
-  const [ref, active, canAnimate] = useReveal()
-  const draw = (delay) =>
-    canAnimate
-      ? {
-          initial: { pathLength: 0 },
-          animate: { pathLength: active ? 1 : 0 },
-          transition: { duration: 0.5, ease: EASE, delay: delay + stagger(index % 4) },
-        }
-      : {}
+  useEffect(() => {
+    if (!open) return undefined
+    const root = document.documentElement
+    const previous = root.style.overflow
+    root.style.overflow = 'hidden'
+    return () => {
+      root.style.overflow = previous
+    }
+  }, [open])
+
+  const album = open ? albums[view.album] : null
+  const photo = open ? album.photos[view.photo] : null
+
+  function onKeyDown(event) {
+    if (event.key === 'ArrowRight' || event.key === 'ArrowLeft') {
+      event.preventDefault()
+      onStep(event.key === 'ArrowRight' ? 1 : -1)
+    }
+  }
 
   return (
-    <div ref={ref} className="relative aspect-[4/3] border-b-3 border-ink">
-      <svg aria-hidden="true" className="absolute inset-0 h-full w-full text-ink">
-        <motion.line x1="0" y1="0" x2="100%" y2="100%" stroke="currentColor" strokeWidth="3" {...draw(0.1)} />
-        <motion.line x1="100%" y1="0" x2="0" y2="100%" stroke="currentColor" strokeWidth="3" {...draw(0.3)} />
-      </svg>
-      <span className="meta absolute left-0 top-0 border-b-3 border-r-3 border-ink bg-bone px-2 py-1 text-ink">
-        <Scramble text={blockNo(id)} delay={stagger(index % 4)} />
-      </span>
-    </div>
+    <dialog
+      ref={ref}
+      aria-labelledby="viewer-title"
+      onClose={onClosed}
+      onKeyDown={onKeyDown}
+      className="on-ink m-0 h-full max-h-none w-full max-w-none border-0 bg-ink p-0 text-bone backdrop:bg-ink"
+    >
+      {photo && (
+        <div className="flex h-full flex-col">
+          <div className="flex items-center justify-between gap-4 border-b-3 border-bone px-4 py-3 md:px-6">
+            <p id="viewer-title" className="meta min-w-0">
+              {album.title} · {pad2(view.photo + 1)} / {pad2(album.photos.length)}
+            </p>
+            <Button variant="ghostOnInk" className="shrink-0" onClick={() => ref.current.close()}>
+              Close
+            </Button>
+          </div>
+          <figure className="flex min-h-0 flex-1 flex-col items-center justify-center gap-4 px-4 py-5 md:px-8">
+            {/* Keyed on the photo, so a slow load never shows the previous one under the new caption. */}
+            <img
+              key={photoUrl(album, photo)}
+              src={photoUrl(album, photo)}
+              alt={photo.alt}
+              className="min-h-0 w-full flex-1 object-contain"
+            />
+            <figcaption className="t-body max-w-[60ch] text-center">{photo.caption}</figcaption>
+          </figure>
+          <div className="flex justify-center gap-5 border-t-3 border-bone px-4 py-4">
+            <Button variant="ghostOnInk" onClick={() => onStep(-1)}>
+              ← Previous
+            </Button>
+            <Button variant="ghostOnInk" onClick={() => onStep(1)}>
+              Next →
+            </Button>
+          </div>
+        </div>
+      )}
+    </dialog>
+  )
+}
+
+// One album: when and what, then its photos. The first photo leads at double size (two columns by two rows from
+// lg, where the next four fill the space beside it); the rest follow in rows.
+function Album({ album, index, onOpen }) {
+  const count = album.photos.length
+
+  return (
+    <section aria-labelledby={`album-${album.slug}`} className="border-b-3 border-ink">
+      <div className="wrap section">
+        <Reveal className="mb-8 grid gap-6 md:mb-10 lg:grid-cols-[1fr_auto] lg:items-end">
+          <div>
+            <p className="meta">
+              <time dateTime={album.datetime}>{album.date}</time> · {pad2(count)} photos
+            </p>
+            <h2 id={`album-${album.slug}`} className="t-h2 mt-4 max-w-[20ch]">
+              {album.title}
+            </h2>
+            <p className="t-lead mt-5 max-w-[60ch]">{album.description}</p>
+          </div>
+          {album.tags?.length > 0 && (
+            <ul className="flex flex-wrap gap-2" aria-label="Tags">
+              {album.tags.map((tag) => (
+                <li key={tag}>
+                  <Chip lower>{tag}</Chip>
+                </li>
+              ))}
+            </ul>
+          )}
+        </Reveal>
+
+        <ul className="cells grid grid-cols-2 lg:grid-cols-4">
+          {album.photos.map((photo, i) => {
+            const lead = i === 0
+            return (
+              <LiftCell key={photo.n} index={i} className={`bg-ink ${lead ? 'col-span-2 lg:row-span-2' : ''}`}>
+                <button
+                  type="button"
+                  className="relative block h-full w-full"
+                  onClick={(event) => onOpen(event.currentTarget, index, i)}
+                >
+                  <span className="sr-only">Open full size: </span>
+                  <img
+                    src={thumbUrl(album, photo)}
+                    alt={photo.alt}
+                    width="960"
+                    height="640"
+                    loading={lead ? 'eager' : 'lazy'}
+                    decoding="async"
+                    className={`block w-full object-cover ${lead ? 'aspect-[3/2] lg:aspect-auto lg:h-full' : 'aspect-[3/2]'}`}
+                  />
+                  <span
+                    aria-hidden="true"
+                    className="meta absolute left-0 top-0 border-b-3 border-r-3 border-ink bg-bone px-2 py-1 text-ink"
+                  >
+                    #{pad2(i + 1)}
+                  </span>
+                </button>
+              </LiftCell>
+            )
+          })}
+        </ul>
+      </div>
+    </section>
   )
 }
 
 export default function Gallery() {
-  const [filter, setFilter] = useState('All')
-  const filtered = filter === 'All' ? allPhotos : allPhotos.filter((p) => p.category === filter)
+  // { album, photo } while the full view is open, null otherwise.
+  const [view, setView] = useState(null)
+  // The photo that opened the full view gets focus back when it closes.
+  const opener = useRef(null)
+
+  function open(button, album, photo) {
+    opener.current = button
+    setView({ album, photo })
+  }
+
+  function step(delta) {
+    setView((current) => {
+      const count = albums[current.album].photos.length
+      return { ...current, photo: (current.photo + delta + count) % count }
+    })
+  }
+
+  function closed() {
+    setView(null)
+    opener.current?.focus()
+  }
 
   return (
     <>
       <PageHeader
         eyebrow="visual memories"
         title="Gallery"
-        lead="Memories that matter — a visual collection of the club's activities and achievements."
+        lead="Moments from the club’s events, one album at a time."
         aside={[
-          ['frames', pad2(allPhotos.length)],
-          ['categories', pad2(galleryCats.length - 1)],
+          ['albums', pad2(albums.length)],
+          ['photos', pad2(photoCount)],
         ]}
       />
 
-      <section>
-        <div className="wrap section">
-          <Tabs label="Filter photos by category" options={galleryCats} value={filter} onChange={setFilter} />
-          {/* The frames are reserved, not filled: the batch holding them is a block still being mined. */}
-          <Reveal as="p" className="meta mt-5">
-            photos are being uploaded — each frame below is reserved for one. batch{' '}
-            <Mine text={shortHash('gallery-batch')} />
-          </Reveal>
-          {/* Positioned so leaving frames can be popped out of the flow while the rest slide into place. */}
-          <ul className="cells relative mt-8 grid grid-cols-1 min-[420px]:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-            <AnimatePresence mode="popLayout" initial={false}>
-              {filtered.map((photo, i) => (
-                <LiftCell key={photo.id} shuffle className="flex flex-col bg-bone">
-                  <Frame id={photo.id} index={i} />
-                  <div className="p-4">
-                    <h2 className="t-row">{photo.title}</h2>
-                    <p className="meta mt-2">
-                      {photo.date} · {photo.category}
-                    </p>
-                  </div>
-                </LiftCell>
-              ))}
-            </AnimatePresence>
-          </ul>
-        </div>
-      </section>
+      {albums.map((album, i) => (
+        <Album key={album.slug} album={album} index={i} onOpen={open} />
+      ))}
+
+      <Viewer view={view} onStep={step} onClosed={closed} />
     </>
   )
 }

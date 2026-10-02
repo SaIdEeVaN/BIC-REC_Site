@@ -105,21 +105,6 @@ test('hovering a track card picks it up onto a longer shadow', async ({ page }, 
   await expect(card).toHaveCSS('transform', 'matrix(1, 0, 0, 1, -4, -4)')
 })
 
-test('a gallery filter reshuffles to exactly the matching frames', async ({ page }) => {
-  await page.goto('/gallery')
-  const frames = page.locator('main ul.cells > li')
-  await expect(frames).toHaveCount(12)
-
-  await page.getByRole('button', { name: 'Workshops', exact: true }).click()
-  await expect(frames).toHaveCount(2)
-  await page.getByRole('button', { name: 'All', exact: true }).click()
-  await expect(frames).toHaveCount(12)
-
-  await page.waitForTimeout(1000)
-  const result = await measureOverflow(page)
-  expect(result.scrollWidth, overflowMessage('/gallery after filtering', result)).toBeLessThanOrEqual(result.viewport)
-})
-
 test('the kinetic band keeps running', async ({ page }, testInfo) => {
   test.skip(testInfo.project.name !== 'desktop-1280', 'one viewport is enough')
 

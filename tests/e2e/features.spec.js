@@ -2,6 +2,7 @@ import { test, expect } from '@playwright/test'
 import { isUpcoming } from '../../src/data/events.js'
 import { RECRUITMENT_RESULTS_OPEN, RECRUITMENT_RESULTS_URL } from '../../src/data/club.js'
 import { associates } from '../../src/data/associates.js'
+import { albums } from '../../src/data/gallery.js'
 import { boardMembers, coreTeamMembers, memberPath } from '../../src/data/members.js'
 
 // Behaviour is identical at every width, so these run once.
@@ -151,4 +152,46 @@ test("an old /team/board link to a core member's page lands on their page under 
   await page.goto(`/team/board/${member.slug}`)
   await expect(page).toHaveURL(memberPath(member))
   await expect(page.locator('main h1')).toContainText(member.name)
+})
+
+test('every gallery album shows its photos, and each one loads', async ({ page }, testInfo) => {
+  once(testInfo)
+
+  await page.goto('/gallery')
+  for (const album of albums) {
+    const section = page.locator(`section[aria-labelledby="album-${album.slug}"]`)
+    await expect(section.getByRole('heading', { name: album.title })).toBeVisible()
+    const images = section.locator('ul.cells img')
+    await expect(images).toHaveCount(album.photos.length)
+    for (const image of await images.all()) {
+      await image.scrollIntoViewIfNeeded()
+      await expect.poll(() => image.evaluate((img) => img.complete && img.naturalWidth)).toBeGreaterThan(0)
+    }
+  }
+})
+
+test('a gallery photo opens full size, steps through its album, and closes back to where it was', async ({ page }, testInfo) => {
+  once(testInfo)
+
+  const album = albums[0]
+  await page.goto('/gallery')
+  const photos = page.locator(`section[aria-labelledby="album-${album.slug}"] ul.cells button`)
+  await photos.nth(0).click()
+
+  const viewer = page.getByRole('dialog')
+  await expect(viewer).toBeVisible()
+  await expect(viewer).toContainText(album.photos[0].caption)
+  await expect(viewer.getByRole('img', { name: album.photos[0].alt })).toBeVisible()
+
+  await page.keyboard.press('ArrowRight')
+  await expect(viewer).toContainText(album.photos[1].caption)
+  await viewer.getByRole('button', { name: /previous/i }).click()
+  await expect(viewer).toContainText(album.photos[0].caption)
+  // Wraps round: previous from the first photo is the last.
+  await page.keyboard.press('ArrowLeft')
+  await expect(viewer).toContainText(album.photos.at(-1).caption)
+
+  await page.keyboard.press('Escape')
+  await expect(viewer).toBeHidden()
+  await expect(photos.nth(0)).toBeFocused()
 })

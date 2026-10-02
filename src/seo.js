@@ -22,7 +22,7 @@ const PAGES = {
   },
   '/gallery': {
     title: 'Gallery',
-    description: "A visual collection of the club's activities and achievements.",
+    description: "Photos from the club's events, one album at a time — starting with its inauguration in September 2025.",
   },
   '/team': {
     title: 'Meet us',
