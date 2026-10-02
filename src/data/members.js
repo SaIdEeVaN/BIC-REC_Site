@@ -70,6 +70,15 @@ const groups = [
         linkedin: "https://www.linkedin.com/in/akash-d-ak1402008",
         instagram: "https://www.instagram.com/_akash_ak__03",
       },
+      {
+        name: "Pavithra J",
+        slug: "pavithra-j",
+        role: "Secretary",
+        department: "CSE",
+        email: "pavithra.j.2024.cse@rajalakshmi.edu.in",
+        linkedin: "https://www.linkedin.com/in/pavithra-j-134279331",
+        instagram: "https://www.instagram.com/_vivi_pavi_006",
+      },
     ],
   },
   {
@@ -95,15 +104,6 @@ const groups = [
         instagram: "https://www.instagram.com/_._saideevan_._",
       },
       {
-        name: "Pavithra J",
-        slug: "pavithra-j",
-        role: "Secretary",
-        department: "CSE",
-        email: "pavithra.j.2024.cse@rajalakshmi.edu.in",
-        linkedin: "https://www.linkedin.com/in/pavithra-j-134279331",
-        instagram: "https://www.instagram.com/_vivi_pavi_006",
-      },
-      {
         name: "V Sanjaivel",
         slug: "v-sanjaivel",
         role: "Treasurer",
@@ -118,15 +118,6 @@ const groups = [
     team: 'core',
     title: "Event",
     members: [
-      {
-        name: "Padma Priya J",
-        slug: "padma-priya-j",
-        role: "Head of Events",
-        department: null,
-        email: null,
-        linkedin: null,
-        instagram: null,
-      },
       {
         name: "Satyaa S",
         slug: "satyaa-s",

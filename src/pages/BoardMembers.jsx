@@ -24,7 +24,7 @@ const contactLink = 'underline decoration-2 underline-offset-4'
 
 // The page's "about": who the board is.
 const ABOUT =
-  `The board is the club’s student leadership. The core board (the President, the Vice President and the club’s ambassadors) leads the club and speaks for it, and the executive team runs operations and technology and keeps the club’s records and accounts. With the ${FACULTY}, they set the club’s direction for the year.`
+  `The board is the club’s student leadership. The core board (the President, the Vice President, the club’s ambassadors and the Secretary) leads the club and speaks for it, and the executive team runs operations and technology and keeps the club’s accounts. With the ${FACULTY}, they set the club’s direction for the year.`
 
 // Block numbers run on from one group to the next, so the whole board reads as a single chain.
 let seats = 0
