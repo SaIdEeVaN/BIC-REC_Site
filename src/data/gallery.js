@@ -6,6 +6,38 @@
 // for screen readers, and `caption` is shown under it in the full view.
 export const albums = [
   {
+    slug: 'decode-blockchain-2025',
+    title: 'Decode Blockchain',
+    date: 'October 15, 2025',
+    datetime: '2025-10-15',
+    tags: ['workshop', 'first event'],
+    description:
+      'The club’s first event: Decode Blockchain, a hands-on workshop organised by the Blockchain Innovation Club with the Department of Computer Science and Engineering, under the theme “Unlocking the Future of Blockchain”.',
+    photos: [
+      {
+        n: 1,
+        alt: 'Club members and faculty stand with the speaker, who holds a bouquet, in front of a screen announcing the BIC workshop.',
+        caption: 'With the speaker, in front of the workshop screen.',
+      },
+      { n: 2, alt: 'Participants follow the session at their laptops in a classroom.', caption: 'Hands-on, laptops open.' },
+      {
+        n: 3,
+        alt: 'The organising team poses with the faculty and the speaker in the classroom.',
+        caption: 'Everyone who made it happen.',
+      },
+      {
+        n: 4,
+        alt: 'Members of the organising team stand with the speaker in front of the classroom screen.',
+        caption: 'The team with the speaker.',
+      },
+      {
+        n: 5,
+        alt: 'Six members of the organising team in club shirts and lanyards, standing under the palms outside.',
+        caption: 'The crew, outside.',
+      },
+    ],
+  },
+  {
     slug: 'kbaic-inauguration-2025',
     title: 'KBAIC Inauguration Ceremony',
     date: 'September 18, 2025',
