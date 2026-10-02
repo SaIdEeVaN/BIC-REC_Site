@@ -286,7 +286,7 @@ const groups = [
       {
         name: "Harshini",
         slug: "harshini",
-        role: "Media Co-Lead",
+        role: "Visual Media Co-Lead",
         department: null,
         email: null,
         linkedin: null,
