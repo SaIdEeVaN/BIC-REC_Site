@@ -17,10 +17,10 @@ const STATES = {
     band: ['Soon', 'Stay tuned', 'Watch this space', 'Any day now'],
   },
   open: {
-    lead: 'The core team intake is closed and the results are live. Everyone who interviewed can check their own result.',
+    lead: 'The core team intake is closed and the results are live. Everyone who applied can check their own result.',
     status: ['results', 'live'],
     hero: ['Check', 'your', 'result'],
-    body: 'Interviewed for the core team? Sign in on the results page with the email you applied with, and use your roll number as the password.',
+    body: 'Applied to the core team? Sign in on the results page with the email you applied with, and use your roll number as the password.',
     band: ['Check your result', 'Email + roll number', 'Results are live', 'Welcome to the chain'],
   },
 }
