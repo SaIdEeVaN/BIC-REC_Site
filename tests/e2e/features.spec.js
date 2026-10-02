@@ -1,6 +1,7 @@
 import { test, expect } from '@playwright/test'
 import { isUpcoming } from '../../src/data/events.js'
 import { RECRUITMENT_RESULTS_OPEN, RECRUITMENT_RESULTS_URL } from '../../src/data/club.js'
+import { coreMembers } from '../../src/data/coreMembers.js'
 
 // Behaviour is identical at every width, so these run once.
 const once = (testInfo) => test.skip(testInfo.project.name !== 'desktop-1280', 'same behaviour at every width')
@@ -97,4 +98,19 @@ test('Core Members follows the recruitment results switch', async ({ page }, tes
     await expect(hero).toContainText(/coming/i)
     await expect(check).toHaveCount(0)
   }
+})
+
+test('Core Members lists the new core team once it is published, filtered by team', async ({ page }, testInfo) => {
+  once(testInfo)
+
+  await page.goto('/team/core')
+  const roster = page.locator('#core-roster')
+  if (coreMembers.length === 0) {
+    await expect(roster).toHaveCount(0)
+    return
+  }
+  await expect(roster.locator('li')).toHaveCount(coreMembers.length)
+  const team = coreMembers[0].team
+  await page.getByRole('group', { name: 'Filter the core team by team' }).getByRole('button', { name: team, exact: true }).click()
+  await expect(roster.locator('li')).toHaveCount(coreMembers.filter((m) => m.team === team).length)
 })

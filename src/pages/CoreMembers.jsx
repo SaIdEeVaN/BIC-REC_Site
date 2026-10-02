@@ -1,13 +1,16 @@
-import { Button } from '../components/kit'
-import { shortHash } from '../lib/chain'
-import { Desync, Marquee, Mine, Reveal, Scramble, SplitText, Typewriter, Wipe } from '../components/motion'
+import { useState } from 'react'
+import { AnimatePresence } from 'motion/react'
+import { Button, Chip, SectionHeading, Tabs } from '../components/kit'
+import { blockNo, shortHash } from '../lib/chain'
+import { Desync, LiftCell, Marquee, Mine, Reveal, Scramble, SplitText, Typewriter, Wipe } from '../components/motion'
+import { CORE_TEAMS, coreMembers, roleOf } from '../data/coreMembers'
 import { CLUB_INSTAGRAM, RECRUITMENT_RESULTS_OPEN, RECRUITMENT_RESULTS_URL } from '../data/club'
 
 // Two states, switched by RECRUITMENT_RESULTS_OPEN in data/club.js:
 // - closed: selections are still being finalised, so the page holds the slot ("Results coming soon").
 // - open: results are published on the results site, so the page sends candidates there to check their own.
-// Neither lists anyone. Add the roster here (a grid of MemberCell, filtered by Tabs) below the hero, inside
-// the same section, once it's public.
+// Neither lists anyone by itself: the roster below the band (CoreRoster) appears once data/coreMembers.js has
+// the new team in it.
 const STATES = {
   closed: {
     lead: 'Selections for the core team are still being finalised. Everyone who makes it in will be listed here the moment results are out.',
@@ -112,6 +115,47 @@ export default function CoreMembers() {
       </section>
 
       <Marquee words={band} />
+
+      {coreMembers.length > 0 && <CoreRoster />}
     </>
+  )
+}
+
+const ALL = 'All'
+// Only the teams that have someone in them, in the club's order.
+const TEAMS = CORE_TEAMS.filter((team) => coreMembers.some((m) => m.team === team))
+
+// The new core team: one cell per member, filtered by team. Members have no pages of their own (yet), so the
+// cells are plain text, not links.
+function CoreRoster() {
+  const [filter, setFilter] = useState(ALL)
+  const shown = filter === ALL ? coreMembers : coreMembers.filter((m) => m.team === filter)
+
+  return (
+    <section aria-labelledby="core-roster">
+      <div className="wrap section">
+        <SectionHeading
+          eyebrow={`the new core team · ${coreMembers.length} members · ${TEAMS.length} teams`}
+          title="Meet the core team"
+        />
+        <Tabs label="Filter the core team by team" options={[ALL, ...TEAMS]} value={filter} onChange={setFilter} />
+        {/* Positioned so leaving cells can be popped out of the flow while the rest slide into place. Columns stay
+            wide enough for the longest names (~15 letters at the card size) at every breakpoint. */}
+        <ul id="core-roster" className="cells relative mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          <AnimatePresence mode="popLayout" initial={false}>
+            {shown.map((member) => (
+              <LiftCell key={`${member.team}-${member.name}`} shuffle className="flex flex-col bg-bone p-5">
+                <p className="meta">{blockNo(coreMembers.indexOf(member) + 1)}</p>
+                <h3 className="t-card mt-4">{member.name}</h3>
+                {member.department && <p className="meta mt-2">{member.department.toLowerCase()}</p>}
+                <div className="mt-auto pt-5">
+                  <Chip tone={member.team === filter ? 'pending' : 'outline'}>{roleOf(member)}</Chip>
+                </div>
+              </LiftCell>
+            ))}
+          </AnimatePresence>
+        </ul>
+      </div>
+    </section>
   )
 }
