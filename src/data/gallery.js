@@ -6,6 +6,28 @@
 // for screen readers, and `caption` is shown under it in the full view.
 export const albums = [
   {
+    slug: 'defi-unlocked-2026',
+    title: 'DeFi Unlocked',
+    date: 'April 11, 2026',
+    datetime: '2026-04-11',
+    tags: ['workshop', 'hands-on'],
+    description:
+      'DeFi Unlocked, a hands-on workshop: participants set up a wallet, made a transaction, wrote a Solidity smart contract and deployed it to the Sepolia testnet, and made a token of their own.',
+    photos: [
+      {
+        n: 1,
+        alt: 'A speaker at the front of a computer lab, with a contract being deployed from Remix and MetaMask projected behind him, as participants work at their screens.',
+        caption: 'Deploying a contract, live.',
+      },
+      { n: 2, alt: 'Rows of participants at computers in a lab during the workshop.', caption: 'A full lab.' },
+      {
+        n: 3,
+        alt: 'A club member with a microphone in front of the closing slide, “Questions? Let’s Talk Blockchain!”, as others look on.',
+        caption: 'Questions? Let’s talk blockchain.',
+      },
+    ],
+  },
+  {
     slug: 'hack-to-blockchain-2026',
     title: 'Hack to Blockchain',
     date: 'February 13, 2026',
@@ -171,3 +193,7 @@ export const albums = [
 ]
 
 export const photoCount = albums.reduce((total, album) => total + album.photos.length, 0)
+
+// Each album also has its own page, the way into it from its event.
+export const albumPath = (album) => `/gallery/${album.slug}`
+export const getAlbumBySlug = (slug) => albums.find((album) => album.slug === slug)

@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test'
 import { events, isUpcoming } from '../../src/data/events.js'
 import { RECRUITMENT_RESULTS_OPEN, RECRUITMENT_RESULTS_URL } from '../../src/data/club.js'
 import { associates } from '../../src/data/associates.js'
-import { albums } from '../../src/data/gallery.js'
+import { albumPath, albums } from '../../src/data/gallery.js'
 import { boardMembers, coreTeamMembers, memberPath } from '../../src/data/members.js'
 
 // Behaviour is identical at every width, so these run once.
@@ -196,7 +196,7 @@ test('a gallery photo opens full size, steps through its album, and closes back 
   await expect(photos.nth(0)).toBeFocused()
 })
 
-test('an event with an album shows its photos and leads to them in the gallery, and back', async ({ page }, testInfo) => {
+test('an event with an album shows its photos and leads to that album alone, and back', async ({ page }, testInfo) => {
   once(testInfo)
 
   const event = events.find((e) => e.album)
@@ -204,14 +204,36 @@ test('an event with an album shows its photos and leads to them in the gallery, 
   await page.goto(`/events/${event.id}`)
   await expect(page.getByRole('img', { name: album.photos[0].alt })).toBeVisible()
 
-  await page.getByRole('link', { name: `All ${album.photos.length} photos in the gallery` }).click()
-  await expect(page).toHaveURL(`/gallery#${album.slug}`)
-  const heading = page.getByRole('heading', { name: album.title })
-  await expect(heading).toBeInViewport()
+  await page.getByRole('link', { name: `See all ${album.photos.length} photos` }).click()
+  await expect(page).toHaveURL(albumPath(album))
+  await expect(page.locator('main h1')).toContainText(album.title)
+  // This album's photos, and no other album's.
+  await expect(page.locator('main ul.cells img')).toHaveCount(album.photos.length)
+  for (const other of albums.filter((a) => a !== album)) {
+    await expect(page.getByRole('heading', { name: other.title })).toHaveCount(0)
+  }
 
-  await page.locator(`section#${album.slug}`).getByRole('link', { name: 'About the event' }).click()
+  // The full view works here too.
+  await page.locator('main ul.cells button').first().click()
+  await expect(page.getByRole('dialog')).toContainText(album.photos[0].caption)
+  await page.keyboard.press('Escape')
+
+  await page.getByRole('link', { name: 'About the event' }).click()
   await expect(page).toHaveURL(`/events/${event.id}`)
   await expect(page.locator('main h1')).toContainText(event.title)
+})
+
+test('every album has its own page, linked from its title in the gallery', async ({ page }, testInfo) => {
+  once(testInfo)
+
+  const album = albums.at(-1)
+  await page.goto('/gallery')
+  await page.getByRole('link', { name: album.title, exact: true }).click()
+  await expect(page).toHaveURL(albumPath(album))
+  await expect(page.locator('main ul.cells img')).toHaveCount(album.photos.length)
+
+  await page.goto('/gallery/no-such-album')
+  await expect(page.getByText("There's no album at this address")).toBeVisible()
 })
 
 test('an event without photos yet says so', async ({ page }, testInfo) => {

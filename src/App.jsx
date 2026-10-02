@@ -12,6 +12,7 @@ const About = lazy(() => import('./pages/About'))
 const Events = lazy(() => import('./pages/Events'))
 const EventDetail = lazy(() => import('./pages/EventDetail'))
 const Gallery = lazy(() => import('./pages/Gallery'))
+const GalleryAlbum = lazy(() => import('./pages/GalleryAlbum'))
 const Team = lazy(() => import('./pages/Team'))
 const BoardMembers = lazy(() => import('./pages/BoardMembers'))
 const MemberDetail = lazy(() => import('./pages/MemberDetail'))
@@ -76,6 +77,7 @@ export default function App() {
               <Route path="/events" element={<Events />} />
               <Route path="/events/:id" element={<EventDetail />} />
               <Route path="/gallery" element={<Gallery />} />
+              <Route path="/gallery/:slug" element={<GalleryAlbum />} />
               <Route path="/team" element={<Team />} />
               <Route path="/team/board" element={<BoardMembers />} />
               <Route path="/team/board/:slug" element={<MemberDetail team="board" />} />

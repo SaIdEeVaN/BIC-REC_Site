@@ -65,6 +65,19 @@ They worked alongside the club’s members and faculty in the lab, with Blockver
 
 It opened with a session on consensus: thousands of computers keep the same ledger, so who decides which block is correct? The network has to agree without a leader. It closed with certificates and Notion goodies handed out on stage.`,
   },
+  {
+    id: 6,
+    title: 'DeFi Unlocked',
+    slug: 'defi-unlocked',
+    date: 'April 11, 2026',
+    venue: 'Rajalakshmi Engineering College',
+    type: 'Workshop',
+    album: 'defi-unlocked-2026',
+    description: 'A hands-on workshop: a wallet, a transaction, a Solidity smart contract and a token of your own.',
+    about: `DeFi Unlocked was a hands-on workshop in the lab. Participants didn’t just learn about crypto, they built their own: they set up a wallet, made a transaction, wrote a Solidity smart contract in Remix and deployed it to the Sepolia testnet, and made a token of their own.
+
+It closed with questions and answers, and pointers for carrying on: Remix, CryptoZombies, LearnWeb3, Sepolia Etherscan and Uniswap.`,
+  },
 ]
 
 export const getEventById = (id) => events.find(e => e.id === parseInt(id))

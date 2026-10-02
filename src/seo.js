@@ -2,6 +2,7 @@
 // Used at runtime (RouteMeta in App.jsx), at build time (scripts/prerender-meta.js) and by the e2e tests,
 // so keep this file free of browser-only or Vite-only code.
 import { events, getEventById } from './data/events.js'
+import { albumPath, albums, getAlbumBySlug } from './data/gallery.js'
 import { FACULTY, getMemberBySlug, memberPath, teamMembers } from './data/members.js'
 import { RECRUITMENT_RESULTS_OPEN } from './data/club.js'
 
@@ -80,6 +81,10 @@ export function metaFor(pathname) {
   const event = eventMatch && getEventById(eventMatch[1])
   if (event) return build(event.title, event.description, path)
 
+  const albumMatch = path.match(/^\/gallery\/([a-z0-9-]+)$/)
+  const album = albumMatch && getAlbumBySlug(albumMatch[1])
+  if (album) return build(`${album.title} · Gallery`, album.description, path)
+
   const memberMatch = path.match(/^\/team\/(board|core)\/([a-z0-9-]+)$/)
   const member = memberMatch && getMemberBySlug(memberMatch[2])
   if (member && member.team === memberMatch[1]) {
@@ -97,6 +102,7 @@ export function metaFor(pathname) {
 export const staticRoutes = [
   ...Object.keys(PAGES),
   ...events.map((e) => `/events/${e.id}`),
+  ...albums.map(albumPath),
   ...teamMembers.map(memberPath),
 ]
 

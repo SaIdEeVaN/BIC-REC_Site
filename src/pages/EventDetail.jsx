@@ -2,11 +2,11 @@ import { Link, useParams } from 'react-router-dom'
 import { Button, Chip, Confirmations, EmptyState, Ledger, LedgerRow } from '../components/kit'
 import { Magnetic, Reveal, Scramble, SplitText, Stamp, Wipe } from '../components/motion'
 import { events, getEventById, isUpcoming } from '../data/events'
-import { albums } from '../data/gallery'
+import { albumPath, albums } from '../data/gallery'
 import { blockNo, isRealLink, sealedDate, shortHash, stripEmoji } from '../lib/chain'
 import { thumbUrl } from '../lib/galleryPhotos'
 
-// The event's album from the gallery: its first four photos, and the way to the rest.
+// The event's album from the gallery: its first four photos, and the way to all of them on the album's own page.
 function EventPhotos({ album }) {
   return (
     <>
@@ -26,8 +26,8 @@ function EventPhotos({ album }) {
         ))}
       </ul>
       <div className="mt-6">
-        <Button variant="onInk" to={`/gallery#${album.slug}`}>
-          All {album.photos.length} photos in the gallery
+        <Button variant="onInk" to={albumPath(album)}>
+          See all {album.photos.length} photos
         </Button>
       </div>
     </>
