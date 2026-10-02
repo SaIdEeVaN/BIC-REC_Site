@@ -7,8 +7,8 @@ import { LiftCell, Mine, Reveal, Slam, SplitText, Stamp } from '../components/mo
 
 const EMPTY = { name: '', email: '', subject: '', message: '' }
 
-// Format only, not the college domain: companies, speakers and other clubs write in through this form too.
-const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/
+// College addresses only (the club's call). Anyone outside REC is pointed to the club's own email under the form.
+const EMAIL_PATTERN = /^[^\s@]+@rajalakshmi\.edu\.in$/i
 const EMAIL_ERROR = 'enter valid email id'
 const emailErrorFor = (value) => (EMAIL_PATTERN.test(value.trim()) ? '' : EMAIL_ERROR)
 
@@ -179,7 +179,7 @@ export default function Contact() {
                     label="email address"
                     type="email"
                     name="email"
-                    placeholder="john@example.com"
+                    placeholder="you@rajalakshmi.edu.in"
                     value={form.email}
                     onChange={handleChange}
                     onBlur={(e) => e.target.value.trim() && setEmailChecked(true)}
@@ -207,6 +207,12 @@ export default function Contact() {
                   className="field resize-y"
                 />
                 <p className="meta">opens your own email app — nothing is stored on this site</p>
+                <p className="meta">
+                  outside rec? write to{' '}
+                  <a href={CLUB_MAILTO} className="break-all underline decoration-2 underline-offset-4">
+                    {CLUB_EMAIL}
+                  </a>
+                </p>
                 <Button type="submit" className="w-full">Send via email</Button>
               </form>
             )}

@@ -53,7 +53,7 @@ test('the contact form hands the message to an email app addressed to the club',
 
   await page.goto('/contact')
   await page.getByLabel('your name').fill('Asha')
-  await page.getByLabel('email address').fill('asha@example.com')
+  await page.getByLabel('email address').fill('asha.k.2025.cse@rajalakshmi.edu.in')
   await page.getByLabel('subject').fill('Workshop collaboration')
   await page.getByLabel('message').fill('Hello BIC!')
   await page.getByRole('button', { name: 'Send via email' }).click()
@@ -63,12 +63,12 @@ test('the contact form hands the message to an email app addressed to the club',
   await expect(retry).toHaveAttribute('href', /^mailto:kbaclub@rajalakshmi\.edu\.in\?subject=Workshop%20collaboration&body=Hello%20BIC!/)
 })
 
-test('the contact form refuses an invalid email address', async ({ page }, testInfo) => {
+test('the contact form only takes a college email address', async ({ page }, testInfo) => {
   once(testInfo)
 
   await page.goto('/contact')
   const email = page.getByLabel('email address')
-  await email.fill('asha@example')
+  await email.fill('asha@gmail.com')
   await page.getByLabel('subject').focus()
   await expect(page.getByText('enter valid email id')).toBeVisible()
   await expect(email).toHaveAttribute('aria-invalid', 'true')
@@ -80,7 +80,7 @@ test('the contact form refuses an invalid email address', async ({ page }, testI
   await expect(page.getByRole('heading', { name: 'Check your email app' })).toHaveCount(0)
   expect(await email.evaluate((el) => el.validationMessage)).toBe('enter valid email id')
 
-  await email.fill('asha@example.com')
+  await email.fill('asha.k.2025.cse@rajalakshmi.edu.in')
   await expect(page.getByText('enter valid email id')).toHaveCount(0)
 })
 
