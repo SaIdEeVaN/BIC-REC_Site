@@ -78,11 +78,7 @@ export default function Footer() {
         </div>
 
         <FooterNav title="quick links" links={quickLinks} />
-        <FooterNav title="explore" links={moreLinks}>
-          <Link to="/join" className={`${linkClass} text-amber`}>
-            <Roll>Join the club</Roll>
-          </Link>
-        </FooterNav>
+        <FooterNav title="explore" links={moreLinks} />
       </div>
 
       <div className="border-t-3 border-bone">

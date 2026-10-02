@@ -58,10 +58,6 @@ const PAGES = {
     title: 'Resources',
     description: 'Handpicked resources curated by the BIC team to help you master Blockchain and Web3.',
   },
-  '/join': {
-    title: 'Join the club',
-    description: "Developer, designer, researcher or just curious about Blockchain — there's a place for you at BIC.",
-  },
   '/contact': {
     title: 'Contact',
     description: 'For collaborations, events, workshops, and general enquiries — get in touch with the club.',

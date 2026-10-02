@@ -44,8 +44,10 @@ test('text on amber stays dark in the dark theme', async ({ page }, testInfo) =>
   await expect(upcoming).toBeVisible()
   expect(await upcoming.evaluate((el) => getComputedStyle(el).color)).toBe(INK)
 
-  const join = page.locator('header').getByRole('link', { name: 'Join' })
-  expect(await join.evaluate((el) => getComputedStyle(el).color)).toBe(INK)
+  await page.goto('/')
+  const amberButton = page.locator('main a.btn-amber').first()
+  await expect(amberButton).toBeVisible()
+  expect(await amberButton.evaluate((el) => getComputedStyle(el).color)).toBe(INK)
 })
 
 test('on a phone the theme toggle sits at the foot of the menu', async ({ page }, testInfo) => {

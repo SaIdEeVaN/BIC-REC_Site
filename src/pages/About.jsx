@@ -56,8 +56,8 @@ export default function About() {
         title="Build with us"
         body="Workshops, hackathons and real projects — open to every department and every year."
       >
-        <Button to="/join" variant="onInk">Join the club</Button>
-        <Button to="/events" variant="ghostOnInk">See our events</Button>
+        <Button to="/events" variant="onInk">See our events</Button>
+        <Button to="/contact" variant="ghostOnInk">Get in touch</Button>
       </InkCTA>
     </>
   )

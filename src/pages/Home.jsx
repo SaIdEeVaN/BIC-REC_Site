@@ -211,12 +211,12 @@ export default function Home() {
               <div className="mt-8 flex flex-wrap gap-5">
                 <Drop delay={0.9}>
                   <Magnetic>
-                    <Button to="/join">Join the club</Button>
+                    <Button to="/events">Explore events</Button>
                   </Magnetic>
                 </Drop>
                 <Drop delay={1}>
                   <Magnetic>
-                    <Button to="/events" variant="bone">Explore events</Button>
+                    <Button to="/team" variant="bone">Meet us</Button>
                   </Magnetic>
                 </Drop>
               </div>
@@ -268,7 +268,7 @@ export default function Home() {
 
       <InkCTA
         title="Ready to level up?"
-        body="Join the Blockchain Innovation Club and unlock a global community of Web3 professionals, resources, and opportunities."
+        body="Come to the club's workshops, hackathons and guest sessions, and tap into a global community of Web3 professionals, resources, and opportunities."
         aside={
           <div className="border-3 border-bone p-6">
             <p className="meta">{FACULTY}</p>
@@ -294,7 +294,7 @@ export default function Home() {
           </div>
         }
       >
-        <Button to="/join" variant="onInk">Become a member</Button>
+        <Button to="/events" variant="onInk">See our events</Button>
       </InkCTA>
     </>
   )

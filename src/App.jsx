@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom'
+import { BrowserRouter as Router, Navigate, Routes, Route, useLocation } from 'react-router-dom'
 import { lazy, Suspense, useEffect } from 'react'
 import { MotionConfig } from 'motion/react'
 import Navbar from './components/Navbar'
@@ -21,7 +21,6 @@ const Projects = lazy(() => import('./pages/Projects'))
 const Achievements = lazy(() => import('./pages/Achievements'))
 const News = lazy(() => import('./pages/News'))
 const Resources = lazy(() => import('./pages/Resources'))
-const JoinUs = lazy(() => import('./pages/JoinUs'))
 const Contact = lazy(() => import('./pages/Contact'))
 const NotFound = lazy(() => import('./pages/NotFound'))
 
@@ -87,7 +86,8 @@ export default function App() {
               <Route path="/achievements" element={<Achievements />} />
               <Route path="/news" element={<News />} />
               <Route path="/resources" element={<Resources />} />
-              <Route path="/join" element={<JoinUs />} />
+              {/* Recruitment is over; an old link to the Join page lands on the associates and their results. */}
+              <Route path="/join" element={<Navigate to="/team/associates" replace />} />
               <Route path="/contact" element={<Contact />} />
               <Route path="*" element={<NotFound />} />
             </Routes>

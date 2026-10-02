@@ -40,14 +40,12 @@ test('before an event, home promotes it and the ledger marks it upcoming', async
   await expect(page.locator('main').getByText('Upcoming', { exact: true }).first()).toBeVisible()
 })
 
-test('Join opens the contact form with the subject filled in', async ({ page }, testInfo) => {
+test('recruitment is over: an old /join link lands on the associates page', async ({ page }, testInfo) => {
   once(testInfo)
 
   await page.goto('/join')
-  await page.locator('main').getByRole('link', { name: 'Join the club' }).click()
-
-  await expect(page).toHaveURL(/\/contact\?subject=Membership/)
-  await expect(page.getByLabel('subject')).toHaveValue('Membership application')
+  await expect(page).toHaveURL('/team/associates')
+  await expect(page.locator('header').getByRole('link', { name: 'Join', exact: true })).toHaveCount(0)
 })
 
 test('the contact form hands the message to an email app addressed to the club', async ({ page }, testInfo) => {

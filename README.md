@@ -47,7 +47,6 @@ The UI follows a **neo-brutalist design system** — hard geometry, 3px ink rule
 - 📰 **News** — Latest club updates
 - 🔧 **Projects** — Blockchain projects by the club
 - 📚 **Resources** — Learning materials and links
-- 🤝 **Join Us** — Membership and application info
 - 📬 **Contact** — Contact form and club details
 - 🌙 **Dark theme** — Opt-in from the header toggle, remembered per device (see [DESIGN_SYSTEM.md](DESIGN_SYSTEM.md#dark-theme))
 

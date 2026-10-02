@@ -193,15 +193,6 @@ const groups = [
         linkedin: null,
         instagram: null,
       },
-      {
-        name: "Kabilan S",
-        slug: "kabilan-s",
-        role: "Blockchain Lead",
-        department: "AIML",
-        email: "kabilan.s.2024.aiml@rajalakshmi.edu.in",
-        linkedin: "https://www.linkedin.com/in/kabilan-senthilkumar-b35a91287",
-        instagram: "https://www.instagram.com/_its_me_techkykabilan_",
-      },
     ],
   },
   {

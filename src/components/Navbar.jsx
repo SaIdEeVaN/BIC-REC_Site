@@ -15,7 +15,7 @@ const links = [
   { to: '/contact', label: 'Contact us' },
 ]
 
-// Desktop nav: one shared ink block slides to whichever item (or Join) is active.
+// Desktop nav: one shared ink block slides to whichever item is active.
 function ActiveFill() {
   return <motion.span layoutId="nav-active" aria-hidden="true" className="absolute inset-0 bg-ink" transition={SNAP} />
 }
@@ -112,29 +112,13 @@ export default function Navbar() {
             ))}
           </nav>
 
-          <NavLink
-            to="/join"
-            className={({ isActive }) =>
-              `roll-host relative ml-auto flex items-center border-l-3 border-ink bg-amber px-4 text-[14px] font-extrabold uppercase md:px-6 lg:ml-0 ${
-                isActive ? 'text-bone' : 'text-coal'
-              }`
-            }
-          >
-            {({ isActive }) => (
-              <>
-                {isActive && <ActiveFill />}
-                <span className="relative">
-                  <Roll>Join</Roll>
-                </span>
-              </>
-            )}
-          </NavLink>
-
-          <ThemeToggle className="hidden w-[64px] items-center justify-center border-l-3 border-ink sm:flex md:w-[76px]" />
+          {/* Whichever cell comes first after the logo takes the slack, so the rest sit at the right edge: the menu
+              links from lg, the theme toggle from sm, the Menu button below that. */}
+          <ThemeToggle className="hidden w-[64px] items-center justify-center border-l-3 border-ink sm:ml-auto sm:flex md:w-[76px] lg:ml-0" />
 
           <button
             type="button"
-            className="flex w-[84px] items-center justify-center border-l-3 border-ink text-[14px] font-extrabold uppercase lg:hidden"
+            className="ml-auto flex w-[84px] items-center justify-center border-l-3 border-ink text-[14px] font-extrabold uppercase sm:ml-0 lg:hidden"
             aria-expanded={open}
             aria-controls="mobile-nav"
             onClick={() => setOpenOn(open ? null : pathname)}
