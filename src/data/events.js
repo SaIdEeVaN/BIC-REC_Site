@@ -38,7 +38,7 @@ The event was a massive success with overwhelming positive feedback and a 95% sa
     description: 'A 24-hour hackathon challenging student teams to build decentralized applications solving real-world problems using blockchain technology.',
     about: `The Web3 Hackathon 2026 was our flagship event — an intense 24-hour challenge that brought together 12 teams and 60+ participants to build decentralized solutions for real-world problems. Teams worked on projects spanning DeFi, supply chain transparency, digital identity verification, healthcare records, and NFT marketplaces.
 
-Industry mentors from Kerala Blockchain Association and leading Web3 companies guided teams throughout the marathon event, providing technical support and business insights. The energy was electric as teams worked through the night to bring their ideas to life.
+Industry mentors from Kerala Blockchain Academy and leading Web3 companies guided teams throughout the marathon event, providing technical support and business insights. The energy was electric as teams worked through the night to bring their ideas to life.
 
 All 12 teams successfully demonstrated working prototypes. The top 3 teams won cash prizes worth ₹50,000 combined and were recommended for incubation support at the KBA innovation hub.`,
     speakers: [],

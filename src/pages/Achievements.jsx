@@ -20,7 +20,7 @@ const statItems = [
 ]
 
 const recognition = [
-  { title: 'Kerala Blockchain Association', body: 'Official student chapter partner.' },
+  { title: 'Kerala Blockchain Academy', body: 'Official student chapter partner.' },
 ]
 
 export default function Achievements() {

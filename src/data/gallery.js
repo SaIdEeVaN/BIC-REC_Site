@@ -12,7 +12,7 @@ export const albums = [
     datetime: '2025-09-18',
     tags: ['inauguration', 'first board', 'as KBA Club REC'],
     description:
-      'Where it all started: the inauguration of the club, then KBA Club REC, and of its first board. It was held with the Department of Computer Science and Engineering under the theme “Unlocking the Future of Blockchain”. The club has since been renamed the Blockchain Innovation Club.',
+      'Where it all started: the inauguration of the club, then the Kerala Blockchain Academy Club REC (KBA Club REC), and of its first board. It was held with the Department of Computer Science and Engineering under the theme “Unlocking the Future of Blockchain”. The club has since been renamed the Blockchain Innovation Club.',
     photos: [
       {
         n: 1,

@@ -61,7 +61,7 @@ export default function Footer() {
           <p className="t-body mt-5 max-w-[38ch]">
             Blockchain Innovation Club, Rajalakshmi Engineering College. Innovate. Decentralize. Build the future.
           </p>
-          <p className="meta mt-4">in partnership with kerala blockchain association</p>
+          <p className="meta mt-4">in partnership with kerala blockchain academy</p>
           <ul className="mt-7 flex flex-wrap gap-3">
             {socialLinks.map((s) => (
               <li key={s.label}>

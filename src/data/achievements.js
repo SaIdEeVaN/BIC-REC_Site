@@ -14,16 +14,16 @@ export const stats = {
   workshops: 1, // DeFi Unlocked
   immersionPrograms: 1, // international students hosted on campus for a blockchain programme
   studentsReached: 500,
-  collaborations: 1, // Kerala Blockchain Association
+  collaborations: 1, // Kerala Blockchain Academy
 }
 
 export const achievements = [
   {
     id: 2,
-    title: 'Official Partnership with Kerala Blockchain Association',
+    title: 'Official Partnership with Kerala Blockchain Academy',
     date: 'August 2025',
     category: 'Collaboration',
-    description: 'BIC became an official student chapter partner of the Kerala Blockchain Association, gaining access to industry mentors, resources, and events.',
+    description: 'BIC became an official student chapter partner of the Kerala Blockchain Academy, gaining access to industry mentors, resources, and events.',
   },
   {
     id: 3,
