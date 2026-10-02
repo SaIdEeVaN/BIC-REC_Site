@@ -126,7 +126,6 @@ export default function EventDetail() {
                   ? 'Photos will be added after the event.'
                   : 'Photos from this event haven’t been uploaded yet.'
               }
-              action={<Button variant="onInk" to="/gallery">Open the gallery</Button>}
             />
           </Block>
         </div>

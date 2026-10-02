@@ -20,10 +20,6 @@ const PAGES = {
     title: 'Events',
     description: 'Workshops, hackathons, and expert talks hosted by the Blockchain Innovation Club.',
   },
-  '/gallery': {
-    title: 'Gallery',
-    description: "A visual collection of the club's activities and achievements.",
-  },
   '/team/board': {
     title: 'Leadership',
     description: 'The people guiding, managing, and growing the Blockchain Innovation Club at REC.',
