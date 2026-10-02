@@ -254,12 +254,21 @@ const groups = [
   },
   {
     team: 'core',
-    title: "Visual and Digital Media",
+    title: "Media",
     members: [
+      {
+        name: "Mohammed Irfan S",
+        slug: "mohammed-irfan-s",
+        role: "Media Director",
+        department: "AI & DS",
+        email: "mohammedirfan.s.2024.aids@rajalakshmi.edu.in",
+        linkedin: "https://www.linkedin.com/in/mohammed-irfan-s-9b7203322",
+        instagram: "https://www.instagram.com/irfan._xd_",
+      },
       {
         name: "Yogadharshini NK",
         slug: "yogadharshini-nk",
-        role: "Media Lead",
+        role: "Visual Media Lead",
         department: null,
         email: null,
         linkedin: null,
@@ -268,7 +277,7 @@ const groups = [
       {
         name: "Keerthana G",
         slug: "keerthana-g",
-        role: "Media Lead",
+        role: "Digital Media Lead",
         department: "CSE",
         email: "keerthana.g.2024.cse@rajalakshmi.edu.in",
         linkedin: "https://www.linkedin.com/in/keerthana-g-8a9b16333",
