@@ -2,7 +2,7 @@ import { PageHeader, SectionHeading } from '../components/kit'
 import { AMBER, Reveal, Slam } from '../components/motion'
 import MeetUs from '../components/MeetUs'
 import MemberCell from '../components/MemberCell'
-import { boardGroups, facultyCoordinators } from '../data/members'
+import { FACULTY, boardGroups, facultyCoordinators } from '../data/members'
 import { pad2 } from '../lib/chain'
 import { initials } from '../lib/initials'
 import { photoFor } from '../lib/memberPhotos'
@@ -24,7 +24,7 @@ const contactLink = 'underline decoration-2 underline-offset-4'
 
 // The page's "about": who the board is.
 const ABOUT =
-  'The board is the club’s student leadership. The core board (the President, the Vice President and the club’s ambassadors) leads the club and speaks for it, and the executive team runs operations and technology and keeps the club’s records and accounts. With the faculty coordinators, they set the club’s direction for the year.'
+  `The board is the club’s student leadership. The core board (the President, the Vice President and the club’s ambassadors) leads the club and speaks for it, and the executive team runs operations and technology and keeps the club’s records and accounts. With the ${FACULTY}, they set the club’s direction for the year.`
 
 // Block numbers run on from one group to the next, so the whole board reads as a single chain.
 let seats = 0
@@ -40,7 +40,7 @@ export default function BoardMembers() {
       <PageHeader
         eyebrow="club leadership"
         title="Board members"
-        lead="The faculty coordinators and student board guiding, managing, and growing the Blockchain Innovation Club at REC."
+        lead={`The ${FACULTY} and student board guiding, managing, and growing the Blockchain Innovation Club at REC.`}
         aside={[
           ['faculty', pad2(facultyCoordinators.length)],
           ['board', pad2(seats)],
@@ -57,9 +57,9 @@ export default function BoardMembers() {
       <section className="border-b-3 border-ink">
         <div className="wrap section">
           <Slam color={AMBER} className="on-ink bg-ink p-6 text-bone shadow-amber md:p-10">
-            <p className="meta">faculty coordinators</p>
+            <p className="meta">{FACULTY}</p>
             {/* Names like MUNEESHWARI need ~320px at the md heading size: the portrait stacks above the name on phones,
-                and the two coordinators only sit side by side once each column is wide enough (xl). */}
+                and two coordinators would only sit side by side once each column is wide enough (xl). */}
             <ul className="mt-6 grid gap-8 xl:grid-cols-2">
               {facultyCoordinators.map((coordinator) => (
                 <li key={coordinator.name} className="flex min-w-0 flex-col gap-4 sm:flex-row sm:items-center sm:gap-5">

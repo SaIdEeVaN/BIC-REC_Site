@@ -21,13 +21,10 @@ export const facultyCoordinators = [
     email: 'muneeshwari.p@rajalakshmi.edu.in',
     linkedin: 'https://www.linkedin.com/in/dr-muneeshwari-p-84aba561/',
   },
-  {
-    name: 'Dr. Manoranjini J',
-    slug: 'manoranjini-j',
-    email: 'manoranjini.j@rajalakshmi.edu.in',
-    linkedin: 'https://www.linkedin.com/in/dr-manoranjini-j-14b0482b4/',
-  },
 ]
+
+// "faculty coordinator" or "faculty coordinators", for text that names them as a group.
+export const FACULTY = facultyCoordinators.length === 1 ? 'faculty coordinator' : 'faculty coordinators'
 
 // Every group of the club's leadership, in page order. `team` says which page it belongs to:
 // - 'board': the core board and the executive team, at /team/board.

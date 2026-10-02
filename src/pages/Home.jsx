@@ -20,7 +20,7 @@ import {
 } from '../components/motion'
 import EventRow from '../components/EventRow'
 import { events, getFeaturedEvents, getUpcomingEvents } from '../data/events'
-import { facultyCoordinators } from '../data/members'
+import { FACULTY, facultyCoordinators } from '../data/members'
 import { stats as clubStats } from '../data/achievements'
 import { meshFacts } from '../lib/mesh'
 import { blockNo, shortHash } from '../lib/chain'
@@ -271,7 +271,7 @@ export default function Home() {
         body="Join the Blockchain Innovation Club and unlock a global community of Web3 professionals, resources, and opportunities."
         aside={
           <div className="border-3 border-bone p-6">
-            <p className="meta">faculty coordinators</p>
+            <p className="meta">{FACULTY}</p>
             <ul className="mt-3 flex flex-col gap-4">
               {facultyCoordinators.map((coordinator) => (
                 <li key={coordinator.name}>

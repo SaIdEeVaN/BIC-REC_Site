@@ -2,7 +2,7 @@
 // Used at runtime (RouteMeta in App.jsx), at build time (scripts/prerender-meta.js) and by the e2e tests,
 // so keep this file free of browser-only or Vite-only code.
 import { events, getEventById } from './data/events.js'
-import { getMemberBySlug, memberPath, teamMembers } from './data/members.js'
+import { FACULTY, getMemberBySlug, memberPath, teamMembers } from './data/members.js'
 import { RECRUITMENT_RESULTS_OPEN } from './data/club.js'
 
 export const SITE_URL = 'https://bicrec.web.app'
@@ -30,7 +30,7 @@ const PAGES = {
   },
   '/team/board': {
     title: 'Board members',
-    description: 'The faculty coordinators and student board guiding, managing, and growing the Blockchain Innovation Club at REC.',
+    description: `The ${FACULTY} and student board guiding, managing, and growing the Blockchain Innovation Club at REC.`,
   },
   '/team/core': {
     title: 'Core members',

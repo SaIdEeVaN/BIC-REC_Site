@@ -1,5 +1,5 @@
 import { associates } from './associates.js'
-import { boardMembers, coreTeamMembers } from './members.js'
+import { FACULTY, boardMembers, coreTeamMembers } from './members.js'
 
 // The club's three tiers of members, each with its own page. The order is the club's: the board leads, the
 // core team runs the domains, the associates are the newest members.
@@ -9,7 +9,7 @@ export const MEMBER_TEAMS = [
     path: '/team/board',
     title: 'Board members',
     count: boardMembers.length,
-    body: 'The student leadership: the core board and the executive team, who set the club’s course with the faculty coordinators.',
+    body: `The student leadership: the core board and the executive team, who set the club’s course with the ${FACULTY}.`,
   },
   {
     key: 'core',
