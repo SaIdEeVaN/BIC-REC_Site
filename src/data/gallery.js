@@ -6,6 +6,89 @@
 // for screen readers, and `caption` is shown under it in the full view.
 export const albums = [
   {
+    slug: 'hack-to-blockchain-2026',
+    title: 'Hack to Blockchain',
+    date: 'February 13, 2026',
+    datetime: '2026-02-13',
+    tags: ['titanium 2026', 'with notion'],
+    description:
+      'Hack to Blockchain at Titanium 2026, the national-level technical symposium at Rajalakshmi Engineering College, with Notion: a session on how a blockchain reaches consensus, then certificates and Notion goodies.',
+    photos: [
+      {
+        n: 1,
+        alt: 'A packed hall of participants, club members and faculty in front of the Hack to Blockchain screen.',
+        caption: 'Everyone at Hack to Blockchain.',
+      },
+      {
+        n: 2,
+        alt: 'A speaker at the front of a hall explains consensus, with the slide “Thousands of computers exist” on screen.',
+        caption: 'Who decides which block is correct? Consensus.',
+      },
+      {
+        n: 3,
+        alt: 'Club members hand a participant a Notion bag in front of the Hack to Blockchain screen.',
+        caption: 'Notion goodies handed over.',
+      },
+      {
+        n: 4,
+        alt: 'Club members present a participant with a certificate in front of the Hack to Blockchain screen.',
+        caption: 'A certificate on stage.',
+      },
+      {
+        n: 5,
+        alt: 'Club members and a faculty member gathered in front of the Hack to Blockchain screen.',
+        caption: 'The team behind the event.',
+      },
+    ],
+  },
+  {
+    slug: 'european-immersion-2026',
+    title: 'European Immersion Program',
+    date: 'January 6, 2026',
+    datetime: '2026-01-06',
+    tags: ['immersion program', 'international'],
+    description:
+      'Students from top European institutions came to Rajalakshmi Engineering College for an immersion program in blockchain and quantum cryptography.',
+    photos: [
+      {
+        n: 1,
+        alt: 'Faculty, club members and the visiting European students gathered in front of the Idea Factory sign at REC.',
+        caption: 'Everyone together at the Idea Factory.',
+      },
+      {
+        n: 2,
+        alt: 'Students and a faculty member gather around a desk in front of a screen showing code.',
+        caption: 'Gathered round the code.',
+      },
+      {
+        n: 3,
+        alt: 'Club members and faculty stand at the front of a lab where every screen shows Blockverse.',
+        caption: 'Blockverse on every screen.',
+      },
+      { n: 4, alt: 'Visiting students at Dell computers in a lab, following the session.', caption: 'Into the session, in the lab.' },
+      {
+        n: 5,
+        alt: 'Visiting students laugh with club members and faculty gathered around a lab computer.',
+        caption: 'Laughs around the desk.',
+      },
+      {
+        n: 6,
+        alt: 'A club member holds a microphone as a visiting student answers from his desk.',
+        caption: 'Questions and answers.',
+      },
+      {
+        n: 7,
+        alt: 'Three club members stand beside two visiting students seated at a lab computer.',
+        caption: 'Club members with two of the visitors.',
+      },
+      {
+        n: 8,
+        alt: 'Two faculty members with three visiting students, who hold up small pins, in the lab.',
+        caption: 'With the faculty, in the lab.',
+      },
+    ],
+  },
+  {
     slug: 'decode-blockchain-2025',
     title: 'Decode Blockchain',
     date: 'October 15, 2025',

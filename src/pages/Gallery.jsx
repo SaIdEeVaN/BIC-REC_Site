@@ -79,10 +79,53 @@ function Viewer({ view, onStep, onClosed }) {
   )
 }
 
-// One album: when and what, then its photos. The first photo leads at double size (two columns by two rows from
-// lg, where the next four fill the space beside it); the rest follow in rows.
+// One photo cell: the thumbnail, its number, and the way into the full view. The lead photo's image is taken out of
+// the flow from lg, so its double cell is exactly as tall as the two rows beside it, whatever the photo's shape.
+function PhotoCell({ album, albumIndex, photo, i, lead = false, className = '', onOpen }) {
+  return (
+    <LiftCell index={i} className={`bg-ink ${className}`}>
+      <button type="button" className="relative block h-full w-full" onClick={(event) => onOpen(event.currentTarget, albumIndex, i)}>
+        <span className="sr-only">Open full size: </span>
+        <img
+          src={thumbUrl(album, photo)}
+          alt={photo.alt}
+          width="960"
+          height="640"
+          loading={lead ? 'eager' : 'lazy'}
+          decoding="async"
+          className={`block aspect-[3/2] w-full object-cover ${lead ? 'lg:absolute lg:inset-0 lg:aspect-auto lg:h-full' : ''}`}
+        />
+        <span
+          aria-hidden="true"
+          className="meta absolute left-0 top-0 border-b-3 border-r-3 border-ink bg-bone px-2 py-1 text-ink"
+        >
+          #{pad2(i + 1)}
+        </span>
+      </button>
+    </LiftCell>
+  )
+}
+
+// One album: when and what, then its photos. The first five make a block: the lead at double size (two columns
+// by two rows from lg) with four beside it. The rest follow in rows of four, or of three when they come in threes,
+// and on phones an odd one out at the end takes the full width, so no row is left with a hole in it.
 function Album({ album, index, onOpen }) {
   const count = album.photos.length
+  const head = album.photos.slice(0, 5)
+  const rest = album.photos.slice(5)
+  const restColumns = rest.length % 4 !== 0 && rest.length % 3 === 0 ? 'lg:grid-cols-3' : 'lg:grid-cols-4'
+  const cell = (photo, i, className) => (
+    <PhotoCell
+      key={photo.n}
+      album={album}
+      albumIndex={index}
+      photo={photo}
+      i={i}
+      lead={i === 0}
+      className={className}
+      onOpen={onOpen}
+    />
+  )
 
   return (
     <section aria-labelledby={`album-${album.slug}`} className="border-b-3 border-ink">
@@ -109,36 +152,16 @@ function Album({ album, index, onOpen }) {
         </Reveal>
 
         <ul className="cells grid grid-cols-2 lg:grid-cols-4">
-          {album.photos.map((photo, i) => {
-            const lead = i === 0
-            return (
-              <LiftCell key={photo.n} index={i} className={`bg-ink ${lead ? 'col-span-2 lg:row-span-2' : ''}`}>
-                <button
-                  type="button"
-                  className="relative block h-full w-full"
-                  onClick={(event) => onOpen(event.currentTarget, index, i)}
-                >
-                  <span className="sr-only">Open full size: </span>
-                  <img
-                    src={thumbUrl(album, photo)}
-                    alt={photo.alt}
-                    width="960"
-                    height="640"
-                    loading={lead ? 'eager' : 'lazy'}
-                    decoding="async"
-                    className={`block w-full object-cover ${lead ? 'aspect-[3/2] lg:aspect-auto lg:h-full' : 'aspect-[3/2]'}`}
-                  />
-                  <span
-                    aria-hidden="true"
-                    className="meta absolute left-0 top-0 border-b-3 border-r-3 border-ink bg-bone px-2 py-1 text-ink"
-                  >
-                    #{pad2(i + 1)}
-                  </span>
-                </button>
-              </LiftCell>
-            )
-          })}
+          {head.map((photo, i) => cell(photo, i, i === 0 ? 'col-span-2 lg:row-span-2' : ''))}
         </ul>
+        {rest.length > 0 && (
+          // Pulled up 3px so its top rule and the block's bottom rule are one line, not two.
+          <ul className={`cells -mt-[3px] grid grid-cols-2 ${restColumns}`}>
+            {rest.map((photo, j) =>
+              cell(photo, j + 5, rest.length % 2 === 1 && j === rest.length - 1 ? 'col-span-2 lg:col-span-1' : ''),
+            )}
+          </ul>
+        )}
       </div>
     </section>
   )
