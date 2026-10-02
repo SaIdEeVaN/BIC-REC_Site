@@ -4,7 +4,8 @@ import EventRow from '../components/EventRow'
 import { events, getUpcomingEvents } from '../data/events'
 import { pad2 } from '../lib/chain'
 
-const FILTERS = ['All', 'Workshop', 'Hackathon', 'Guest Lecture', 'Competition', 'Community Meetup']
+// One tab per kind of event the club has actually run, so no tab is ever empty.
+const FILTERS = ['All', ...new Set(events.map((e) => e.type))]
 
 export default function Events() {
   const [filter, setFilter] = useState('All')
@@ -19,7 +20,7 @@ export default function Events() {
       <PageHeader
         eyebrow="event ledger"
         title="Events"
-        lead="Explore our curated collection of workshops, hackathons, and expert talks hosted by the Blockchain Innovation Club."
+        lead="Every event the Blockchain Innovation Club has run, from its inauguration in September 2025. Photos from them are in the gallery."
         aside={[
           ['blocks', pad2(events.length)],
           ['upcoming', pad2(upcoming)],

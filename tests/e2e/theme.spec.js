@@ -37,7 +37,7 @@ test('the dark theme is opt-in, flips the page, and is remembered', async ({ pag
 test('text on amber stays dark in the dark theme', async ({ page }, testInfo) => {
   test.skip(testInfo.project.name !== 'desktop-1280', 'same behaviour at every width')
   await page.addInitScript(() => localStorage.setItem('bic-theme', 'dark'))
-  await page.clock.setFixedTime(new Date('2026-04-01T10:00:00'))
+  await page.clock.setFixedTime(new Date('2026-02-10T10:00:00'))
 
   await page.goto('/events')
   const upcoming = page.locator('main').getByText('Upcoming', { exact: true }).first()

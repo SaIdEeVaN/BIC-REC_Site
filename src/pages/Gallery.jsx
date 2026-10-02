@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from 'react'
+import { Link, useLocation } from 'react-router-dom'
 import { Button, Chip, PageHeader } from '../components/kit'
 import { LiftCell, Reveal } from '../components/motion'
+import { events } from '../data/events'
 import { albums, photoCount } from '../data/gallery'
 import { pad2 } from '../lib/chain'
 import { photoUrl, thumbUrl } from '../lib/galleryPhotos'
@@ -111,6 +113,7 @@ function PhotoCell({ album, albumIndex, photo, i, lead = false, className = '', 
 // and on phones an odd one out at the end takes the full width, so no row is left with a hole in it.
 function Album({ album, index, onOpen }) {
   const count = album.photos.length
+  const event = events.find((e) => e.album === album.slug)
   const head = album.photos.slice(0, 5)
   const rest = album.photos.slice(5)
   const restColumns = rest.length % 4 !== 0 && rest.length % 3 === 0 ? 'lg:grid-cols-3' : 'lg:grid-cols-4'
@@ -128,7 +131,12 @@ function Album({ album, index, onOpen }) {
   )
 
   return (
-    <section aria-labelledby={`album-${album.slug}`} className="border-b-3 border-ink">
+    // `id`: /gallery#<slug> (from an event's page) lands here, just under the sticky header.
+    <section
+      id={album.slug}
+      aria-labelledby={`album-${album.slug}`}
+      className="scroll-mt-[67px] border-b-3 border-ink md:scroll-mt-[79px]"
+    >
       <div className="wrap section">
         <Reveal className="mb-8 grid gap-6 md:mb-10 lg:grid-cols-[1fr_auto] lg:items-end">
           <div>
@@ -139,6 +147,14 @@ function Album({ album, index, onOpen }) {
               {album.title}
             </h2>
             <p className="t-lead mt-5 max-w-[60ch]">{album.description}</p>
+            {event && (
+              <Link
+                to={`/events/${event.id}`}
+                className="mt-5 inline-block font-mono text-[12.5px] font-medium underline decoration-2 underline-offset-4 hover:decoration-[3px]"
+              >
+                About the event →
+              </Link>
+            )}
           </div>
           {album.tags?.length > 0 && (
             <ul className="flex flex-wrap gap-2" aria-label="Tags">
@@ -168,10 +184,16 @@ function Album({ album, index, onOpen }) {
 }
 
 export default function Gallery() {
+  const { hash } = useLocation()
   // { album, photo } while the full view is open, null otherwise.
   const [view, setView] = useState(null)
   // The photo that opened the full view gets focus back when it closes.
   const opener = useRef(null)
+
+  // Arriving at /gallery#<album>: the router only scrolls to the top, so go to the album.
+  useEffect(() => {
+    if (hash) document.getElementById(decodeURIComponent(hash.slice(1)))?.scrollIntoView({ block: 'start' })
+  }, [hash])
 
   function open(button, album, photo) {
     opener.current = button

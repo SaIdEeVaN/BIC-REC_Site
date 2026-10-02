@@ -1,6 +1,8 @@
 import { test, expect } from '@playwright/test'
 import { measureOverflow, overflowMessage } from './overflow.js'
 import { stats } from '../../src/data/achievements.js'
+import { getFeaturedEvents } from '../../src/data/events.js'
+import { shortHash } from '../../src/lib/chain.js'
 
 test.use({ reducedMotion: 'no-preference' })
 
@@ -41,13 +43,14 @@ test('home animations land on the real content', async ({ page }, testInfo) => {
   await page.goto('/')
   await playAllAnimations(page)
 
-  // Number tickers finish on their values; decrypted hashes resolve to the real hash. The member count
-  // is read from the club's figures rather than written out here, so correcting a number doesn't fail
-  // a test about whether the ticker arrives.
+  // Number tickers finish on their values; decrypted hashes resolve to the real hash. The member count and
+  // the hash (of the first event in "Events that define us") are read from the data rather than written out
+  // here, so correcting a number or changing the events doesn't fail a test about whether the animation arrives.
   await expect(
     page.locator('dd span[aria-hidden="true"]').filter({ hasText: new RegExp(`^${stats.members}$`) })
   ).toBeVisible()
-  await expect(page.locator('span[aria-hidden="true"]', { hasText: /^0xb51…e50$/ }).first()).toBeVisible()
+  const hash = shortHash(getFeaturedEvents()[0].slug)
+  await expect(page.locator('span[aria-hidden="true"]').filter({ hasText: new RegExp(`^${hash}$`) }).first()).toBeVisible()
 })
 
 test('every scroll reveal below the fold lands at rest', async ({ page }, testInfo) => {

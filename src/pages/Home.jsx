@@ -93,8 +93,12 @@ function NextEvent({ event }) {
         <h2 className="t-card mt-4 underline decoration-2 underline-offset-[5px] group-hover:decoration-[3px]">{event.title}</h2>
         <p className="mt-4 font-mono text-[12.5px]">
           {event.date}
-          <br />
-          {event.venue}
+          {event.venue && (
+            <>
+              <br />
+              {event.venue}
+            </>
+          )}
         </p>
         {/* The block isn't sealed yet, so its hash is still being searched for rather than read out. */}
         <p className="meta mt-5">

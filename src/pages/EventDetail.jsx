@@ -2,7 +2,37 @@ import { Link, useParams } from 'react-router-dom'
 import { Button, Chip, Confirmations, EmptyState, Ledger, LedgerRow } from '../components/kit'
 import { Magnetic, Reveal, Scramble, SplitText, Stamp, Wipe } from '../components/motion'
 import { events, getEventById, isUpcoming } from '../data/events'
+import { albums } from '../data/gallery'
 import { blockNo, isRealLink, sealedDate, shortHash, stripEmoji } from '../lib/chain'
+import { thumbUrl } from '../lib/galleryPhotos'
+
+// The event's album from the gallery: its first four photos, and the way to the rest.
+function EventPhotos({ album }) {
+  return (
+    <>
+      <ul className="cells grid grid-cols-2 md:grid-cols-4">
+        {album.photos.slice(0, 4).map((photo) => (
+          <li key={photo.n} className="bg-ink">
+            <img
+              src={thumbUrl(album, photo)}
+              alt={photo.alt}
+              width="960"
+              height="640"
+              loading="lazy"
+              decoding="async"
+              className="block aspect-[3/2] w-full object-cover"
+            />
+          </li>
+        ))}
+      </ul>
+      <div className="mt-6">
+        <Button variant="onInk" to={`/gallery#${album.slug}`}>
+          All {album.photos.length} photos in the gallery
+        </Button>
+      </div>
+    </>
+  )
+}
 
 function Block({ title, children }) {
   return (
@@ -32,6 +62,7 @@ export default function EventDetail() {
   }
 
   const upcoming = isUpcoming(event)
+  const album = albums.find((a) => a.slug === event.album)
   // Depth: blocks sealed after this one. An event that hasn't happened has none — nothing is built on it.
   const confirmations = events.filter((e) => e.id > event.id && !isUpcoming(e)).length
   const canRegister = upcoming && isRealLink(event.registrationLink)
@@ -119,15 +150,19 @@ export default function EventDetail() {
           )}
 
           <Block title="Event photos">
-            <EmptyState
-              title="Photos pending"
-              body={
-                upcoming
-                  ? 'Photos will be added after the event.'
-                  : 'Photos from this event haven’t been uploaded yet.'
-              }
-              action={<Button variant="onInk" to="/gallery">Open the gallery</Button>}
-            />
+            {album ? (
+              <EventPhotos album={album} />
+            ) : (
+              <EmptyState
+                title="Photos pending"
+                body={
+                  upcoming
+                    ? 'Photos will be added after the event.'
+                    : 'Photos from this event haven’t been uploaded yet.'
+                }
+                action={<Button variant="onInk" to="/gallery">Open the gallery</Button>}
+              />
+            )}
           </Block>
         </div>
 
@@ -139,12 +174,14 @@ export default function EventDetail() {
                   ['date', event.date],
                   ['time', event.time],
                   ['venue', event.venue],
-                ].map(([label, value]) => (
-                  <div key={label} className="border-t-3 border-ink px-4 py-3 first:border-t-0">
-                    <dt className="meta">{label}</dt>
-                    <dd className="mt-1 text-[15px] font-bold">{value}</dd>
-                  </div>
-                ))}
+                ]
+                  .filter(([, value]) => value)
+                  .map(([label, value]) => (
+                    <div key={label} className="border-t-3 border-ink px-4 py-3 first:border-t-0">
+                      <dt className="meta">{label}</dt>
+                      <dd className="mt-1 text-[15px] font-bold">{value}</dd>
+                    </div>
+                  ))}
                 <div className={`border-t-3 border-ink px-4 py-3 ${upcoming ? 'bg-amber text-coal' : ''}`}>
                   <dt className={`meta ${upcoming ? 'text-coal' : ''}`}>registration</dt>
                   <dd className="mt-1 font-mono text-[12.5px] font-medium uppercase">{registration}</dd>

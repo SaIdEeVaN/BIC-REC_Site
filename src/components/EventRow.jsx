@@ -28,7 +28,7 @@ export default function EventRow({ event, index = 0 }) {
       side={
         <>
           <Chip>{event.type}</Chip>
-          <p className="mt-3 font-mono text-[12.5px]">{event.venue}</p>
+          {event.venue && <p className="mt-3 font-mono text-[12.5px]">{event.venue}</p>}
         </>
       }
       status={

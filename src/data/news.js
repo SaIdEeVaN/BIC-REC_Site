@@ -13,7 +13,7 @@ export const news = [
     date: 'February 22, 2026',
     category: 'Event',
     description: 'The Web3 Hackathon 2026 was an incredible success! 12 teams, 60+ participants, and 5 working DApps built over 24 hours. See the full recap.',
-    link: '/events/2',
+    link: '#',
   },
   {
     id: 5,
@@ -37,7 +37,7 @@ export const news = [
     date: 'January 16, 2026',
     category: 'Event',
     description: 'Our inaugural workshop was a massive success! 60+ students from 8 departments attended the full-day session. Thank you to all participants, speakers, and the KBA team.',
-    link: '/events/1',
+    link: '#',
   },
   {
     id: 8,

@@ -18,7 +18,7 @@ const PAGES = {
   },
   '/events': {
     title: 'Events',
-    description: 'Workshops, hackathons, and expert talks hosted by the Blockchain Innovation Club.',
+    description: 'Every event the Blockchain Innovation Club has run at REC, from its inauguration in September 2025.',
   },
   '/gallery': {
     title: 'Gallery',

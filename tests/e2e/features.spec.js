@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test'
-import { isUpcoming } from '../../src/data/events.js'
+import { events, isUpcoming } from '../../src/data/events.js'
 import { RECRUITMENT_RESULTS_OPEN, RECRUITMENT_RESULTS_URL } from '../../src/data/club.js'
 import { associates } from '../../src/data/associates.js'
 import { albums } from '../../src/data/gallery.js'
@@ -32,10 +32,10 @@ test('once every event has passed, nothing says "Upcoming"', async ({ page }, te
 
 test('before an event, home promotes it and the ledger marks it upcoming', async ({ page }, testInfo) => {
   once(testInfo)
-  await page.clock.setFixedTime(new Date('2026-04-01T10:00:00'))
+  await page.clock.setFixedTime(new Date('2026-02-10T10:00:00'))
 
   await page.goto('/')
-  await expect(page.getByRole('link', { name: /next event/i })).toContainText('Smart Contract Development Bootcamp')
+  await expect(page.getByRole('link', { name: /next event/i })).toContainText('Byte the Dust')
 
   await page.goto('/events')
   await expect(page.locator('main').getByText('Upcoming', { exact: true }).first()).toBeVisible()
@@ -194,4 +194,30 @@ test('a gallery photo opens full size, steps through its album, and closes back 
   await page.keyboard.press('Escape')
   await expect(viewer).toBeHidden()
   await expect(photos.nth(0)).toBeFocused()
+})
+
+test('an event with an album shows its photos and leads to them in the gallery, and back', async ({ page }, testInfo) => {
+  once(testInfo)
+
+  const event = events.find((e) => e.album)
+  const album = albums.find((a) => a.slug === event.album)
+  await page.goto(`/events/${event.id}`)
+  await expect(page.getByRole('img', { name: album.photos[0].alt })).toBeVisible()
+
+  await page.getByRole('link', { name: `All ${album.photos.length} photos in the gallery` }).click()
+  await expect(page).toHaveURL(`/gallery#${album.slug}`)
+  const heading = page.getByRole('heading', { name: album.title })
+  await expect(heading).toBeInViewport()
+
+  await page.locator(`section#${album.slug}`).getByRole('link', { name: 'About the event' }).click()
+  await expect(page).toHaveURL(`/events/${event.id}`)
+  await expect(page.locator('main h1')).toContainText(event.title)
+})
+
+test('an event without photos yet says so', async ({ page }, testInfo) => {
+  once(testInfo)
+
+  const event = events.find((e) => !e.album)
+  await page.goto(`/events/${event.id}`)
+  await expect(page.getByText('Photos from this event haven’t been uploaded yet.')).toBeVisible()
 })
