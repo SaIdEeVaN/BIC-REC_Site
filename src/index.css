@@ -21,6 +21,10 @@
     --reveal-rise: calc(26px * var(--m));
     /* Overshoot: the block passes its mark and settles back, so it lands instead of drifting. */
     --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+    /* Light unless the visitor picks the dark theme: "only" stops phone browsers in dark mode from repainting
+       the page dark on their own (see index.html). */
+    color-scheme: only light;
   }
 
   /* Dark theme (src/lib/theme.js): the page is printed in negative — ink is the paper, bone the rules and

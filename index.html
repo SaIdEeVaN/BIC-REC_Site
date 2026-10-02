@@ -24,12 +24,16 @@
     <meta name="twitter:image" content="https://bicrec.web.app/og-image.png" />
     <!-- seo:end -->
     <meta name="theme-color" content="#EDE6D8" />
+    <!-- "only light": phone browsers in dark mode (Chrome's auto-dark, Samsung Internet) would otherwise repaint the
+         light page dark themselves. The site's own dark theme is the header switch (src/lib/theme.js). -->
+    <meta name="color-scheme" content="only light" />
     <script>
       // Applies a saved dark theme before the first paint, so the light page never flashes first (src/lib/theme.js).
       try {
         if (localStorage.getItem('bic-theme') === 'dark') {
           document.documentElement.dataset.theme = 'dark'
           document.querySelector('meta[name="theme-color"]').content = '#14110E'
+          document.querySelector('meta[name="color-scheme"]').content = 'dark'
         }
       } catch (e) {}
     </script>

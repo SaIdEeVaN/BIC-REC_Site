@@ -34,6 +34,25 @@ test('the dark theme is opt-in, flips the page, and is remembered', async ({ pag
   expect(await background(page)).toBe(BONE)
 })
 
+test('a phone in dark mode still gets the light page, until the visitor picks the dark theme', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'desktop-1280', 'same behaviour at every width')
+  await page.emulateMedia({ colorScheme: 'dark' })
+  const scheme = page.locator('meta[name="color-scheme"]')
+
+  await page.goto('/')
+  await expect(page.locator('main h1')).toBeVisible()
+  expect(await background(page)).toBe(BONE)
+  // "only light" is what stops a phone browser's own dark mode from repainting the light page.
+  await expect(scheme).toHaveAttribute('content', 'only light')
+  expect(await page.evaluate(() => getComputedStyle(document.documentElement).colorScheme)).toBe('light only')
+
+  const toggle = page.locator('header').getByRole('button', { name: 'Dark theme' })
+  await toggle.click()
+  await expect(scheme).toHaveAttribute('content', 'dark')
+  await toggle.click()
+  await expect(scheme).toHaveAttribute('content', 'only light')
+})
+
 test('text on amber stays dark in the dark theme', async ({ page }, testInfo) => {
   test.skip(testInfo.project.name !== 'desktop-1280', 'same behaviour at every width')
   await page.addInitScript(() => localStorage.setItem('bic-theme', 'dark'))
