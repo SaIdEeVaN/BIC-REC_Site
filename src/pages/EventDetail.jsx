@@ -27,7 +27,7 @@ function EventPhotos({ album }) {
       </ul>
       <div className="mt-6">
         <Button variant="onInk" to={albumPath(album)}>
-          See all {album.photos.length} photos
+          Explore gallery
         </Button>
       </div>
     </>

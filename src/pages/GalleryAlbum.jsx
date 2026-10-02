@@ -10,7 +10,7 @@ import { useViewer } from '../lib/useViewer'
 
 const smallLink = 'font-mono text-[12.5px] font-medium underline decoration-2 underline-offset-4 hover:decoration-[3px]'
 
-// One album on a page of its own (/gallery/<slug>): where an event's "See all photos" leads, so it opens on that
+// One album on a page of its own (/gallery/<slug>): where an event's "Explore gallery" leads, so it opens on that
 // event's photos alone rather than the whole gallery.
 export default function GalleryAlbum() {
   const { slug } = useParams()

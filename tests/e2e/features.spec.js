@@ -212,7 +212,7 @@ test('an event with an album shows its photos and leads to that album alone, and
   await page.goto(`/events/${event.id}`)
   await expect(page.getByRole('img', { name: album.photos[0].alt })).toBeVisible()
 
-  await page.getByRole('link', { name: `See all ${album.photos.length} photos` }).click()
+  await page.getByRole('link', { name: 'Explore gallery' }).click()
   await expect(page).toHaveURL(albumPath(album))
   await expect(page.locator('main h1')).toContainText(album.title)
   // This album's photos, and no other album's.
