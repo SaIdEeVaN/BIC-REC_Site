@@ -16,13 +16,15 @@ const whyJoin = [
 
 const BAND_WORDS = ['Builders', 'Organizers', 'Creatives', 'Communicators', 'Writers']
 
+// The club's domains, by their official names and in the club's own order (CORE_TEAMS in data/coreMembers.js).
 const openRoles = [
-  { team: 'Technical Team', skills: ['Solidity', 'React', 'Web3'] },
-  { team: 'Events Team', skills: ['Planning', 'Coordination', 'Management'] },
-  { team: 'Design & Media Team', skills: ['Figma', 'Canva', 'Photography'] },
-  { team: 'PR & Outreach Team', skills: ['Social Media', 'Communication', 'Outreach'] },
-  { team: 'Content Team', skills: ['Writing', 'Research', 'Blogging'] },
-  { team: 'Operations Team', skills: ['Logistics', 'Planning', 'Organisation'] },
+  { team: 'Event', skills: ['Planning', 'Coordination', 'Management'] },
+  { team: 'PR and Outreach', skills: ['Social Media', 'Communication', 'Outreach'] },
+  { team: 'Technical', skills: ['Solidity', 'React', 'Web3'] },
+  { team: 'Design', skills: ['Figma', 'Canva', 'UI/UX'] },
+  { team: 'Research and Innovation', skills: ['Research', 'Writing', 'Whitepapers'] },
+  { team: 'Visual Media', skills: ['Photography', 'Videography', 'Editing'] },
+  { team: 'Digital Media', skills: ['Content Creation', 'Reels', 'Blogging'] },
 ]
 
 export default function JoinUs() {

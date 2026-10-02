@@ -144,7 +144,7 @@ export const boardGroups = [
     ],
   },
   {
-    title: "Events",
+    title: "Event",
     members: [
       {
         name: "Padma Priya J",
@@ -167,7 +167,7 @@ export const boardGroups = [
     ],
   },
   {
-    title: "PR",
+    title: "PR and Outreach",
     members: [
       {
         name: "Karthick Raja R",
@@ -190,7 +190,7 @@ export const boardGroups = [
     ],
   },
   {
-    title: "Tech",
+    title: "Technical",
     members: [
       {
         name: "Arjun K",
@@ -231,7 +231,7 @@ export const boardGroups = [
     ],
   },
   {
-    title: "Research",
+    title: "Research and Innovation",
     members: [
       {
         name: "Muhilan S",
@@ -254,7 +254,7 @@ export const boardGroups = [
     ],
   },
   {
-    title: "Media",
+    title: "Visual and Digital Media",
     members: [
       {
         name: "Yogadharshini NK",
