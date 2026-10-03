@@ -1,8 +1,57 @@
 // The associates: the club's newest members, selected in the 2026–27 recruitment. Each entry:
 // { name, team, department }, where `team` is one of DOMAINS (data/domains.js); the role shown is "<team> Associate".
 //
-// Kept empty until the club publishes the list (3 Oct 2026, 10:00 IST): until then the names would give
-// the results away. The Associates page only shows its roster section when this list has people in it.
-export const associates = []
+// Published on 3 Oct 2026 at 13:00 IST, two hours after the results went out (kept empty until then, since the names
+// would have given the results away). The Associates page shows its roster section because this list has people in
+// it, in the club's domain order.
+export const associates = [
+  { name: "Arya K", team: "Event", department: "ECE" },
+  { name: "Hemavarshni S", team: "Event", department: "ECE" },
+  { name: "Jerusha J", team: "Event", department: "CSE" },
+  { name: "Kanimozhi D V", team: "Event", department: "Biomedical" },
+  { name: "Nithish Kumar G", team: "Event", department: "Biomedical" },
+  { name: "S Anto Sherine", team: "Event", department: "CSBS" },
+  { name: "Tharun B", team: "Event", department: "CSE" },
+  { name: "Venkat Babu K", team: "Event", department: "IT" },
+  { name: "Aadhithya S", team: "PR and Outreach", department: "Mechanical" },
+  { name: "Gurudharan B", team: "PR and Outreach", department: "ECE" },
+  { name: "Keerthika J", team: "PR and Outreach", department: "ECE" },
+  { name: "Pragadhi R", team: "PR and Outreach", department: "CSE" },
+  { name: "Sahana Senguttuvan", team: "PR and Outreach", department: "CSBS" },
+  { name: "Yashmitha Gajendiran", team: "PR and Outreach", department: "ECE" },
+  { name: "Yashwanthi B", team: "PR and Outreach", department: "Cybersecurity" },
+  { name: "Arunachalam J", team: "Technical", department: "Cybersecurity" },
+  { name: "Dhayanithimaran K", team: "Technical", department: "CSE" },
+  { name: "Gopyraj M", team: "Technical", department: "CSE" },
+  { name: "Lavanya V", team: "Technical", department: "CSE" },
+  { name: "Mithun Jaiganesan A", team: "Technical", department: "AI & DS" },
+  { name: "Mohnish Kumar K G", team: "Technical", department: "CSE" },
+  { name: "Priyadharshini T", team: "Technical", department: "ECE" },
+  { name: "Shyamprasad G", team: "Technical", department: "CSE" },
+  { name: "Aishwarya M", team: "Design", department: "Cybersecurity" },
+  { name: "Keerthipriyan S", team: "Design", department: "CSE" },
+  { name: "Manisha V", team: "Design", department: "CSE" },
+  { name: "Miruthula G", team: "Design", department: "CSE" },
+  { name: "Moksha K", team: "Design", department: "CSE" },
+  { name: "Nivethitha G", team: "Design", department: "CSE" },
+  { name: "Rithick Y", team: "Design", department: "Biotechnology" },
+  { name: "Saipriya H", team: "Design", department: "Biotechnology" },
+  { name: "Bala Aditya Dhinakaran", team: "Research and Innovation", department: "AI & DS" },
+  { name: "M J Vikas", team: "Research and Innovation", department: "Mechatronics" },
+  { name: "Mahalakshmi M B", team: "Research and Innovation", department: "CSE" },
+  { name: "Moulika A", team: "Research and Innovation", department: "AI & DS" },
+  { name: "Rakshana L", team: "Research and Innovation", department: "CSE" },
+  { name: "Sunitha", team: "Research and Innovation", department: "Biomedical" },
+  { name: "Balaji D", team: "Visual Media", department: "CSE" },
+  { name: "Gokulnath M", team: "Visual Media", department: "Automobile" },
+  { name: "Narendran K", team: "Visual Media", department: "CSD" },
+  { name: "Nithish K", team: "Visual Media", department: "IT" },
+  { name: "Vignesh N", team: "Visual Media", department: "CSE" },
+  { name: "Aaqib Shariff", team: "Digital Media", department: "CSE" },
+  { name: "D Jishnu", team: "Digital Media", department: "CSE" },
+  { name: "Divyaprakash G", team: "Digital Media", department: "Automobile" },
+  { name: "Mathavan N", team: "Digital Media", department: "CSE" },
+  { name: "Mercica M", team: "Digital Media", department: "CSE" },
+]
 
 export const roleOf = (member) => `${member.team} Associate`
