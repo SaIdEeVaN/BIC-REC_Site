@@ -20,4 +20,4 @@ export const RECRUITMENT_RESULTS_URL = 'https://bicrec-results.web.app'
 // The Associates page's switch (/team/associates). false: "Results coming soon". true: "Check your result",
 // with a button to RECRUITMENT_RESULTS_URL. Flip it only once the real results are published there — until
 // then the results site holds sample data and every candidate would get "no match".
-export const RECRUITMENT_RESULTS_OPEN = false
+export const RECRUITMENT_RESULTS_OPEN = true
