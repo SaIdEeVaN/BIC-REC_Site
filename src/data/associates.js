@@ -7,6 +7,10 @@
 // would have given the results away). LinkedIn and Instagram come from the associates' own form (6 Oct 2026); null
 // where someone left it blank or gave a link that isn't a profile. Roll numbers, phone numbers and emails from that
 // form are deliberately not here: this repo and the site are public.
+//
+// Photos come from the associates' photo form (6 Oct 2026): one per person, the best of what each sent, cropped to an
+// 800×800 head-and-shoulders portrait with the metadata stripped. Aishwarya M sent none under her name, so she keeps
+// her initials until one is dropped in.
 export const associates = [
   {
     name: "Arya K",
