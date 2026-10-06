@@ -1,17 +1,18 @@
 import { Link, Navigate, useParams } from 'react-router-dom'
 import { Button, EmptyState } from '../components/kit'
 import { Desync, Reveal, Scramble, Slam, SplitText } from '../components/motion'
-import { boardMembers, coreTeamMembers, getMemberBySlug, memberPath } from '../data/members'
+import { associateMembers, boardMembers, coreTeamMembers, getMemberBySlug, memberPath } from '../data/members'
 import { blockNo, shortHash } from '../lib/chain'
 import { initials } from '../lib/initials'
 import { photoFor } from '../lib/memberPhotos'
 
 const linkClass = 'fill-up block border-3 border-ink px-4 py-3 text-[13.5px] font-extrabold uppercase'
 
-// Board and core members each have their own pages, and step through their own team only.
+// Board members, core members and associates each have their own pages, and step through their own team only.
 const TEAMS = {
   board: { path: '/team/board', name: 'the board', roster: boardMembers },
   core: { path: '/team/core', name: 'the core team', roster: coreTeamMembers },
+  associates: { path: '/team/associates', name: 'the associates', roster: associateMembers },
 }
 
 // A member's own block. The portrait panel is a square either way: their photo once one is dropped into
@@ -49,7 +50,8 @@ function Neighbour({ member, direction }) {
   )
 }
 
-// `team`: which address this is ('board' for /team/board/:slug, 'core' for /team/core/:slug).
+// `team`: which address this is ('board' for /team/board/:slug, 'core' for /team/core/:slug, 'associates' for
+// /team/associates/:slug).
 export default function MemberDetail({ team = 'board' }) {
   const { slug } = useParams()
   const member = getMemberBySlug(slug)
@@ -74,9 +76,10 @@ export default function MemberDetail({ team = 'board' }) {
   const index = roster.findIndex((m) => m.slug === member.slug)
   const previous = roster[index - 1]
   const next = roster[index + 1]
+  // An associate's group is their domain, which their role ("Event Associate") already says.
   const facts = [
     ['role', member.role],
-    ['group', member.group],
+    ['group', member.team === 'associates' ? null : member.group],
     ['department', member.department],
   ].filter(([, value]) => Boolean(value))
 

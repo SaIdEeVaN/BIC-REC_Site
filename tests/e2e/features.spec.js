@@ -1,9 +1,8 @@
 import { test, expect } from '@playwright/test'
 import { events, isUpcoming } from '../../src/data/events.js'
 import { RECRUITMENT_RESULTS_OPEN, RECRUITMENT_RESULTS_URL } from '../../src/data/club.js'
-import { associates } from '../../src/data/associates.js'
 import { albumPath, albums } from '../../src/data/gallery.js'
-import { boardMembers, coreTeamMembers, memberPath } from '../../src/data/members.js'
+import { associateGroups, associateMembers, boardMembers, coreTeamMembers, memberPath } from '../../src/data/members.js'
 
 // Behaviour is identical at every width, so these run once.
 const once = (testInfo) => test.skip(testInfo.project.name !== 'desktop-1280', 'same behaviour at every width')
@@ -108,19 +107,29 @@ test('the Associates page follows the recruitment results switch', async ({ page
   }
 })
 
-test('the Associates page lists the associates once they are published, filtered by domain', async ({ page }, testInfo) => {
+test('the Associates page lists the associates by domain, each linking to their own page', async ({ page }, testInfo) => {
   once(testInfo)
 
   await page.goto('/team/associates')
   const roster = page.locator('#associates-roster')
-  if (associates.length === 0) {
+  if (associateMembers.length === 0) {
     await expect(roster).toHaveCount(0)
     return
   }
-  await expect(roster.locator('li')).toHaveCount(associates.length)
-  const team = associates[0].team
-  await page.getByRole('group', { name: 'Filter the associates by domain' }).getByRole('button', { name: team, exact: true }).click()
-  await expect(roster.locator('li')).toHaveCount(associates.filter((m) => m.team === team).length)
+  // One group per domain, in the club's order, each with its own associates.
+  await expect(roster.locator('h3')).toHaveText(associateGroups.map((group) => group.title))
+  const links = roster.locator('ul.cells a[href^="/team/associates/"]')
+  await expect(links).toHaveCount(associateMembers.length)
+  await expect(links.first()).toHaveAttribute('href', memberPath(associateMembers[0]))
+
+  // An associate's page has their LinkedIn and Instagram, and leads back to the associates.
+  const member = associateMembers.find((m) => m.linkedin && m.instagram)
+  await page.goto(memberPath(member))
+  await expect(page.locator('main h1')).toContainText(member.name)
+  await expect(page.locator('main').getByRole('link', { name: /LinkedIn/ })).toHaveAttribute('href', member.linkedin)
+  await expect(page.locator('main').getByRole('link', { name: /Instagram/ })).toHaveAttribute('href', member.instagram)
+  await page.getByRole('link', { name: '← back to the associates' }).click()
+  await expect(page).toHaveURL('/team/associates')
 })
 
 test('Meet us leads to the board, the core team and the associates', async ({ page }, testInfo) => {

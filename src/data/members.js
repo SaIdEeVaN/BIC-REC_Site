@@ -1,3 +1,6 @@
+import { associates, roleOf } from './associates.js'
+import { DOMAINS } from './domains.js'
+
 // Faculty coordinators and the student leadership (the board and the core team), in the groups and order the
 // club publishes them. The associates (the newest members) are in data/associates.js.
 //
@@ -29,6 +32,7 @@ export const FACULTY = facultyCoordinators.length === 1 ? 'faculty coordinator' 
 // Every group of the club's leadership, in page order. `team` says which page it belongs to:
 // - 'board': the core board and the executive team, at /team/board.
 // - 'core': the leads and co-leads of each domain (the core team), at /team/core, in the club's domain order.
+// The associates (/team/associates) are grouped the same way below, from data/associates.js.
 const groups = [
   {
     team: 'board',
@@ -305,15 +309,29 @@ const withTeam = (group) => ({
 export const boardGroups = groups.filter((group) => group.team === 'board').map(withTeam)
 export const coreGroups = groups.filter((group) => group.team === 'core').map(withTeam)
 
+// The associates, grouped by domain in the club's order. In data/associates.js their `team` is their domain; here,
+// as for everyone else, `team` is the page they belong to ('associates'), `group` their domain and `role` the
+// "<domain> Associate" they were selected as.
+export const associateGroups = DOMAINS.map((domain) => ({
+  team: 'associates',
+  title: domain,
+  members: associates
+    .filter((member) => member.team === domain)
+    .map((member) => ({ ...member, team: 'associates', group: domain, role: roleOf(member) })),
+})).filter((group) => group.members.length > 0)
+
 // Flat rosters in page order: what the detail page uses to find a member and to step to the next one.
 const flatten = (list) => list.flatMap((group) => group.members)
 
 export const boardMembers = flatten(boardGroups)
 export const coreTeamMembers = flatten(coreGroups)
-// Everyone with a page of their own, board first.
+export const associateMembers = flatten(associateGroups)
+// The student leadership, board first: the club's working force, which the figures on Home and /achievements count.
 export const teamMembers = [...boardMembers, ...coreTeamMembers]
+// Everyone with a page of their own: the leadership, then the associates.
+export const memberPages = [...teamMembers, ...associateMembers]
 
-// A member's page lives under their team: /team/board/<slug> or /team/core/<slug>.
+// A member's page lives under their team: /team/board/<slug>, /team/core/<slug> or /team/associates/<slug>.
 export const memberPath = (member) => `/team/${member.team}/${member.slug}`
 
-export const getMemberBySlug = (slug) => teamMembers.find((member) => member.slug === slug)
+export const getMemberBySlug = (slug) => memberPages.find((member) => member.slug === slug)

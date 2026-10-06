@@ -83,6 +83,7 @@ export default function App() {
               <Route path="/team/core" element={<CoreTeam />} />
               <Route path="/team/core/:slug" element={<MemberDetail team="core" />} />
               <Route path="/team/associates" element={<Associates />} />
+              <Route path="/team/associates/:slug" element={<MemberDetail team="associates" />} />
               <Route path="/projects" element={<Projects />} />
               <Route path="/achievements" element={<Achievements />} />
               <Route path="/resources" element={<Resources />} />

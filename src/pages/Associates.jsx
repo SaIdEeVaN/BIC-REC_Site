@@ -1,11 +1,9 @@
-import { useState } from 'react'
-import { AnimatePresence } from 'motion/react'
-import { Button, Chip, SectionHeading, Tabs } from '../components/kit'
-import { blockNo, shortHash } from '../lib/chain'
-import { Desync, LiftCell, Marquee, Mine, Reveal, Scramble, SplitText, Typewriter, Wipe } from '../components/motion'
+import { Button, SectionHeading } from '../components/kit'
+import { pad2, shortHash } from '../lib/chain'
+import { Desync, Marquee, Mine, Reveal, Scramble, SplitText, Typewriter, Wipe } from '../components/motion'
 import MeetUs from '../components/MeetUs'
-import { associates, roleOf } from '../data/associates'
-import { DOMAINS } from '../data/domains'
+import MemberCell from '../components/MemberCell'
+import { associateGroups, associateMembers } from '../data/members'
 import { CLUB_INSTAGRAM, RECRUITMENT_RESULTS_OPEN, RECRUITMENT_RESULTS_URL } from '../data/club'
 
 // Two states, switched by RECRUITMENT_RESULTS_OPEN in data/club.js:
@@ -128,47 +126,48 @@ export default function Associates() {
         </div>
       </section>
 
-      {associates.length > 0 && <AssociateRoster />}
+      {associateMembers.length > 0 && <AssociateRoster />}
 
       <MeetUs current="associates" />
     </>
   )
 }
 
-const ALL = 'All'
-// Only the domains that have someone in them, in the club's order.
-const TEAMS = DOMAINS.filter((team) => associates.some((m) => m.team === team))
+// Block numbers run on from one domain to the next, so the whole intake reads as a single chain.
+let seats = 0
+const groups = associateGroups.map((group) => {
+  const start = seats
+  seats += group.members.length
+  return { ...group, start }
+})
 
-// The associates: one cell per member, filtered by domain. Associates have no pages of their own (yet), so the
-// cells are plain text, not links.
+// The associates, as the core team is shown: grouped by domain in the club's order, a cell per member, each the way
+// into their own page (/team/associates/<slug>) with their LinkedIn and Instagram.
 function AssociateRoster() {
-  const [filter, setFilter] = useState(ALL)
-  const shown = filter === ALL ? associates : associates.filter((m) => m.team === filter)
-
   return (
     <section aria-labelledby="associates-roster" className="border-b-3 border-ink">
       <div className="wrap section">
         <SectionHeading
-          eyebrow={`the 2026–27 associates · ${associates.length} members · ${TEAMS.length} domains`}
+          eyebrow={`the 2026–27 associates · ${associateMembers.length} members · ${groups.length} domains`}
           title="Meet the associates"
         />
-        <Tabs label="Filter the associates by domain" options={[ALL, ...TEAMS]} value={filter} onChange={setFilter} />
-        {/* Positioned so leaving cells can be popped out of the flow while the rest slide into place. Columns stay
-            wide enough for the longest names (~15 letters at the card size) at every breakpoint. */}
-        <ul id="associates-roster" className="cells relative mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-          <AnimatePresence mode="popLayout" initial={false}>
-            {shown.map((member) => (
-              <LiftCell key={`${member.team}-${member.name}`} shuffle className="flex flex-col bg-bone p-5">
-                <p className="meta">{blockNo(associates.indexOf(member) + 1)}</p>
-                <h3 className="t-card mt-4">{member.name}</h3>
-                {member.department && <p className="meta mt-2">{member.department.toLowerCase()}</p>}
-                <div className="mt-auto pt-5">
-                  <Chip tone={member.team === filter ? 'pending' : 'outline'}>{roleOf(member)}</Chip>
-                </div>
-              </LiftCell>
-            ))}
-          </AnimatePresence>
-        </ul>
+        <div id="associates-roster" className="flex flex-col gap-10 md:gap-14">
+          {groups.map((group) => (
+            <div key={group.title}>
+              <Reveal className="mb-5 flex items-baseline justify-between gap-4 border-b-3 border-ink pb-3">
+                <h3 className="t-h3">{group.title}</h3>
+                <p className="meta shrink-0">
+                  {pad2(group.members.length)} {group.members.length === 1 ? 'associate' : 'associates'}
+                </p>
+              </Reveal>
+              <ul className="cells grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                {group.members.map((member, i) => (
+                  <MemberCell key={member.slug} member={member} index={group.start + i} heading="h4" />
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
       </div>
     </section>
   )

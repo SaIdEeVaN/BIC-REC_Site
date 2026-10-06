@@ -2,11 +2,11 @@ import { test, expect } from '@playwright/test'
 import { metaFor, renderSeoTags, staticRoutes } from '../../src/seo.js'
 import { events } from '../../src/data/events.js'
 import { albumPath, albums } from '../../src/data/gallery.js'
-import { boardMembers, coreTeamMembers, memberPath, teamMembers } from '../../src/data/members.js'
+import { associateMembers, boardMembers, coreTeamMembers, memberPages, memberPath } from '../../src/data/members.js'
 import { findOversizedHeadingWords, measureOverflow, overflowMessage } from './overflow.js'
 
-// 49 routes, but only 12 distinct layouts: the other 37 are three templates — an event, an album and a member
-// (board or core) — rendered with different text. Laying out the 24th member proves nothing the 1st didn't,
+// 96 routes, but only 12 distinct layouts: the other 84 are three templates — an event, an album and a member
+// (board, core or associate) — rendered with different text. Laying out the 70th member proves nothing the 1st didn't,
 // so what gets measured is every distinct layout plus the worst case of each template. Long content
 // is what breaks these pages, and the worst case is derived from the data rather than pinned to a
 // name, so it follows the roster instead of going stale when it changes.
@@ -15,7 +15,7 @@ const longestBy = (items, pick) => items.reduce((a, b) => (pick(b).length >= pic
 const templated = new Set([
   ...events.map((e) => `/events/${e.id}`),
   ...albums.map(albumPath),
-  ...teamMembers.map(memberPath),
+  ...memberPages.map(memberPath),
 ])
 
 const worstCase = [
@@ -24,8 +24,8 @@ const worstCase = [
   // An album's grid depends on how many photos it has, so the smallest and the largest are both laid out.
   albumPath(albums.reduce((a, b) => (b.photos.length < a.photos.length ? b : a))),
   albumPath(albums.reduce((a, b) => (b.photos.length > a.photos.length ? b : a))),
-  memberPath(longestBy(teamMembers, (m) => m.name)),
-  memberPath(longestBy(teamMembers, (m) => m.email ?? '')),
+  memberPath(longestBy(memberPages, (m) => m.name)),
+  memberPath(longestBy(memberPages, (m) => m.email ?? '')),
   // Not every difference is text length. The first and last member of each team have one neighbour rather
   // than two, so their previous/next row is a different grid — that asymmetry has already shipped a bug
   // once (an empty cell showing the ink background as a black slab), so both ends stay covered.
@@ -33,6 +33,7 @@ const worstCase = [
   memberPath(boardMembers.at(-1)),
   memberPath(coreTeamMembers[0]),
   memberPath(coreTeamMembers.at(-1)),
+  ...(associateMembers.length ? [memberPath(associateMembers[0]), memberPath(associateMembers.at(-1))] : []),
 ]
 
 const routes = [

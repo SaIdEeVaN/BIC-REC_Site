@@ -3,7 +3,7 @@
 // so keep this file free of browser-only or Vite-only code.
 import { events, getEventById } from './data/events.js'
 import { albumPath, albums, getAlbumBySlug } from './data/gallery.js'
-import { FACULTY, getMemberBySlug, memberPath, teamMembers } from './data/members.js'
+import { FACULTY, associateMembers, getMemberBySlug, memberPath, memberPages } from './data/members.js'
 import { RECRUITMENT_RESULTS_OPEN } from './data/club.js'
 
 export const SITE_URL = 'https://bicrec.web.app'
@@ -39,7 +39,9 @@ const PAGES = {
   },
   '/team/associates': {
     title: 'Associate members',
-    description: RECRUITMENT_RESULTS_OPEN
+    description: associateMembers.length
+      ? `The ${associateMembers.length} associates of 2026–27, the club’s newest members, by domain. Applied this year? Check your result with your email and roll number.`
+      : RECRUITMENT_RESULTS_OPEN
       ? 'The 2026–27 recruitment results are out — check yours with the email you applied with and your roll number.'
       : 'Selections for the 2026–27 intake are being finalised — results will be published here once they are out.',
   },
@@ -81,7 +83,7 @@ export function metaFor(pathname) {
   const album = albumMatch && getAlbumBySlug(albumMatch[1])
   if (album) return build(`${album.title} · Gallery`, album.description, path)
 
-  const memberMatch = path.match(/^\/team\/(board|core)\/([a-z0-9-]+)$/)
+  const memberMatch = path.match(/^\/team\/(board|core|associates)\/([a-z0-9-]+)$/)
   const member = memberMatch && getMemberBySlug(memberMatch[2])
   if (member && member.team === memberMatch[1]) {
     const detail = [member.role, member.department].filter(Boolean).join(' · ')
@@ -99,7 +101,7 @@ export const staticRoutes = [
   ...Object.keys(PAGES),
   ...events.map((e) => `/events/${e.id}`),
   ...albums.map(albumPath),
-  ...teamMembers.map(memberPath),
+  ...memberPages.map(memberPath),
 ]
 
 const escapeAttr = (value) =>
