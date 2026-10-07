@@ -123,13 +123,13 @@ const groups = [
     title: "Event",
     members: [
       {
-        name: "Madhu narayanan N",
+        name: "Madhu Narayanan N",
         slug: "madhu-narayanan-n",
         role: "Event Lead",
         department: "CSE",
         email: "madhunarayanan.n.2024.cse@rajalakshmi.edu.in",
-        linkedin: "https://www.linkedin.com/in/madhu-narayanan-n-7a8977319/",
-        instagram: "https://www.instagram.com/its_madhu_narayanan/?hl=en",
+        linkedin: "https://www.linkedin.com/in/madhu-narayanan-n-7a8977319",
+        instagram: "https://www.instagram.com/its_madhu_narayanan",
       },
       {
         name: "Satyaa S",
