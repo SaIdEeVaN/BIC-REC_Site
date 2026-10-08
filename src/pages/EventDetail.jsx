@@ -1,9 +1,9 @@
 import { Link, useParams } from 'react-router-dom'
-import { Button, Chip, Confirmations, EmptyState, Ledger, LedgerRow } from '../components/kit'
+import { Button, Chip, Confirmations, EmptyState } from '../components/kit'
 import { Magnetic, Reveal, Scramble, SplitText, Stamp, Wipe } from '../components/motion'
 import { events, getEventById, isUpcoming } from '../data/events'
 import { albumPath, albums } from '../data/gallery'
-import { blockNo, isRealLink, sealedDate, shortHash, stripEmoji } from '../lib/chain'
+import { blockNo, isRealLink, sealedDate, shortHash } from '../lib/chain'
 import { thumbUrl } from '../lib/galleryPhotos'
 
 // From md the strip is as many columns as it has photos, so a short album leaves no empty slot (spelled out for Tailwind).
@@ -131,29 +131,6 @@ export default function EventDetail() {
                   </li>
                 ))}
               </ul>
-            </Block>
-          )}
-
-          {event.winners?.length > 0 && (
-            <Block title="Winners">
-              <Ledger from="xl" head={['place', 'team · project', 'prize', 'block']}>
-                {event.winners.map((w, i) => (
-                  <LedgerRow
-                    key={w.team}
-                    index={i}
-                    tone={i === 0 ? 'pending' : 'confirmed'}
-                    date={stripEmoji(w.position)}
-                    main={
-                      <>
-                        <h3 className="t-row">{w.team}</h3>
-                        <p className="t-small mt-2">{w.project}</p>
-                      </>
-                    }
-                    side={<span className="text-[18px] font-black">{w.prize}</span>}
-                    status={<span className={`meta ${i === 0 ? 'text-coal' : ''}`}>{shortHash(w.team)}</span>}
-                  />
-                ))}
-              </Ledger>
             </Block>
           )}
 

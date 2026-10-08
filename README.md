@@ -40,11 +40,10 @@ The UI follows a **neo-brutalist design system** — hard geometry, 3px ink rule
 ## ✨ Features
 
 - 🏠 **Home** — Stacked hero, chain rail, stat bar and event ledger
-- 📅 **Events** — Filterable event ledger with detail pages
+- 📅 **Events** — The club's real events as a ledger, each with its own page and its gallery album
 - 🏆 **Achievements** — Club milestones and accomplishments
-- 👥 **Meet us** — The club's three teams, each with its own page: board members and core members (with profiles), and the associates (the newest members, and the way to the recruitment results at [bicrec-results.web.app](https://bicrec-results.web.app))
-- 🖼️ **Gallery** — Photo frames by category
-- 📰 **News** — Latest club updates
+- 👥 **Meet us** — The club's three teams, each with its own page: board members, core members and associates (grouped by domain), every member with a profile page; the Associates page also leads to the recruitment results at [bicrec-results.web.app](https://bicrec-results.web.app)
+- 🖼️ **Gallery** — Albums of the club's events, each with its own page and a full-screen viewer
 - 🔧 **Projects** — Blockchain projects by the club
 - 📚 **Resources** — Learning materials and links
 - 📬 **Contact** — Contact form and club details
@@ -124,9 +123,8 @@ Animation uses [Motion](https://motion.dev) (`motion/react`) through a small kit
 | `Desync` | A label forks into an amber and a mint copy on hover, then snaps back (CSS, `.desync`) |
 | `Drift` | A block travels a little against the page as it scrolls past, so stacked blocks separate |
 
-Three of the kit's drawings are the chain itself: `ChainRail` (blocks on one rail — keyed on a filter, it
-redraws for whatever the selection left standing), `NodeMesh` (a broadcast propagating across nine peers, on
-the topology in [`src/lib/mesh.js`](src/lib/mesh.js)) and `Confirmations` (a cell per block sealed on top of
+Two of the kit's drawings are the chain itself: `ChainRail` (blocks on one rail — keyed on a filter, it
+redraws for whatever the selection left standing) and `Confirmations` (a cell per block sealed on top of
 this one). `BlockClock` counts the club's block height
 from its August 2025 genesis at one block every 12s — derived from the clock rather than stored, so it needs
 nothing kept in sync.
@@ -163,23 +161,25 @@ BIC-REC_Site/
 │   └── render-og-image.js        # `npm run og-image`
 ├── src/
 │   ├── assets/
+│   │   ├── gallery/              # Album photos, one folder per album — see its README
 │   │   ├── logo/
 │   │   └── members/              # Member photos — drop in <slug>.jpg, see its README
 │   ├── components/
 │   │   ├── kit/                  # Design-system primitives (Button, Chip, Ledger, TrackCards, ChainRail,
-│   │   │                         #   NodeMesh, Confirmations, BlockClock, ...)
+│   │   │                         #   Confirmations, BlockClock, ...)
+│   │   ├── gallery/              # Album photo grid and full-screen viewer
 │   │   ├── motion/               # Animation kit — see Motion above
 │   │   ├── Navbar.jsx
 │   │   ├── Footer.jsx
 │   │   ├── EventRow.jsx
 │   │   └── MemberCell.jsx
-│   ├── data/                     # Events, members, news, achievements, resources; club.js holds
+│   ├── data/                     # Events, gallery, members, associates, achievements, resources; club.js holds
 │   │                             #   the club's email and social links
 │   ├── lib/
 │   │   ├── chain.js              # Block numbers, display hashes, sealed dates
 │   │   ├── initials.js           # Initials for members without a photo
 │   │   ├── memberPhotos.js       # Resolves a member's photo from their slug
-│   │   ├── mesh.js               # Peer-mesh topology drawn by NodeMesh
+│   │   ├── mesh.js               # Peer-mesh figures quoted on Home
 │   │   └── theme.js              # Dark theme: the visitor's choice, saved on their device
 │   ├── pages/                    # One component per route — the route table is in App.jsx
 │   ├── App.jsx                   # Root component & routing

@@ -41,8 +41,8 @@ Amber, mint and coal don't change. What that asks of new code:
 - **A dark strip that isn't a section still takes `.on-ink`** (the ticker, the kinetic band, the route shutter),
   or the dark theme inverts it into a light one.
 - **SVG attributes can't hold `var()`.** Draw rules with `stroke="currentColor"` under a `text-ink`/`text-bone`
-  class and fill with `fill-*` classes; animate something other than the colour (`NodeMesh` switches an amber
-  rect on and off over the resting fill).
+  class and fill with `fill-*` classes; animate something other than the colour (switch an amber rect on and
+  off over the resting fill, say).
 
 The one place mint is used at size is `<Desync>`, where it and amber are the two forked copies of a label. That is a hover state lasting 420ms, never a resting one, and at most one element per screen carries it.
 
@@ -101,9 +101,6 @@ Offset direction is always down-right. Shadow color is ink on bone, amber or bon
 - Cards carry `block #0001`, `block #0002`, `block #0003 · head` as their eyebrow.
 - Every build row ends in a truncated hash `0x000…000` in muted mono.
 - The chain rail SVG: one 3px horizontal line, 16px squares with 3px strokes at the nodes, two diagonal 3px branches per node. Amber square = head, bone squares = the rest.
-- The peer mesh SVG: nine 20px squares joined by 3px rules, authored in a fixed `600x300` viewBox
-  (`src/lib/mesh.js`). A broadcast leaves the origin and reaches the whole mesh in four hops — an amber dash
-  runs down every link of a hop, and each node it reaches fills amber until the round resets.
 - The confirmation strip: six equal cells split by 3px rules, one filled amber per block sealed on top, with
   an `00/06 confirmations` readout. A block nothing is built on yet reads `00/06` and stays bone.
 - The block clock: `block 0000000 · sealed 00s ago`, counting from the club's genesis in August 2025 at one
@@ -140,7 +137,6 @@ nothing on this site fades in.
 | Mined value | `<Mine>` — a hash churns through candidates until its difficulty zeros lock in |
 | Hover accent | `<Desync>` — the label forks into an amber and a mint copy, then snaps back |
 | Depth | `<Drift>` — a block travels a little against the page as it scrolls past |
-| Ambient loop | `<NodeMesh>` — the one motion on the site that never finishes; everything else fires once |
 | Depth | `<Confirmations>` — cells fill left to right for each block sealed on top of this one |
 
 Rules:
@@ -158,8 +154,8 @@ Rules:
   on the same cadence — the two read as one event.
 - **Every `<PageHeader>` title and `<EmptyState>` heading forks on hover.** It is set once in those two
   components, so pages do not opt in and cannot drift apart on it.
-- **Loops earn their place.** Reveals fire once by design. The ticker, the kinetic band, the chain rail's
-  packet and the peer mesh are the only things that run forever, and each is describing something that is
+- **Loops earn their place.** Reveals fire once by design. The ticker, the kinetic band and the chain rail's
+  packet are the only things that run forever, and each is describing something that is
   genuinely still happening.
 - **Stagger is `Math.min(i, 12) * 45ms`** — `stagger(i)` in `motion/core.js`. Capped, because the 30th row
   of a ledger should not wait two seconds for its turn.

@@ -55,6 +55,3 @@ export function hostOf(url) {
     return url
   }
 }
-
-// Drops leading emoji/symbols ("🏆 1st Place" -> "1st Place"); the system uses no pictograms.
-export const stripEmoji = (text) => text.replace(/^[^\p{L}\p{N}]+/u, '').trim()

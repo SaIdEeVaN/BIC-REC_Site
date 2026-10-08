@@ -25,7 +25,7 @@ const subscribe = (listener) => {
   return () => listeners.delete(listener)
 }
 
-export const getTheme = () => (document.documentElement.dataset.theme === 'dark' ? 'dark' : 'light')
+const getTheme = () => (document.documentElement.dataset.theme === 'dark' ? 'dark' : 'light')
 
 export function setTheme(theme) {
   document.documentElement.dataset.theme = theme
