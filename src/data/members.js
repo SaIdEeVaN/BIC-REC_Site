@@ -17,17 +17,13 @@ import { DOMAINS } from './domains.js'
 //
 // The faculty coordinators carry a slug for the photo alone. They have no page of their own: routes, the
 // sitemap and the e2e suite all walk `teamMembers`, which is the student leadership only.
-export const facultyCoordinators = [
-  {
-    name: 'Dr. Muneeshwari R',
-    slug: 'muneeshwari-r',
-    email: 'muneeshwari.p@rajalakshmi.edu.in',
-    linkedin: 'https://www.linkedin.com/in/dr-muneeshwari-p-84aba561/',
-  },
-]
+// Leave empty until the new coordinator's details are available; coordinator sections stay hidden.
+export const facultyCoordinators = []
 
-// "faculty coordinator" or "faculty coordinators", for text that names them as a group.
-export const FACULTY = facultyCoordinators.length === 1 ? 'faculty coordinator' : 'faculty coordinators'
+// Group label, or an empty string when no coordinator is listed.
+export const FACULTY = facultyCoordinators.length
+  ? facultyCoordinators.length === 1 ? 'faculty coordinator' : 'faculty coordinators'
+  : ''
 
 // Every group of the club's leadership, in page order. `team` says which page it belongs to:
 // - 'board': the core board and the executive team, at /team/board.

@@ -24,7 +24,7 @@ const contactLink = 'underline decoration-2 underline-offset-4'
 
 // The page's "about": who the board is.
 const ABOUT =
-  `The board is the club’s student leadership. The core board (the President, the Vice President, the Secretary and the club’s ambassadors) leads the club and speaks for it, and the executive team runs operations and technology and keeps the club’s accounts. With the ${FACULTY}, they set the club’s direction for the year.`
+  `The board is the club’s student leadership. The core board (the President, the Vice President, the Secretary and the club’s ambassadors) leads the club and speaks for it, and the executive team runs operations and technology and keeps the club’s accounts. ${FACULTY ? `With the ${FACULTY}, they set` : 'They set'} the club’s direction for the year.`
 
 // Block numbers run on from one group to the next, so the whole board reads as a single chain.
 let seats = 0
@@ -40,9 +40,9 @@ export default function BoardMembers() {
       <PageHeader
         eyebrow="club leadership"
         title="Board members"
-        lead={`The ${FACULTY} and student board guiding, managing, and growing the Blockchain Innovation Club at REC.`}
+        lead={`The ${FACULTY ? `${FACULTY} and ` : ''}student board guiding, managing, and growing the Blockchain Innovation Club at REC.`}
         aside={[
-          ['faculty', pad2(facultyCoordinators.length)],
+          ...(FACULTY ? [['faculty', pad2(facultyCoordinators.length)]] : []),
           ['board', pad2(seats)],
           ['groups', pad2(groups.length)],
         ]}
@@ -54,40 +54,41 @@ export default function BoardMembers() {
         </div>
       </section>
 
-      <section className="border-b-3 border-ink">
-        <div className="wrap section">
-          <Slam color={AMBER} className="on-ink bg-ink p-6 text-bone shadow-amber md:p-10">
-            <p className="meta">{FACULTY}</p>
-            {/* Names like MUNEESHWARI need ~320px at the md heading size: the portrait stacks above the name on phones,
-                and two coordinators would only sit side by side once each column is wide enough (xl). */}
-            <ul className="mt-6 grid gap-8 xl:grid-cols-2">
-              {facultyCoordinators.map((coordinator) => (
-                <li key={coordinator.name} className="flex min-w-0 flex-col gap-4 sm:flex-row sm:items-center sm:gap-5">
-                  <span
-                    aria-hidden="true"
-                    className="grid h-20 w-20 shrink-0 place-items-center overflow-hidden bg-amber text-[28px] font-black tracking-[-.04em] text-coal"
-                  >
-                    <CoordinatorPortrait coordinator={coordinator} />
-                  </span>
-                  <div className="min-w-0">
-                    <h2 className="t-h3">{coordinator.name}</h2>
-                    <p className="mt-2 flex flex-wrap gap-x-5 gap-y-1 font-mono text-[12.5px]">
-                      <a href={`mailto:${coordinator.email}`} className={`break-all ${contactLink}`}>
-                        {coordinator.email}
-                      </a>
-                      {coordinator.linkedin && (
-                        <a href={coordinator.linkedin} target="_blank" rel="noopener noreferrer" className={`whitespace-nowrap ${contactLink}`}>
-                          LinkedIn ↗<span className="sr-only"> (opens in a new tab)</span>
+      {FACULTY && (
+        <section className="border-b-3 border-ink">
+          <div className="wrap section">
+            <Slam color={AMBER} className="on-ink bg-ink p-6 text-bone shadow-amber md:p-10">
+              <p className="meta">{FACULTY}</p>
+              {/* Stack portraits above long names on phones; use two columns only at xl. */}
+              <ul className="mt-6 grid gap-8 xl:grid-cols-2">
+                {facultyCoordinators.map((coordinator) => (
+                  <li key={coordinator.name} className="flex min-w-0 flex-col gap-4 sm:flex-row sm:items-center sm:gap-5">
+                    <span
+                      aria-hidden="true"
+                      className="grid h-20 w-20 shrink-0 place-items-center overflow-hidden bg-amber text-[28px] font-black tracking-[-.04em] text-coal"
+                    >
+                      <CoordinatorPortrait coordinator={coordinator} />
+                    </span>
+                    <div className="min-w-0">
+                      <h2 className="t-h3">{coordinator.name}</h2>
+                      <p className="mt-2 flex flex-wrap gap-x-5 gap-y-1 font-mono text-[12.5px]">
+                        <a href={`mailto:${coordinator.email}`} className={`break-all ${contactLink}`}>
+                          {coordinator.email}
                         </a>
-                      )}
-                    </p>
-                  </div>
-                </li>
-              ))}
-            </ul>
-          </Slam>
-        </div>
-      </section>
+                        {coordinator.linkedin && (
+                          <a href={coordinator.linkedin} target="_blank" rel="noopener noreferrer" className={`whitespace-nowrap ${contactLink}`}>
+                            LinkedIn ↗<span className="sr-only"> (opens in a new tab)</span>
+                          </a>
+                        )}
+                      </p>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            </Slam>
+          </div>
+        </section>
+      )}
 
       <section className="border-b-3 border-ink">
         <div className="wrap section">

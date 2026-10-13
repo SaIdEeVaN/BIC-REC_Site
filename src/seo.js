@@ -31,7 +31,7 @@ const PAGES = {
   },
   '/team/board': {
     title: 'Board members',
-    description: `The ${FACULTY} and student board guiding, managing, and growing the Blockchain Innovation Club at REC.`,
+    description: `The ${FACULTY ? `${FACULTY} and ` : ''}student board guiding, managing, and growing the Blockchain Innovation Club at REC.`,
   },
   '/team/core': {
     title: 'Core members',

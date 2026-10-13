@@ -9,7 +9,7 @@ export const MEMBER_TEAMS = [
     path: '/team/board',
     title: 'Board members',
     count: boardMembers.length,
-    body: `The student leadership: the core board and the executive team, who set the club’s course with the ${FACULTY}.`,
+    body: `The student leadership: the core board and the executive team, who set the club’s course${FACULTY ? ` with the ${FACULTY}` : ''}.`,
   },
   {
     key: 'core',

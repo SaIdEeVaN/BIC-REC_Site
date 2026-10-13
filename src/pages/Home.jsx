@@ -273,28 +273,30 @@ export default function Home() {
         title="Ready to level up?"
         body="Come to the club's workshops, hackathons and guest sessions, and tap into a global community of Web3 professionals, resources, and opportunities."
         aside={
-          <div className="border-3 border-bone p-6">
-            <p className="meta">{FACULTY}</p>
-            <ul className="mt-3 flex flex-col gap-4">
-              {facultyCoordinators.map((coordinator) => (
-                <li key={coordinator.name}>
-                  <p className="t-card">{coordinator.name}</p>
-                  <a
-                    href={`mailto:${coordinator.email}`}
-                    className="mt-1 inline-block break-all font-mono text-[12.5px] underline decoration-2 underline-offset-4"
-                  >
-                    {coordinator.email}
-                  </a>
-                </li>
-              ))}
-            </ul>
-            <Link
-              to="/team/board"
-              className="mt-4 inline-block font-mono text-[12.5px] underline decoration-2 underline-offset-4"
-            >
-              meet the board →
-            </Link>
-          </div>
+          FACULTY && (
+            <div className="border-3 border-bone p-6">
+              <p className="meta">{FACULTY}</p>
+              <ul className="mt-3 flex flex-col gap-4">
+                {facultyCoordinators.map((coordinator) => (
+                  <li key={coordinator.name}>
+                    <p className="t-card">{coordinator.name}</p>
+                    <a
+                      href={`mailto:${coordinator.email}`}
+                      className="mt-1 inline-block break-all font-mono text-[12.5px] underline decoration-2 underline-offset-4"
+                    >
+                      {coordinator.email}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+              <Link
+                to="/team/board"
+                className="mt-4 inline-block font-mono text-[12.5px] underline decoration-2 underline-offset-4"
+              >
+                meet the board →
+              </Link>
+            </div>
+          )
         }
       >
         <Button to="/events" variant="onInk">See our events</Button>
