@@ -1,10 +1,12 @@
-// The club's photo albums, newest first.
+import { events } from './events.js'
+
+// The club's photo albums, exported below in the same order as the event ledger.
 //
 // Each album's photos live in src/assets/gallery/<slug>/ as <nn>.webp (the full view, 1600px wide) and
 // <nn>-thumb.webp (the grid, 960px wide), web-sized and stripped of all metadata before they're added (see the
 // README in that folder). `photos` lists them in page order: `n` is the file number, `alt` describes the photo
 // for screen readers, and `caption` is shown under it in the full view.
-export const albums = [
+const albumData = [
   {
     slug: 'defi-unlocked-2026',
     title: 'DeFi Unlocked',
@@ -213,6 +215,13 @@ export const albums = [
     ],
   },
 ]
+
+// Use the events page's order everywhere, including the full-size viewer's album indexes.
+// Albums without a linked event stay at the end in their existing relative order.
+const eventOrder = new Map(events.map((event, index) => [event.album, index]))
+export const albums = [...albumData].sort(
+  (a, b) => (eventOrder.get(a.slug) ?? events.length) - (eventOrder.get(b.slug) ?? events.length),
+)
 
 export const photoCount = albums.reduce((total, album) => total + album.photos.length, 0)
 
