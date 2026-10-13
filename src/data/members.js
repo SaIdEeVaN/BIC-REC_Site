@@ -239,7 +239,7 @@ const groups = [
       {
         name: "Muhilan S",
         slug: "muhilan-s",
-        role: "Research and Innovation Lead",
+        role: "Research Lead",
         department: "CSD",
         email: "muhilan.s.2024.csd@rajalakshmi.edu.in",
         linkedin: "https://www.linkedin.com/in/muhilan-s-6a2120332",
@@ -248,7 +248,7 @@ const groups = [
       {
         name: "M. Harish Karthikeyan",
         slug: "m-harish-karthikeyan",
-        role: "Research and Innovation Lead",
+        role: "Innovation Lead",
         department: "ECE",
         email: "harishkarthikeyan.m.2024.ece@rajalakshmi.edu.in",
         linkedin: "https://www.linkedin.com/in/harishkarthikeyan-m-26587332a",
