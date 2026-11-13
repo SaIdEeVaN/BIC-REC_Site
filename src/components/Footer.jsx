@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { shortHash } from '../lib/chain'
+import { head, short } from '../lib/ledger'
 import { CLUB_INSTAGRAM, CLUB_LINKEDIN, CLUB_MAILTO } from '../data/club'
 import { BlockClock } from './kit'
 import { Desync, Roll, Scramble, SplitText } from './motion'
@@ -12,6 +12,8 @@ const quickLinks = [
 ]
 
 const moreLinks = [
+  { name: 'The Chain', path: '/chain' },
+  { name: 'Mine a Block', path: '/mine' },
   { name: 'Projects', path: '/projects' },
   { name: 'Board Members', path: '/team/board' },
   { name: 'Core Members', path: '/team/core' },
@@ -87,7 +89,7 @@ export default function Footer() {
               than printing the date the page happened to be built. */}
           <span className="flex flex-wrap items-center gap-x-2">
             <span>
-              head <Scramble text={shortHash('bic-rec')} duration={1} /> ·
+              head <Scramble text={short(head.hash)} duration={1} /> ·
             </span>
             <BlockClock />
           </span>

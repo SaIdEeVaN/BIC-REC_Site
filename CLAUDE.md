@@ -10,7 +10,7 @@ The public website of the Blockchain Innovation Club at Rajalakshmi Engineering 
 ```bash
 npm run dev         # dev server, http://localhost:5173
 npm run lint        # ESLint
-npm run test:unit   # node --test: dates, data integrity, firebase.json (about a second)
+npm run test:unit   # node --test: dates, data, firebase.json, SHA-256 and the chain (about a second)
 npm run test:e2e    # Playwright, against a production build served by `vite preview`
 npm run build       # vite build, then scripts/prerender-meta.js
 npm run photos      # make newly added member photos web-sized
@@ -31,6 +31,9 @@ Run lint, the unit tests and the relevant e2e specs before pushing. The e2e suit
 - `src/components/kit/` is the design system's primitives, `src/components/motion/` the animation kit. Read
   `DESIGN_SYSTEM.md` before designing anything: hard geometry, 3px rules, hard shadows; nothing fades or blurs.
 - `firebase.json` is the hosting config, and `scripts/prerender-meta.js` writes the files it relies on.
+- `src/lib/ledger.js` is the real chain: each event is a block whose SHA-256 hash covers the block before it.
+  `/chain` verifies and tampers with it, `/mine` does proof of work in a worker. `src/lib/sha256.js` is the
+  hash itself, held to Node's by the unit tests.
 
 ## Rules that are easy to break
 
@@ -47,6 +50,9 @@ Run lint, the unit tests and the relevant e2e specs before pushing. The e2e suit
 - **Don't invent content.** Events, achievements, figures and people come from the club. If something isn't
   known, leave the field out; the pages render what is present.
 - **Everything animated respects reduced motion** and must leave the page in its final state without it.
+- **An event's hash is real.** It comes from `blockOf(event).hash` in `lib/ledger.js`, never from `shortHash`
+  (`lib/chain.js`), which is decoration for things that aren't blocks. Don't claim more than the chain proves:
+  it is derived from the data at build time, and `/chain` says so.
 
 ## Conventions
 

@@ -3,7 +3,7 @@ import { measureOverflow, overflowMessage } from './overflow.js'
 import { watchPolicy } from './policy.js'
 import { stats } from '../../src/data/achievements.js'
 import { getFeaturedEvents } from '../../src/data/events.js'
-import { shortHash } from '../../src/lib/chain.js'
+import { blockOf, short } from '../../src/lib/ledger.js'
 
 test.use({ reducedMotion: 'no-preference' })
 
@@ -54,7 +54,7 @@ test('home animations land on the real content', async ({ page }, testInfo) => {
   await expect(
     page.locator('dd span[aria-hidden="true"]').filter({ hasText: new RegExp(`^${stats.members}$`) })
   ).toBeVisible()
-  const hash = shortHash(getFeaturedEvents()[0].slug)
+  const hash = short(blockOf(getFeaturedEvents()[0]).hash)
   await expect(page.locator('span[aria-hidden="true"]').filter({ hasText: new RegExp(`^${hash}$`) }).first()).toBeVisible()
 })
 

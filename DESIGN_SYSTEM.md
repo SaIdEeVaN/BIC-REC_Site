@@ -100,6 +100,11 @@ Offset direction is always down-right. Shadow color is ink on bone, amber or bon
 - Header ticker: `block #0000 · 0x000…000 · sealed 00.00.00`, repeated and clipped.
 - Cards carry `block #0001`, `block #0002`, `block #0003 · head` as their eyebrow.
 - Every build row ends in a truncated hash `0x000…000` in muted mono.
+- An event's hash is real: the SHA-256 of its record and of the hash before it (`src/lib/ledger.js`), printed
+  short. Hashes on anything that isn't a block (a member, a message) are decoration (`shortHash`).
+- On `/chain` a block's verdict is a chip: solid ink = checked and holding, amber = the record that was
+  changed, hollow = no longer holding (or not checked yet). The bar joining two blocks is drawn cut when the
+  block above it no longer matches its seal.
 - The chain rail SVG: one 3px horizontal line, 16px squares with 3px strokes at the nodes, two diagonal 3px branches per node. Amber square = head, bone squares = the rest.
 - The confirmation strip: six equal cells split by 3px rules, one filled amber per block sealed on top, with
   an `00/06 confirmations` readout. A block nothing is built on yet reads `00/06` and stays bone.
@@ -116,6 +121,7 @@ Offset direction is always down-right. Shadow color is ink on bone, amber or bon
 | Confirmed | Bone cell, ink text, mono caps |
 | Archived | 2px ink outline chip, no fill |
 | Shipped | Mint chip, ink text |
+| Verified | Ink chip, bone text (`solid`): the selected-tab treatment at chip size |
 | Selected tab | Ink fill, bone text |
 | Active nav item | Ink fill, bone text |
 | Empty state | Full ink panel, amber shadow, 44px heading, one amber CTA |
@@ -145,6 +151,8 @@ Rules:
   and unseals its lead is four events where one was wanted.
 - **Hover is a second layer, not a second accent.** A block may land on its entrance accent and still pick up,
   fork or re-decrypt under a pointer — a track card already does all three. What it may not do is arrive twice.
+- **`<Mine>` draws mining; `/mine` does it.** The component is an animation for a hash that is still being
+  found. The page runs real proof of work and shows the worker's own count, so it uses no `<Mine>` at all.
 - **`<Mine>` is not another `<Scramble>`.** Scramble decrypts at a constant rate and you can read the answer
   coming; Mine *searches*, and nothing is settled until the difficulty is met. At most one per section, on the
   hash that is genuinely still being found — an unsealed block, a pending batch, the head of a feed — never on a

@@ -42,6 +42,7 @@ The UI follows a **neo-brutalist design system** — hard geometry, 3px ink rule
 
 - 🏠 **Home** — Stacked hero, chain rail, stat bar and event ledger
 - 📅 **Events** — The club's real events as a ledger, each with its own page and its gallery album
+- ⛓️ **The chain** — Every event is a block with a real SHA-256 hash covering the block before it. `/chain` verifies it with the browser's own crypto and lets you break it by editing a record; `/mine` runs real proof of work (see [The chain](#the-chain))
 - 🏆 **Achievements** — Club milestones and accomplishments
 - 👥 **Meet us** — The club's three teams, each with its own page: board members, core members and associates (grouped by domain), every member with a profile page; the Associates page also leads to the recruitment results at [bicrec-results.web.app](https://bicrec-results.web.app)
 - 🖼️ **Gallery** — Albums of the club's events, each with its own page and a full-screen viewer
@@ -97,7 +98,7 @@ npm run dev       # Start dev server with hot reload
 npm run build     # Build for production (outputs to /dist) + a file per page with its share tags, 404.html, sitemap.xml, robots.txt
 npm run preview   # Preview the production build locally
 npm run lint      # ESLint
-npm run test:unit # Node's test runner: date parsing, the data files' integrity, the hosting config
+npm run test:unit # Node's test runner: date parsing, the data files' integrity, the hosting config, SHA-256 and the chain
 npm run test:e2e  # Playwright: every page at five widths (360–1280px) — no sideways scroll, correct title + share tags,
                   #   accessibility (axe, both themes), nothing the Content-Security-Policy blocks
 npm run og-image  # Re-render public/og-image.png from scripts/og-image.html
@@ -145,6 +146,18 @@ one moving (`Magnetic` translates an inner span), because measuring the element 
 its own displacement into the next reading.
 
 Everything respects the OS "reduce motion" setting (`MotionConfig reducedMotion="user"` plus `useCanAnimate()`), which renders the final state immediately. Scroll-triggered animations must observe an element that isn't clipped at rest — see `useReveal` in `core.js`.
+
+### The chain
+
+The site has always talked like a blockchain (blocks, hashes, sealed dates). For the events, it now is one.
+
+- **Every event is a block** ([`src/lib/ledger.js`](src/lib/ledger.js)). A block's hash is the SHA-256 of its record: its height, the hash of the block before it, and the event's title, date, venue, type and summary, written out as plain text. That hash is what the ledger, the ticker and the event's page show.
+- **Nothing is stored.** The chain is derived from `src/data/events.js`, so adding an event extends it and editing one changes every hash after it. The page says what that does and doesn't prove.
+- **`/chain`** re-derives every hash with the browser's own SHA-256 (`crypto.subtle`) and holds it against the block's seal. Open a block, change its record, and that block and every block after it stop matching.
+- **`/mine`** is proof of work, actually done: a Web Worker ([`src/lib/miner.worker.js`](src/lib/miner.worker.js)) tries nonce 0, 1, 2… until the block's hash starts with the zeros asked for. The search starts at 0, so the same name at the same difficulty always needs the same nonce. The mined block is not saved or sent anywhere.
+- **The SHA-256 is the site's own** ([`src/lib/sha256.js`](src/lib/sha256.js)): a synchronous implementation, because the browser's is async-only and too slow per call to mine with. The unit tests hold it to Node's, byte for byte.
+
+Other hashes on the site (a member's page, a drafted message) are still decorative: `shortHash` in `src/lib/chain.js`.
 
 ### Page titles & share previews
 
@@ -204,7 +217,10 @@ BIC-REC_Site/
 │   ├── data/                     # Events, gallery, members, associates, achievements, resources; club.js holds
 │   │                             #   the club's email and social links, and the site's two switches
 │   ├── lib/
-│   │   ├── chain.js              # Block numbers, display hashes, sealed dates
+│   │   ├── chain.js              # Block numbers, decorative display hashes, sealed dates
+│   │   ├── ledger.js             # The real chain: one block per event, each hash covering the one before
+│   │   ├── sha256.js             # SHA-256, synchronous: what seals the blocks and what the miner runs
+│   │   ├── miner.worker.js       # The proof-of-work search behind /mine, on its own thread
 │   │   ├── contact.js            # Sends the contact form's message, when the form has a key
 │   │   ├── initials.js           # Initials for members without a photo
 │   │   ├── memberPhotos.js       # Resolves a member's photo (and its thumbnail) from their slug
@@ -216,8 +232,8 @@ BIC-REC_Site/
 │   ├── seo.js                    # Title, description and canonical URL for every route
 │   └── index.css                 # Global styles
 ├── tests/
-│   ├── e2e/                      # Playwright specs (pages, features, motion, theme, accessibility)
-│   └── unit/                     # `node --test`: dates, data integrity, firebase.json
+│   ├── e2e/                      # Playwright specs (pages, features, the chain, motion, theme, accessibility)
+│   └── unit/                     # `node --test`: dates, data integrity, firebase.json, SHA-256, the chain
 ├── .firebaserc                   # Firebase project config
 ├── CLAUDE.md                     # Orientation for Claude Code sessions working on this repo
 ├── DESIGN_SYSTEM.md              # The design spec

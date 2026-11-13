@@ -1,5 +1,9 @@
 // Blockchain vocabulary helpers: stable pseudo-hashes, block numbers and "sealed" dates.
 // Purely presentational — nothing here is cryptographic.
+//
+// `shortHash` is for things that wear the vocabulary without being on the chain: a member's page, a message
+// being drafted, a page that isn't built yet. An event is a block, and its hash is a real SHA-256 — that one
+// comes from lib/ledger.js, never from here.
 
 const MONTHS = ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec']
 

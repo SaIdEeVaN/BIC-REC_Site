@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { motion, useScroll } from 'motion/react'
 import { Button, ChainRail, Chip, InkCTA, Ledger, SectionHeading, StatBar, TrackCards } from '../components/kit'
 import MeetUs from '../components/MeetUs'
+import ProveIt from '../components/ProveIt'
 import {
   Desync,
   Drift,
@@ -23,7 +24,8 @@ import { events, getFeaturedEvents, getUpcomingEvents } from '../data/events'
 import { FACULTY, facultyCoordinators } from '../data/members'
 import { stats as clubStats } from '../data/achievements'
 import { meshFacts } from '../lib/mesh'
-import { blockNo, shortHash } from '../lib/chain'
+import { blockNo } from '../lib/chain'
+import { blockOf, head, short } from '../lib/ledger'
 import { CLUB_INSTAGRAM } from '../data/club'
 
 // Read from the club's figures rather than written out again here — the two used to be separate lists
@@ -101,7 +103,7 @@ function NextEvent({ event }) {
         </p>
         {/* The block isn't sealed yet, so its hash is still being searched for rather than read out. */}
         <p className="meta mt-5">
-          mining · <Mine text={shortHash(event.slug)} trigger="mount" delay={1.35} />
+          mining · <Mine text={short(blockOf(event).hash)} trigger="mount" delay={1.35} />
         </p>
       </Link>
     </Slam>
@@ -172,7 +174,7 @@ function Network() {
             <div className="flex items-baseline justify-between gap-4 border-t-3 border-bone px-4 py-2.5">
               <dt className="meta">head</dt>
               <dd className="font-mono text-[12.5px] font-medium">
-                <Mine text={shortHash('bic-rec')} delay={0.6} />
+                <Mine text={short(head.hash)} delay={0.6} />
               </dd>
             </div>
           </dl>
@@ -266,6 +268,8 @@ export default function Home() {
           </Ledger>
         </div>
       </section>
+
+      <ProveIt className="border-t-3 border-ink" />
 
       <MeetUs className="border-t-3 border-ink" />
 

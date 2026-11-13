@@ -3,7 +3,8 @@ import { Button, Chip, Confirmations, EmptyState } from '../components/kit'
 import { Magnetic, Reveal, Scramble, SplitText, Stamp, Wipe } from '../components/motion'
 import { events, getEventById, isUpcoming } from '../data/events'
 import { albumPath, albums } from '../data/gallery'
-import { blockNo, isRealLink, sealedDate, shortHash } from '../lib/chain'
+import { blockNo, isRealLink, sealedDate } from '../lib/chain'
+import { blockOf, short } from '../lib/ledger'
 import { thumbUrl } from '../lib/galleryPhotos'
 
 // From md the strip is as many columns as it has photos, so a short album leaves no empty slot (spelled out for Tailwind).
@@ -87,7 +88,7 @@ export default function EventDetail() {
             <Scramble
               trigger="mount"
               duration={1}
-              text={`${blockNo(event.id)} · ${shortHash(event.slug)} · ${
+              text={`${blockNo(event.id)} · ${short(blockOf(event).hash)} · ${
                 upcoming ? 'pending' : `sealed ${sealedDate(event.date)}`
               }`}
             />
@@ -175,6 +176,14 @@ export default function EventDetail() {
             </Reveal>
 
             <Confirmations count={confirmations} className="mt-7" />
+
+            {/* The hash in the header is this block's real SHA-256; /chain re-derives it and lets it be tampered with. */}
+            <Link
+              to={`/chain#block-${event.id}`}
+              className="mt-5 inline-block font-mono text-[12.5px] font-medium underline decoration-2 underline-offset-4"
+            >
+              verify this block →
+            </Link>
 
             {canRegister && (
               <div className="mt-7">

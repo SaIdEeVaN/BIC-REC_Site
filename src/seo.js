@@ -46,6 +46,16 @@ const PAGES = {
       ? 'The 2026–27 recruitment results are out — check yours with the email you applied with and your roll number.'
       : 'Selections for the 2026–27 intake are being finalised — results will be published here once they are out.',
   },
+  '/chain': {
+    title: 'The chain',
+    description:
+      'Every event the club has run is a block sealed with a real SHA-256 hash. Verify the whole chain in your browser, then change a record and watch it break.',
+  },
+  '/mine': {
+    title: 'Mine a block',
+    description:
+      'Proof of work, for real: pick a difficulty and your browser searches for a hash that starts with enough zeros.',
+  },
   '/projects': {
     title: 'Projects',
     description: "The club's first blockchain projects are in progress — each will be published here as it ships.",

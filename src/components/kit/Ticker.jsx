@@ -1,10 +1,13 @@
 import { motion } from 'motion/react'
-import { events, isUpcoming } from '../../data/events'
-import { blockNo, sealedDate, shortHash } from '../../lib/chain'
+import { isUpcoming } from '../../data/events'
+import { blockNo, sealedDate } from '../../lib/chain'
+import { blocks, short } from '../../lib/ledger'
 import { useCanAnimate } from '../motion/core'
 
-const entries = events.map(
-  (e) => `${blockNo(e.id)} · ${shortHash(e.slug)} · ${isUpcoming(e) ? 'pending' : `sealed ${sealedDate(e.date)}`}`
+// The chain itself, block by block: each entry is a block's real hash (lib/ledger.js).
+const entries = blocks.map(
+  ({ event, height, hash }) =>
+    `${blockNo(height)} · ${short(hash)} · ${isUpcoming(event) ? 'pending' : `sealed ${sealedDate(event.date)}`}`
 )
 
 function Run() {
