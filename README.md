@@ -97,7 +97,9 @@ npm run dev       # Start dev server with hot reload
 npm run build     # Build for production (outputs to /dist) + a file per page with its share tags, 404.html, sitemap.xml, robots.txt
 npm run preview   # Preview the production build locally
 npm run lint      # ESLint
-npm run test:e2e  # Playwright: every page at five widths (360–1280px) — no sideways scroll, correct title + share tags
+npm run test:unit # Node's test runner: date parsing, the data files' integrity, the hosting config
+npm run test:e2e  # Playwright: every page at five widths (360–1280px) — no sideways scroll, correct title + share tags,
+                  #   accessibility (axe, both themes), nothing the Content-Security-Policy blocks
 npm run og-image  # Re-render public/og-image.png from scripts/og-image.html
 npm run photos    # Make newly added member photos web-sized (WebP + a thumbnail for the roster cells)
 ```
@@ -175,8 +177,10 @@ To switch it on, enter the club's email address at web3forms.com, copy the acces
 
 ```
 BIC-REC_Site/
-├── .github/workflows/
-│   └── firebase-deploy.yml       # Lint + e2e on every PR and push; deploys pushes to main
+├── .github/
+│   ├── dependabot.yml            # Weekly dependency update pull requests
+│   └── workflows/
+│       └── firebase-deploy.yml   # Lint + tests on every PR and push; deploys pushes to main
 ├── public/                       # favicon.svg, og-image.png
 ├── scripts/
 │   ├── prerender-meta.js         # Post-build: a file per route with its share tags, 404.html, sitemap.xml, robots.txt
@@ -211,8 +215,11 @@ BIC-REC_Site/
 │   ├── main.jsx                  # App entry point
 │   ├── seo.js                    # Title, description and canonical URL for every route
 │   └── index.css                 # Global styles
-├── tests/e2e/                    # Playwright specs
+├── tests/
+│   ├── e2e/                      # Playwright specs (pages, features, motion, theme, accessibility)
+│   └── unit/                     # `node --test`: dates, data integrity, firebase.json
 ├── .firebaserc                   # Firebase project config
+├── CLAUDE.md                     # Orientation for Claude Code sessions working on this repo
 ├── DESIGN_SYSTEM.md              # The design spec
 ├── firebase.json                 # Firebase hosting config
 ├── package.json
@@ -241,12 +248,14 @@ firebase deploy --only hosting
 [`.github/workflows/firebase-deploy.yml`](.github/workflows/firebase-deploy.yml) runs on every pull request to `main` and every push to it:
 
 1. **Lint** — `npm run lint`
-2. **Test** — the full Playwright suite, split across four runners
+2. **Test** — the unit tests, then the full Playwright suite, split across four runners
 3. **Deploy** — on a push to `main`, or a manual run from the Actions tab: build, then publish to Firebase Hosting's live channel
 
 A pull request runs lint and test as a check on the PR and never deploys. On `main`, a failure in either stops the deploy. A manual run deploys whichever branch it is started on, so start it on `main`.
 
 > **Note:** Deploying requires a `FIREBASE_SERVICE_ACCOUNT` secret in the repository's GitHub Actions secrets.
+
+[Dependabot](.github/dependabot.yml) opens a pull request each Monday with that week's dependency updates, grouped. Each one runs the same lint and tests, and never deploys until it is merged.
 
 ---
 
