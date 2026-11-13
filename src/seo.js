@@ -46,6 +46,16 @@ const PAGES = {
       ? 'The 2026–27 recruitment results are out — check yours with the email you applied with and your roll number.'
       : 'Selections for the 2026–27 intake are being finalised — results will be published here once they are out.',
   },
+  '/chain': {
+    title: 'The chain',
+    description:
+      'Every event the club has run is a block sealed with a real SHA-256 hash. Verify the whole chain in your browser, then change a record and watch it break.',
+  },
+  '/mine': {
+    title: 'Mine a block',
+    description:
+      'Proof of work, for real: pick a difficulty and your browser searches for a hash that starts with enough zeros.',
+  },
   '/projects': {
     title: 'Projects',
     description: "The club's first blockchain projects are in progress — each will be published here as it ships.",
@@ -177,6 +187,10 @@ export const staticRoutes = [
   ...memberPages.map(memberPath),
 ]
 
+// What the default share image shows. A page with an image of its own says what is on that one instead
+// (`imageAlt`, set at build time by scripts/share-cards.js).
+const DEFAULT_IMAGE_ALT = 'BIC/REC — Blockchain Innovation Club, Rajalakshmi Engineering College'
+
 const escapeAttr = (value) =>
   String(value).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
 
@@ -195,7 +209,7 @@ export function renderSeoTags(meta) {
     `<meta property="og:image" content="${meta.image}" />`,
     `<meta property="og:image:width" content="1200" />`,
     `<meta property="og:image:height" content="630" />`,
-    `<meta property="og:image:alt" content="BIC/REC — Blockchain Innovation Club, Rajalakshmi Engineering College" />`,
+    `<meta property="og:image:alt" content="${escapeAttr(meta.imageAlt ?? DEFAULT_IMAGE_ALT)}" />`,
     `<meta name="twitter:card" content="summary_large_image" />`,
     `<meta name="twitter:title" content="${title}" />`,
     `<meta name="twitter:description" content="${description}" />`,

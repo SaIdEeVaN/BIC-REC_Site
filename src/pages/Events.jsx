@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react'
 import { Button, ChainRail, EmptyState, Ledger, PageHeader, Tabs } from '../components/kit'
 import EventRow from '../components/EventRow'
+import ProveIt from '../components/ProveIt'
 import { events, getUpcomingEvents } from '../data/events'
 import { pad2 } from '../lib/chain'
 
@@ -51,6 +52,8 @@ export default function Events() {
           )}
         </div>
       </section>
+
+      <ProveIt className="border-t-3 border-ink" />
     </>
   )
 }

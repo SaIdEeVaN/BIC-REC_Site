@@ -1,6 +1,7 @@
 import { Chip, LedgerRow } from './kit'
 import { Scramble } from './motion'
-import { blockNo, shortHash } from '../lib/chain'
+import { blockNo } from '../lib/chain'
+import { blockOf, short } from '../lib/ledger'
 import { isUpcoming } from '../data/events'
 
 export default function EventRow({ event, index = 0 }) {
@@ -38,7 +39,7 @@ export default function EventRow({ event, index = 0 }) {
             {upcoming ? 'Upcoming' : 'Sealed'}
           </span>
           <span className={`meta mt-2 block ${upcoming ? 'text-coal' : ''}`}>
-            <Scramble text={shortHash(event.slug)} delay={index * 0.07 + 0.3} />
+            <Scramble text={short(blockOf(event).hash)} delay={index * 0.07 + 0.3} />
           </span>
         </>
       }

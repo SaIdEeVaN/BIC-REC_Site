@@ -10,7 +10,8 @@
     "lint": "eslint .",
     "test:unit": "node --test tests/unit/*.test.js",
     "test:e2e": "playwright test",
-    "og-image": "node scripts/render-og-image.js",
+    "og-image": "node scripts/render-share-images.js --default",
+    "share-images": "node scripts/render-share-images.js",
     "photos": "node scripts/optimize-member-photos.js"
   },
   "dependencies": {

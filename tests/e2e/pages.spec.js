@@ -5,6 +5,7 @@ import { albumPath, albums } from '../../src/data/gallery.js'
 import { associateMembers, boardMembers, coreTeamMembers, memberPages, memberPath } from '../../src/data/members.js'
 import { findOversizedHeadingWords, measureOverflow, overflowMessage } from './overflow.js'
 import { watchPolicy } from './policy.js'
+import { imageFor, metaWithImage } from '../../scripts/share-cards.js'
 
 // 96 routes, but only 12 distinct layouts: the other 84 are three templates — an event, an album and a member
 // (board, core or associate) — rendered with different text. Laying out the 70th member proves nothing the 1st didn't,
@@ -82,7 +83,16 @@ for (const route of staticRoutes) {
     const response = await request.get(route)
     expect(response.ok()).toBeTruthy()
     const html = await response.text()
-    expect(html).toContain(renderSeoTags(metaFor(route)))
+    // The tags as the build writes them: with the page's own share image where one has been drawn.
+    expect(html).toContain(renderSeoTags(metaWithImage(route)))
+
+    // An image a page names has to be there to fetch, or the link previews with nothing at all.
+    const image = imageFor(route)
+    if (image) {
+      const picture = await request.get(image.path)
+      expect(picture.ok(), `${route} names ${image.path}`).toBeTruthy()
+      expect(picture.headers()['content-type']).toMatch(/^image\/(png|jpeg)$/)
+    }
 
     // Structured data is for the pages that have some (the club on the home page, an event on its own page),
     // and no other page may carry any.
@@ -115,7 +125,7 @@ test("a core member's old /team/board address still serves their page, naming th
   for (const member of coreTeamMembers) {
     const response = await request.get(`/team/board/${member.slug}`)
     expect(response.ok()).toBeTruthy()
-    expect(await response.text()).toContain(renderSeoTags(metaFor(memberPath(member))))
+    expect(await response.text()).toContain(renderSeoTags(metaWithImage(memberPath(member))))
   }
 })
 

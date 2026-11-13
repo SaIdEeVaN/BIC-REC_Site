@@ -48,6 +48,7 @@ export default function About() {
             eyebrow="the record"
             title="Everything folds into one root"
             lead="Workshops, hackathons, guest lectures, builds — each one is sealed on its own, and each seal folds into the next until a whole year of the club hashes down to a single block."
+            action={<Button to="/chain" variant="bone">Verify the chain</Button>}
           />
         </div>
       </section>
