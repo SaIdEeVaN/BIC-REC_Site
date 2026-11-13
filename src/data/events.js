@@ -102,7 +102,7 @@ export const getEventById = (id) => events.find(e => e.id === parseInt(id))
 export const getFeaturedEvents = () => events.slice(-3)
 // Status comes from the date, never a hand-typed field, so a past event can't keep saying "Upcoming".
 // An event counts as upcoming until the end of its last day ("February 20–21, 2026" → end of the 21st).
-function eventEnd(event) {
+export function eventEnd(event) {
   const start = parseLooseDate(event.date)
   if (!start) return null
   const end = new Date(start)

@@ -5,7 +5,7 @@ import Navbar from './components/Navbar'
 import { RouteShutter } from './components/motion'
 import Footer from './components/Footer'
 import Home from './pages/Home'
-import { metaFor } from './seo'
+import { metaFor, structuredDataFor } from './seo'
 
 // Home ships in the main bundle; every other page is its own chunk, fetched on first visit.
 const About = lazy(() => import('./pages/About'))
@@ -46,6 +46,19 @@ function RouteEffects() {
       document.head.querySelector(selector)?.setAttribute('content', meta[key])
     }
     document.head.querySelector('link[rel="canonical"]')?.setAttribute('href', meta.url)
+
+    // The page's structured data was written into the HTML at build time (scripts/prerender-meta.js) for the
+    // address the visitor arrived at. Moving on to another page inside the app has to replace or remove it, or an
+    // event's data would follow the visitor onto pages that are not that event.
+    const data = structuredDataFor(pathname)
+    let block = document.head.querySelector('script[type="application/ld+json"]')
+    if (data && !block) {
+      block = document.createElement('script')
+      block.type = 'application/ld+json'
+      document.head.append(block)
+    }
+    if (data) block.textContent = JSON.stringify(data)
+    else block?.remove()
   }, [pathname])
 
   return null

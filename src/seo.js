@@ -1,10 +1,11 @@
 // Page titles, descriptions and share tags for every route.
 // Used at runtime (RouteMeta in App.jsx), at build time (scripts/prerender-meta.js) and by the e2e tests,
 // so keep this file free of browser-only or Vite-only code.
-import { events, getEventById } from './data/events.js'
+import { eventEnd, events, getEventById } from './data/events.js'
 import { albumPath, albums, getAlbumBySlug } from './data/gallery.js'
 import { FACULTY, associateMembers, getMemberBySlug, memberPath, memberPages } from './data/members.js'
-import { RECRUITMENT_RESULTS_OPEN } from './data/club.js'
+import { CLUB_EMAIL, CLUB_INSTAGRAM, CLUB_LINKEDIN, RECRUITMENT_RESULTS_OPEN } from './data/club.js'
+import { pad2, parseLooseDate } from './lib/chain.js'
 
 export const SITE_URL = 'https://bicrec.web.app'
 
@@ -95,6 +96,78 @@ export function metaFor(pathname) {
 
   return build('Block not found', DEFAULT_DESCRIPTION, path)
 }
+
+// Structured data (schema.org, written as JSON-LD): what a search engine can read off a page without guessing.
+// Two kinds of page have something to say. The home page describes the club, and each event's page describes
+// that event. Both are built from the same data the page shows, so the two cannot disagree.
+const COLLEGE = {
+  '@type': 'CollegeOrUniversity',
+  name: 'Rajalakshmi Engineering College',
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: 'Thandalam',
+    addressLocality: 'Chennai',
+    addressRegion: 'Tamil Nadu',
+    postalCode: '602105',
+    addressCountry: 'IN',
+  },
+}
+
+const CLUB = { '@type': 'Organization', name: 'Blockchain Innovation Club', url: `${SITE_URL}/` }
+
+// A calendar date as written, with no time zone: toISOString() would shift it to UTC, and an event on the 18th
+// in Chennai would be published as the 17th.
+const isoDate = (date) => `${date.getFullYear()}-${pad2(date.getMonth() + 1)}-${pad2(date.getDate())}`
+
+// Returns the page's structured data, or null for a page that has none.
+export function structuredDataFor(pathname) {
+  const path = pathname.replace(/\/+$/, '') || '/'
+
+  if (path === '/') {
+    return {
+      '@context': 'https://schema.org',
+      ...CLUB,
+      alternateName: 'BIC/REC',
+      description: DEFAULT_DESCRIPTION,
+      image: `${SITE_URL}/og-image.png`,
+      email: CLUB_EMAIL,
+      foundingDate: '2025-08',
+      parentOrganization: COLLEGE,
+      sameAs: [CLUB_INSTAGRAM, CLUB_LINKEDIN],
+    }
+  }
+
+  const eventMatch = path.match(/^\/events\/(\d+)$/)
+  const event = eventMatch && getEventById(eventMatch[1])
+  const start = event && parseLooseDate(event.date)
+  if (!start) return null
+
+  // An event at the college gets the college's address; anywhere else, the venue as the event states it.
+  const atCollege = event.venue === COLLEGE.name
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'Event',
+    name: event.title,
+    description: event.description,
+    url: `${SITE_URL}${path}`,
+    image: `${SITE_URL}/og-image.png`,
+    startDate: isoDate(start),
+    endDate: isoDate(eventEnd(event)),
+    eventStatus: 'https://schema.org/EventScheduled',
+    eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
+    ...(event.venue && {
+      location: { '@type': 'Place', name: event.venue, address: atCollege ? COLLEGE.address : event.venue },
+    }),
+    ...(event.speakers?.length && {
+      performer: event.speakers.map((speaker) => ({ '@type': 'Person', name: speaker.name })),
+    }),
+    organizer: CLUB,
+  }
+}
+
+// `<` is written as \u003c so that no text in the data can close the script element early.
+export const renderStructuredData = (data) =>
+  `<script type="application/ld+json">${JSON.stringify(data).replace(/</g, '\\u003c')}</script>`
 
 // Every route that gets its own prerendered HTML file.
 export const staticRoutes = [

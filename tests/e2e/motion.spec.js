@@ -1,5 +1,6 @@
 import { test, expect } from '@playwright/test'
 import { measureOverflow, overflowMessage } from './overflow.js'
+import { watchPolicy } from './policy.js'
 import { stats } from '../../src/data/achievements.js'
 import { getFeaturedEvents } from '../../src/data/events.js'
 import { shortHash } from '../../src/lib/chain.js'
@@ -27,6 +28,7 @@ const MOTION_WIDTHS = ['mobile-360', 'desktop-1280']
 for (const route of animatedRoutes) {
   test(`${route} fits the viewport with animations on`, async ({ page }, testInfo) => {
     test.skip(!MOTION_WIDTHS.includes(testInfo.project.name), 'the extreme widths are what catch this')
+    const blocked = watchPolicy(page)
     await page.goto(route)
     await expect(page.locator('main :is(h1, h2)').first()).toBeVisible()
     await page.evaluate(() => document.fonts.ready)
@@ -34,6 +36,9 @@ for (const route of animatedRoutes) {
 
     const result = await measureOverflow(page)
     expect(result.scrollWidth, overflowMessage(route, result)).toBeLessThanOrEqual(result.viewport)
+
+    // Animations write styles as they run; none of that may be something the Content-Security-Policy refuses.
+    expect(blocked, `${route} animates with something the Content-Security-Policy blocks`).toEqual([])
   })
 }
 

@@ -94,7 +94,7 @@ The site will be available at **http://localhost:5173**
 
 ```bash
 npm run dev       # Start dev server with hot reload
-npm run build     # Build for production (outputs to /dist) + per-page share tags, sitemap.xml, robots.txt
+npm run build     # Build for production (outputs to /dist) + a file per page with its share tags, 404.html, sitemap.xml, robots.txt
 npm run preview   # Preview the production build locally
 npm run lint      # ESLint
 npm run test:e2e  # Playwright: every page at five widths (360–1280px) — no sideways scroll, correct title + share tags
@@ -148,6 +148,18 @@ Everything respects the OS "reduce motion" setting (`MotionConfig reducedMotion=
 
 Titles and descriptions for every route live in [`src/seo.js`](src/seo.js). The app updates the tab title as you navigate, and `npm run build` writes a separate HTML file per route (e.g. `dist/events/2.html`) so link previews on WhatsApp, LinkedIn, etc. show the right page. Firebase serves those files via `cleanUrls` in `firebase.json`. The same route list is written out as `dist/sitemap.xml`, with a `dist/robots.txt` pointing crawlers at it. New events and members in `src/data/` are picked up by all three automatically.
 
+The home page and each event's page also carry structured data (schema.org JSON-LD, `structuredDataFor` in `src/seo.js`): the club as an organisation, and the event with its date and venue. It is built from the same data the page shows.
+
+### Hosting: 404s, redirects and security headers
+
+All of this is in [`firebase.json`](firebase.json), with the files it relies on written by [`scripts/prerender-meta.js`](scripts/prerender-meta.js).
+
+- **Every real page is a file.** There is no catch-all rewrite to `index.html`, so an address with no page gets `404.html` and a real 404 status. That page is still the app, so the visitor sees the site's own "Block not found". A new route must be added to `staticRoutes` in `src/seo.js` to get its file.
+- **Old addresses.** `/join` and `/news` are redirected by Firebase. A core member's old `/team/board/<slug>` address is a file that loads the app, which sends the visitor on to `/team/core/<slug>`.
+- **Security headers.** Every response carries a Content-Security-Policy and the usual hardening headers. `vite preview` sends the same ones, so the e2e suite runs under the live site's policy and fails if a page loads something it would block.
+- **The inline script in `index.html`** (it applies a saved dark theme before first paint) is allowed by its hash in the policy. Edit that script and the build stops with the new hash to paste into `firebase.json`.
+- **Loading anything from a new origin** (a font, a script, an API) means adding that origin to the policy in `firebase.json`.
+
 ---
 
 ## 📁 Project Structure
@@ -158,7 +170,7 @@ BIC-REC_Site/
 │   └── firebase-deploy.yml       # Lint + e2e on every PR and push; deploys pushes to main
 ├── public/                       # favicon.svg, og-image.png
 ├── scripts/
-│   ├── prerender-meta.js         # Post-build: per-route share tags, sitemap.xml, robots.txt
+│   ├── prerender-meta.js         # Post-build: a file per route with its share tags, 404.html, sitemap.xml, robots.txt
 │   ├── og-image.html             # Source for public/og-image.png
 │   ├── render-og-image.js        # `npm run og-image`
 │   └── optimize-member-photos.js # `npm run photos`

@@ -1,9 +1,10 @@
 import { test, expect } from '@playwright/test'
-import { metaFor, renderSeoTags, staticRoutes } from '../../src/seo.js'
+import { metaFor, renderSeoTags, renderStructuredData, staticRoutes, structuredDataFor } from '../../src/seo.js'
 import { events } from '../../src/data/events.js'
 import { albumPath, albums } from '../../src/data/gallery.js'
 import { associateMembers, boardMembers, coreTeamMembers, memberPages, memberPath } from '../../src/data/members.js'
 import { findOversizedHeadingWords, measureOverflow, overflowMessage } from './overflow.js'
+import { watchPolicy } from './policy.js'
 
 // 96 routes, but only 12 distinct layouts: the other 84 are three templates — an event, an album and a member
 // (board, core or associate) — rendered with different text. Laying out the 70th member proves nothing the 1st didn't,
@@ -47,6 +48,7 @@ const routes = [
 // Runs with reduced motion (playwright.config.js), i.e. against the settled, final layout.
 for (const route of routes) {
   test(`${route} fits the viewport and has its own title`, async ({ page }) => {
+    const blocked = watchPolicy(page)
     await page.goto(route)
     // Pages are lazy-loaded: wait for real content, then for webfonts (they change text widths).
     await expect(page.locator('main :is(h1, h2)').first()).toBeVisible()
@@ -67,6 +69,8 @@ for (const route of routes) {
         .filter((value) => value !== 'none' && value !== '0px'),
     )
     expect(stranded, `${route} strands scroll reveals when motion is reduced`).toEqual([])
+
+    expect(blocked, `${route} loads something the Content-Security-Policy blocks`).toEqual([])
   })
 }
 
@@ -77,6 +81,62 @@ for (const route of staticRoutes) {
 
     const response = await request.get(route)
     expect(response.ok()).toBeTruthy()
-    expect(await response.text()).toContain(renderSeoTags(metaFor(route)))
+    const html = await response.text()
+    expect(html).toContain(renderSeoTags(metaFor(route)))
+
+    // Structured data is for the pages that have some (the club on the home page, an event on its own page),
+    // and no other page may carry any.
+    const data = structuredDataFor(route)
+    if (data) expect(html).toContain(renderStructuredData(data))
+    else expect(html).not.toContain('application/ld+json')
   })
 }
+
+// What follows is about the files Firebase serves, so it reads them without a browser, once.
+const once = (testInfo) => test.skip(testInfo.project.name !== 'desktop-1280', 'the files are the same at every width')
+
+test('structured data states each event as the events page does', () => {
+  once(test.info())
+
+  expect(structuredDataFor('/')).toMatchObject({ '@type': 'Organization', url: metaFor('/').url })
+  for (const event of events) {
+    const data = structuredDataFor(`/events/${event.id}`)
+    expect(data).toMatchObject({ '@type': 'Event', name: event.title, url: metaFor(`/events/${event.id}`).url })
+    expect(data.startDate).toMatch(/^\d{4}-\d{2}-\d{2}$/)
+    expect(data.endDate >= data.startDate).toBe(true)
+  }
+  // The date is the calendar date as written, in no time zone.
+  expect(structuredDataFor('/events/1')).toMatchObject({ startDate: '2025-09-18', endDate: '2025-09-18' })
+})
+
+test("a core member's old /team/board address still serves their page, naming the new address", async ({ request }, testInfo) => {
+  once(testInfo)
+
+  for (const member of coreTeamMembers) {
+    const response = await request.get(`/team/board/${member.slug}`)
+    expect(response.ok()).toBeTruthy()
+    expect(await response.text()).toContain(renderSeoTags(metaFor(memberPath(member))))
+  }
+})
+
+test('an address with no page gets the 404 page, which is the app and is kept out of search', async ({ request }, testInfo) => {
+  once(testInfo)
+
+  // Firebase answers any address that has no file with 404.html and a 404 status. The preview server can't
+  // reproduce the status (it falls back to index.html), so this checks the file Firebase will reach for.
+  const html = await (await request.get('/404.html')).text()
+  expect(html).toContain('<title>Block not found | BIC/REC</title>')
+  expect(html).toContain('<meta name="robots" content="noindex" />')
+  expect(html).not.toContain('rel="canonical"')
+  expect(html).toMatch(/<script type="module"[^>]+src="\/assets\/index-/)
+})
+
+test('every response carries the security headers', async ({ request }, testInfo) => {
+  once(testInfo)
+
+  const headers = (await request.get('/')).headers()
+  expect(headers['content-security-policy']).toContain("default-src 'self'")
+  expect(headers['x-content-type-options']).toBe('nosniff')
+  expect(headers['x-frame-options']).toBe('SAMEORIGIN')
+  expect(headers['referrer-policy']).toBe('strict-origin-when-cross-origin')
+})
