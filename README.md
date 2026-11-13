@@ -26,6 +26,7 @@
 - [Deployment](#deployment)
 - [CI/CD](#cicd)
 - [Contributing](#contributing)
+- [License](#license)
 
 ---
 
@@ -232,6 +233,15 @@ A pull request runs lint and test as a check on the PR and never deploys. On `ma
 3. Commit your changes: `git commit -m "Add your feature"`
 4. Push to the branch: `git push origin feature/your-feature`
 5. Open a Pull Request
+
+---
+
+## 📄 License
+
+The code is released under the [MIT License](LICENSE).
+
+That covers the code only. The photographs in `src/assets/members` and `src/assets/gallery` are of real people,
+and they and the club's name and logo are not licensed for reuse.
 
 ---
 
