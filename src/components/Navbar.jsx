@@ -76,7 +76,6 @@ export default function Navbar() {
           <Link
             to="/"
             className="flex min-w-0 items-center gap-3 px-4 md:pl-[44px]"
-            aria-label="BIC/REC home"
             onPointerEnter={(e) => e.pointerType === 'mouse' && setReplay((n) => n + 1)}
           >
             <img src={logo} alt="" className="logo-lift h-10 w-10 shrink-0 border-3 border-ink object-cover md:h-12 md:w-12" />
@@ -86,6 +85,10 @@ export default function Navbar() {
               </span>
               <span className="meta mt-1 hidden whitespace-nowrap sm:block">blockchain innovation club</span>
             </span>
+            {/* The link is named by the words on it, plus where it goes. It used to carry an aria-label instead
+                ("BIC/REC home"), which replaced those words: someone using voice control says what they can see
+                ("click blockchain innovation club"), and a name that leaves it out doesn't answer. */}
+            <span className="sr-only">home</span>
           </Link>
 
           <nav aria-label="Main" className="ml-auto hidden lg:flex">
