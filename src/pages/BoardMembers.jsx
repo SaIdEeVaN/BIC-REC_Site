@@ -5,12 +5,12 @@ import MemberCell from '../components/MemberCell'
 import { FACULTY, boardGroups, facultyCoordinators } from '../data/members'
 import { pad2 } from '../lib/chain'
 import { initials } from '../lib/initials'
-import { photoFor } from '../lib/memberPhotos'
+import { thumbFor } from '../lib/memberPhotos'
 
 // Same fallback as MemberCell: the photo when one has been dropped in under the coordinator's slug, their
 // initials until then. The name sits right beside it, so the image is decorative and carries no alt text.
 function CoordinatorPortrait({ coordinator }) {
-  const photo = photoFor(coordinator.slug)
+  const photo = thumbFor(coordinator.slug)
   return photo ? (
     <img src={photo} alt="" className="h-full w-full object-cover" loading="lazy" />
   ) : (

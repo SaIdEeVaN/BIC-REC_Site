@@ -9,7 +9,8 @@
     "preview": "vite preview",
     "lint": "eslint .",
     "test:e2e": "playwright test",
-    "og-image": "node scripts/render-og-image.js"
+    "og-image": "node scripts/render-og-image.js",
+    "photos": "node scripts/optimize-member-photos.js"
   },
   "dependencies": {
     "motion": "^13.2.0",

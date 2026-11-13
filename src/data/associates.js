@@ -1,7 +1,7 @@
 // The associates: the club's newest members, selected in the 2026–27 recruitment. Each entry:
 // { name, slug, team, department, linkedin, instagram }, where `team` is one of DOMAINS (data/domains.js) and the role shown
 // is "<team> Associate". Each has a page of their own at /team/associates/<slug> (see data/members.js), with a photo
-// once src/assets/members/<slug>.jpg is dropped in, as for the board and the core team.
+// once src/assets/members/<slug>.jpg is dropped in (then `npm run photos`), as for the board and the core team.
 //
 // Published on 3 Oct 2026 at 13:00 IST, two hours after the results went out (kept empty until then, since the names
 // would have given the results away). LinkedIn and Instagram come from the associates' own form (6 Oct 2026); null

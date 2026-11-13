@@ -13,7 +13,8 @@ import { DOMAINS } from './domains.js'
 //
 // `slug` is two things at once for the student leadership: the member's address (/team/board/<slug> or
 // /team/core/<slug>, see memberPath), and the name their photo file must carry. Drop src/assets/members/<slug>.jpg (or .jpeg/.png/.webp) in and it
-// appears — see lib/memberPhotos.js. Until then the cell falls back to their initials.
+// appears — see lib/memberPhotos.js — then run `npm run photos` to make it web-sized. Until then the cell falls
+// back to their initials.
 //
 // The faculty coordinators carry a slug for the photo alone. They have no page of their own: routes, the
 // sitemap and the e2e suite all walk `teamMembers`, which is the student leadership only.

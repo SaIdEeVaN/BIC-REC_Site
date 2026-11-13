@@ -99,6 +99,7 @@ npm run preview   # Preview the production build locally
 npm run lint      # ESLint
 npm run test:e2e  # Playwright: every page at five widths (360–1280px) — no sideways scroll, correct title + share tags
 npm run og-image  # Re-render public/og-image.png from scripts/og-image.html
+npm run photos    # Make newly added member photos web-sized (WebP + a thumbnail for the roster cells)
 ```
 
 > First time running the Playwright tests? Install the browser once: `npx playwright install chromium`
@@ -159,12 +160,13 @@ BIC-REC_Site/
 ├── scripts/
 │   ├── prerender-meta.js         # Post-build: per-route share tags, sitemap.xml, robots.txt
 │   ├── og-image.html             # Source for public/og-image.png
-│   └── render-og-image.js        # `npm run og-image`
+│   ├── render-og-image.js        # `npm run og-image`
+│   └── optimize-member-photos.js # `npm run photos`
 ├── src/
 │   ├── assets/
 │   │   ├── gallery/              # Album photos, one folder per album — see its README
 │   │   ├── logo/
-│   │   └── members/              # Member photos — drop in <slug>.jpg, see its README
+│   │   └── members/              # Member photos — drop in <slug>.jpg, then `npm run photos`; see its README
 │   ├── components/
 │   │   ├── kit/                  # Design-system primitives (Button, Chip, Ledger, TrackCards, ChainRail,
 │   │   │                         #   Confirmations, BlockClock, ...)
@@ -179,7 +181,7 @@ BIC-REC_Site/
 │   ├── lib/
 │   │   ├── chain.js              # Block numbers, display hashes, sealed dates
 │   │   ├── initials.js           # Initials for members without a photo
-│   │   ├── memberPhotos.js       # Resolves a member's photo from their slug
+│   │   ├── memberPhotos.js       # Resolves a member's photo (and its thumbnail) from their slug
 │   │   ├── mesh.js               # Peer-mesh figures quoted on Home
 │   │   └── theme.js              # Dark theme: the visitor's choice, saved on their device
 │   ├── pages/                    # One component per route — the route table is in App.jsx

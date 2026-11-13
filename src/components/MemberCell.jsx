@@ -4,7 +4,7 @@ import { motion } from 'motion/react'
 import { blockNo } from '../lib/chain'
 import { initials } from '../lib/initials'
 import { memberPath } from '../data/members'
-import { photoFor } from '../lib/memberPhotos'
+import { thumbFor } from '../lib/memberPhotos'
 import { LiftCell, SLAM, Scramble, stagger, useReveal } from './motion'
 
 // One cell in a `.cells` grid, and the way into a member's own page. The portrait slams in as the cell
@@ -17,7 +17,7 @@ const MemberCell = forwardRef(function MemberCell({ member, index, shuffle = fal
   const [revealRef, active, canAnimate] = useReveal()
   const [replay, setReplay] = useState(0)
   const delay = stagger(index % 5)
-  const photo = photoFor(member.slug)
+  const photo = thumbFor(member.slug)
 
   return (
     <LiftCell ref={ref} shuffle={shuffle} className="bg-bone" onHoverStart={() => setReplay((n) => n + 1)}>
