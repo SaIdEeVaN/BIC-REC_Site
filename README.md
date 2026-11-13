@@ -47,7 +47,7 @@ The UI follows a **neo-brutalist design system** — hard geometry, 3px ink rule
 - 🖼️ **Gallery** — Albums of the club's events, each with its own page and a full-screen viewer
 - 🔧 **Projects** — Blockchain projects by the club
 - 📚 **Resources** — Learning materials and links
-- 📬 **Contact** — Contact form and club details
+- 📬 **Contact** — Contact form and club details (see [Contact form](#contact-form))
 - 🌙 **Dark theme** — Opt-in from the header toggle, remembered per device (see [DESIGN_SYSTEM.md](DESIGN_SYSTEM.md#dark-theme))
 
 ---
@@ -160,6 +160,15 @@ All of this is in [`firebase.json`](firebase.json), with the files it relies on 
 - **The inline script in `index.html`** (it applies a saved dark theme before first paint) is allowed by its hash in the policy. Edit that script and the build stops with the new hash to paste into `firebase.json`.
 - **Loading anything from a new origin** (a font, a script, an API) means adding that origin to the policy in `firebase.json`.
 
+### Contact form
+
+The form at `/contact` has two ways of delivering a message, switched by `CONTACT_FORM_KEY` in [`src/data/club.js`](src/data/club.js):
+
+- **No key (the default).** The site sends nothing itself: the form opens the visitor's own email app with the message written and addressed to the club. This only works on a device with an email app set up.
+- **A key.** The form sends the message itself through [Web3Forms](https://web3forms.com), to the inbox the key was issued for, and offers the email app only if sending fails.
+
+To switch it on, enter the club's email address at web3forms.com, copy the access key that arrives in that inbox, and set it as `CONTACT_FORM_KEY`. The key is not a secret (all it can do is send to that inbox), and the Content-Security-Policy already allows the service. The e2e tests follow the switch, and never contact the real service.
+
 ---
 
 ## 📁 Project Structure
@@ -189,9 +198,10 @@ BIC-REC_Site/
 │   │   ├── EventRow.jsx
 │   │   └── MemberCell.jsx
 │   ├── data/                     # Events, gallery, members, associates, achievements, resources; club.js holds
-│   │                             #   the club's email and social links
+│   │                             #   the club's email and social links, and the site's two switches
 │   ├── lib/
 │   │   ├── chain.js              # Block numbers, display hashes, sealed dates
+│   │   ├── contact.js            # Sends the contact form's message, when the form has a key
 │   │   ├── initials.js           # Initials for members without a photo
 │   │   ├── memberPhotos.js       # Resolves a member's photo (and its thumbnail) from their slug
 │   │   ├── mesh.js               # Peer-mesh figures quoted on Home

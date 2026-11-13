@@ -2,8 +2,9 @@ import { useEffect, useRef, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { Button, Chip, PageHeader } from '../components/kit'
 import { shortHash } from '../lib/chain'
-import { CLUB_EMAIL, CLUB_INSTAGRAM, CLUB_LINKEDIN, CLUB_MAILTO } from '../data/club'
-import { LiftCell, Mine, Reveal, Slam, SplitText, Stamp } from '../components/motion'
+import { sendMessage } from '../lib/contact'
+import { CLUB_EMAIL, CLUB_INSTAGRAM, CLUB_LINKEDIN, CLUB_MAILTO, CONTACT_FORM_KEY } from '../data/club'
+import { LiftCell, Mine, Reveal, Scramble, Slam, SplitText, Stamp } from '../components/motion'
 
 const EMPTY = { name: '', email: '', subject: '', message: '' }
 
@@ -12,7 +13,13 @@ const EMAIL_PATTERN = /^[^\s@]+@rajalakshmi\.edu\.in$/i
 const EMAIL_ERROR = 'enter valid email id'
 const emailErrorFor = (value) => (EMAIL_PATTERN.test(value.trim()) ? '' : EMAIL_ERROR)
 
-// The site has no backend, so the message is handed to the visitor's own email app, addressed to the club.
+// Two ways out, switched by CONTACT_FORM_KEY in data/club.js:
+// - no key: the site has no backend, so the message is handed to the visitor's own email app, addressed to the
+//   club, and they send it from there ("Drafted").
+// - a key: the form sends the message itself (lib/contact.js) and says so ("Sent"). The email app is still the
+//   way through if that fails, so nobody is left holding a message they can't deliver.
+const SENDS_ITSELF = Boolean(CONTACT_FORM_KEY)
+
 const mailtoFor = (form) =>
   `mailto:${CLUB_EMAIL}?subject=${encodeURIComponent(form.subject)}&body=${encodeURIComponent(
     `${form.message}\n\n— ${form.name} (${form.email})`
@@ -59,24 +66,52 @@ export default function Contact() {
   const [searchParams] = useSearchParams()
   // Links like /contact?subject=Membership%20application pre-fill the subject.
   const [form, setForm] = useState(() => ({ ...EMPTY, subject: searchParams.get('subject') ?? '' }))
-  const [submitted, setSubmitted] = useState(false)
+  // What became of the message: null while the form is up, then 'drafted' (handed to the email app) or 'sent'.
+  const [outcome, setOutcome] = useState(null)
+  const [sending, setSending] = useState(false)
+  const [failed, setFailed] = useState(false)
   // The email is checked when the visitor leaves the field (or tries to send), then live as they fix it.
   const [emailChecked, setEmailChecked] = useState(false)
   const emailRef = useRef(null)
   const emailError = emailErrorFor(form.email)
 
   // The browser's own submit check uses the same rule and message, so the form can't go out with a bad address.
-  // `submitted` is a dependency because the field is a new element each time the form comes back.
+  // `outcome` is a dependency because the field is a new element each time the form comes back.
   useEffect(() => {
     emailRef.current?.setCustomValidity(emailError)
-  }, [emailError, submitted])
+  }, [emailError, outcome])
 
   const handleChange = (e) => setForm((f) => ({ ...f, [e.target.name]: e.target.value }))
 
-  const handleSubmit = (e) => {
-    e.preventDefault()
+  const draftInEmailApp = () => {
     window.location.href = mailtoFor(form)
-    setSubmitted(true)
+    setOutcome('drafted')
+  }
+
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    if (!SENDS_ITSELF) return draftInEmailApp()
+
+    // The form has one box no person can see or reach. Only a script filling in every field ticks it, and what
+    // it submits goes nowhere — it is told "sent" like anyone else, so it has nothing to learn from.
+    if (e.target.elements.botcheck.checked) return setOutcome('sent')
+
+    setSending(true)
+    setFailed(false)
+    const delivered = await sendMessage(form).then(
+      () => true,
+      () => false,
+    )
+    setSending(false)
+    if (delivered) setOutcome('sent')
+    else setFailed(true)
+  }
+
+  const startOver = () => {
+    setOutcome(null)
+    setFailed(false)
+    setForm(EMPTY)
+    setEmailChecked(false)
   }
 
   return (
@@ -132,7 +167,26 @@ export default function Contact() {
           </Reveal>
 
           <Slam className="border-3 border-ink bg-bone p-6 shadow-ink md:p-8">
-            {submitted ? (
+            {outcome === 'sent' ? (
+              <div role="status">
+                <Stamp trigger="mount">
+                  <Chip tone="shipped">Sent</Chip>
+                </Stamp>
+                <h2 className="t-h3 mt-5">
+                  <SplitText text="Message sent" delay={0.15} />
+                </h2>
+                {/* Delivered, so the hash is read off as settled rather than mined (compare "Drafted" below). */}
+                <p className="meta mt-3">
+                  sealed · <Scramble text={shortHash(form.subject + form.message)} trigger="mount" delay={0.4} />
+                </p>
+                <p className="t-body mt-3">
+                  It is in the club&apos;s inbox. We&apos;ll reply to <span className="break-all font-bold">{form.email}</span>.
+                </p>
+                <Button variant="bone" className="mt-8" onClick={startOver}>
+                  Write another message
+                </Button>
+              </div>
+            ) : outcome === 'drafted' ? (
               <div role="status">
                 <Stamp trigger="mount">
                   <Chip tone="pending">Drafted</Chip>
@@ -158,15 +212,7 @@ export default function Contact() {
                   </a>
                   .
                 </p>
-                <Button
-                  variant="bone"
-                  className="mt-8"
-                  onClick={() => {
-                    setSubmitted(false)
-                    setForm(EMPTY)
-                    setEmailChecked(false)
-                  }}
-                >
+                <Button variant="bone" className="mt-8" onClick={startOver}>
                   Write another message
                 </Button>
               </div>
@@ -206,14 +252,34 @@ export default function Contact() {
                   onChange={handleChange}
                   className="field resize-y"
                 />
-                <p className="meta">opens your own email app — nothing is stored on this site</p>
+                {SENDS_ITSELF && (
+                  // Hidden from people and from the keyboard; see handleSubmit.
+                  <input type="checkbox" name="botcheck" tabIndex={-1} autoComplete="off" aria-hidden="true" className="hidden" />
+                )}
+                <p className="meta">
+                  {SENDS_ITSELF
+                    ? 'goes straight to the club’s inbox — nothing is stored on this site'
+                    : 'opens your own email app — nothing is stored on this site'}
+                </p>
                 <p className="meta">
                   outside rec? write to{' '}
                   <a href={CLUB_MAILTO} className="break-all underline decoration-2 underline-offset-4">
                     {CLUB_EMAIL}
                   </a>
                 </p>
-                <Button type="submit" className="w-full">Send via email</Button>
+                {failed && (
+                  <p role="alert" className="text-[14px] font-bold">
+                    <span className="font-mono text-[12px] font-medium">error · </span>
+                    That didn&apos;t go through. Try again, or{' '}
+                    <button type="button" onClick={draftInEmailApp} className="font-bold underline decoration-2 underline-offset-4">
+                      send it from your email app
+                    </button>
+                    .
+                  </p>
+                )}
+                <Button type="submit" className="w-full" disabled={sending} aria-busy={sending || undefined}>
+                  {SENDS_ITSELF ? (sending ? 'Sending…' : 'Send message') : 'Send via email'}
+                </Button>
               </form>
             )}
           </Slam>

@@ -336,6 +336,13 @@
     box-shadow: 0 0 0 var(--shadow);
   }
 
+  /* A busy button is held pressed in until its work is done: it can't be pressed again, and it looks it. */
+  .btn:disabled {
+    transform: translate(7px, 7px);
+    box-shadow: 0 0 0 var(--shadow);
+    cursor: progress;
+  }
+
   .btn-amber {
     background: var(--amber);
     color: var(--coal);

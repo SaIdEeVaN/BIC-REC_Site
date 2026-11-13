@@ -13,6 +13,18 @@ export const CLUB_MAILTO = `mailto:${CLUB_EMAIL}`
 export const CLUB_INSTAGRAM = 'https://www.instagram.com/bic.rec/'
 export const CLUB_LINKEDIN = 'https://www.linkedin.com/company/bicrec'
 
+// How the contact form (/contact) delivers a message.
+//
+// Empty: the site sends nothing itself. The form opens the visitor's own email app with the message written and
+// addressed to the club, and they press send there. That only works on a device with an email app set up, which
+// leaves out a good many phones and most shared PCs.
+//
+// Set to the club's Web3Forms access key: the form sends the message itself, to the inbox the key was issued for,
+// and offers the email app only if that fails. To get a key, enter CLUB_EMAIL at https://web3forms.com — the key
+// is emailed to that inbox, so it has to be done by someone who can read it. The key is not a secret: all it can
+// do is send to that one inbox, so it belongs here in the code, as the address itself does.
+export const CONTACT_FORM_KEY = ''
+
 // Recruitment results live on their own site (the result_bic repo, deployed as a second Firebase site in
 // this project).
 export const RECRUITMENT_RESULTS_URL = 'https://bicrec-results.web.app'

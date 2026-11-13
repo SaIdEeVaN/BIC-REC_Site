@@ -1,6 +1,7 @@
 import { test, expect } from '@playwright/test'
 import { events, isUpcoming } from '../../src/data/events.js'
-import { RECRUITMENT_RESULTS_OPEN, RECRUITMENT_RESULTS_URL } from '../../src/data/club.js'
+import { CONTACT_FORM_KEY, RECRUITMENT_RESULTS_OPEN, RECRUITMENT_RESULTS_URL } from '../../src/data/club.js'
+import { CONTACT_ENDPOINT } from '../../src/lib/contact.js'
 import { albumPath, albums } from '../../src/data/gallery.js'
 import { associateGroups, associateMembers, boardMembers, coreTeamMembers, memberPath } from '../../src/data/members.js'
 
@@ -56,19 +57,86 @@ test('the News page is gone: an old /news link lands on the events', async ({ pa
   await expect(page.locator('footer').getByRole('link', { name: 'News' })).toHaveCount(0)
 })
 
-test('the contact form hands the message to an email app addressed to the club', async ({ page }, testInfo) => {
+// The contact form has two ways out, switched by CONTACT_FORM_KEY in data/club.js: with no key it drafts the
+// message in the visitor's own email app, and with one it sends the message itself. These follow the switch, as
+// the Associates test further down follows its own, so they hold whichever way it is set.
+const MESSAGE = {
+  name: 'Asha',
+  email: 'asha.k.2025.cse@rajalakshmi.edu.in',
+  subject: 'Workshop collaboration',
+  message: 'Hello BIC!',
+}
+const SEND = CONTACT_FORM_KEY ? 'Send message' : 'Send via email'
+const DRAFT = /^mailto:kbaclub@rajalakshmi\.edu\.in\?subject=Workshop%20collaboration&body=Hello%20BIC!/
+
+async function writeMessage(page) {
+  await page.getByLabel('your name').fill(MESSAGE.name)
+  await page.getByLabel('email address').fill(MESSAGE.email)
+  await page.getByLabel('subject').fill(MESSAGE.subject)
+  await page.getByLabel('message').fill(MESSAGE.message)
+}
+
+// No test ever reaches the real form service: every request to it is answered here, and kept for inspection.
+async function standInForFormService(page, answer) {
+  const posted = []
+  await page.route(CONTACT_ENDPOINT, (route) => {
+    posted.push(route.request().postDataJSON())
+    return route.fulfill({ headers: { 'access-control-allow-origin': '*' }, ...answer })
+  })
+  return posted
+}
+
+test('the contact form gets the message to the club', async ({ page }, testInfo) => {
   once(testInfo)
+  const posted = await standInForFormService(page, { json: { success: true } })
 
   await page.goto('/contact')
-  await page.getByLabel('your name').fill('Asha')
-  await page.getByLabel('email address').fill('asha.k.2025.cse@rajalakshmi.edu.in')
-  await page.getByLabel('subject').fill('Workshop collaboration')
-  await page.getByLabel('message').fill('Hello BIC!')
-  await page.getByRole('button', { name: 'Send via email' }).click()
+  await writeMessage(page)
+  await page.getByRole('button', { name: SEND }).click()
 
+  if (CONTACT_FORM_KEY) {
+    await expect(page.getByRole('heading', { name: 'Message sent' })).toBeVisible()
+    await expect(page.getByRole('status')).toContainText(MESSAGE.email)
+    expect(posted).toEqual([{ access_key: CONTACT_FORM_KEY, ...MESSAGE }])
+  } else {
+    await expect(page.getByRole('heading', { name: 'Check your email app' })).toBeVisible()
+    await expect(page.getByRole('link', { name: 'Open the email again' })).toHaveAttribute('href', DRAFT)
+    expect(posted, 'without a key the site sends nothing itself').toEqual([])
+  }
+})
+
+test('if the contact form cannot send, the message can still go out from an email app', async ({ page }, testInfo) => {
+  once(testInfo)
+  test.skip(!CONTACT_FORM_KEY, 'the form only sends for itself once it has a key')
+  await standInForFormService(page, { status: 429, json: { success: false, message: 'Too many requests' } })
+
+  await page.goto('/contact')
+  await writeMessage(page)
+  await page.getByRole('button', { name: SEND }).click()
+
+  // It says so, and keeps what was written.
+  await expect(page.getByRole('alert')).toContainText("didn't go through")
+  await expect(page.getByLabel('message')).toHaveValue(MESSAGE.message)
+
+  await page.getByRole('button', { name: 'send it from your email app' }).click()
   await expect(page.getByRole('heading', { name: 'Check your email app' })).toBeVisible()
-  const retry = page.getByRole('link', { name: 'Open the email again' })
-  await expect(retry).toHaveAttribute('href', /^mailto:kbaclub@rajalakshmi\.edu\.in\?subject=Workshop%20collaboration&body=Hello%20BIC!/)
+  await expect(page.getByRole('link', { name: 'Open the email again' })).toHaveAttribute('href', DRAFT)
+})
+
+test('the contact form sends nothing for a script that ticks its hidden box', async ({ page }, testInfo) => {
+  once(testInfo)
+  test.skip(!CONTACT_FORM_KEY, 'the form only sends for itself once it has a key')
+  const posted = await standInForFormService(page, { json: { success: true } })
+
+  await page.goto('/contact')
+  await writeMessage(page)
+  const trap = page.locator('input[name="botcheck"]')
+  await expect(trap).toBeHidden()
+  await trap.evaluate((box) => { box.checked = true })
+  await page.getByRole('button', { name: SEND }).click()
+
+  await expect(page.getByRole('heading', { name: 'Message sent' })).toBeVisible()
+  expect(posted).toEqual([])
 })
 
 test('the contact form only takes a college email address', async ({ page }, testInfo) => {
@@ -84,8 +152,8 @@ test('the contact form only takes a college email address', async ({ page }, tes
   await page.getByLabel('your name').fill('Asha')
   await page.getByLabel('subject').fill('Workshop collaboration')
   await page.getByLabel('message').fill('Hello BIC!')
-  await page.getByRole('button', { name: 'Send via email' }).click()
-  await expect(page.getByRole('heading', { name: 'Check your email app' })).toHaveCount(0)
+  await page.getByRole('button', { name: SEND }).click()
+  await expect(page.getByRole('heading', { name: /Check your email app|Message sent/ })).toHaveCount(0)
   expect(await email.evaluate((el) => el.validationMessage)).toBe('enter valid email id')
 
   await email.fill('asha.k.2025.cse@rajalakshmi.edu.in')
