@@ -58,6 +58,11 @@ jobs:
         if: matrix.shard == 1
         run: npm run lint
 
+      # Likewise the unit tests: plain Node, no browser, about a second.
+      - name: Unit tests
+        if: matrix.shard == 1
+        run: npm run test:unit
+
       # The browser is ~130MB and re-downloading it cost ~25s per runner. Cache it against the
       # Playwright version, so it is only fetched again when that version actually changes.
       #
