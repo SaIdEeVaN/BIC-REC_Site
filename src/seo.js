@@ -187,6 +187,10 @@ export const staticRoutes = [
   ...memberPages.map(memberPath),
 ]
 
+// What the default share image shows. A page with an image of its own says what is on that one instead
+// (`imageAlt`, set at build time by scripts/share-cards.js).
+const DEFAULT_IMAGE_ALT = 'BIC/REC — Blockchain Innovation Club, Rajalakshmi Engineering College'
+
 const escapeAttr = (value) =>
   String(value).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
 
@@ -205,7 +209,7 @@ export function renderSeoTags(meta) {
     `<meta property="og:image" content="${meta.image}" />`,
     `<meta property="og:image:width" content="1200" />`,
     `<meta property="og:image:height" content="630" />`,
-    `<meta property="og:image:alt" content="BIC/REC — Blockchain Innovation Club, Rajalakshmi Engineering College" />`,
+    `<meta property="og:image:alt" content="${escapeAttr(meta.imageAlt ?? DEFAULT_IMAGE_ALT)}" />`,
     `<meta name="twitter:card" content="summary_large_image" />`,
     `<meta name="twitter:title" content="${title}" />`,
     `<meta name="twitter:description" content="${description}" />`,

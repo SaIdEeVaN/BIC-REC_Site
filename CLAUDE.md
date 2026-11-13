@@ -14,7 +14,8 @@ npm run test:unit   # node --test: dates, data, firebase.json, SHA-256 and the c
 npm run test:e2e    # Playwright, against a production build served by `vite preview`
 npm run build       # vite build, then scripts/prerender-meta.js
 npm run photos      # make newly added member photos web-sized
-npm run og-image    # re-render public/og-image.png
+npm run share-images  # draw the share image of every page that is missing one (public/og)
+npm run og-image    # re-render public/og-image.png, the default share image
 ```
 
 Run lint, the unit tests and the relevant e2e specs before pushing. The e2e suite builds the site itself.
@@ -47,6 +48,9 @@ Run lint, the unit tests and the relevant e2e specs before pushing. The e2e suit
 - **The repo and the site are public.** No roll numbers, phone numbers or personal emails in data files.
   Members' college emails appear only on their own page, never in a list. Photos are published with all
   metadata stripped (`npm run photos` does this for member photos; see `src/assets/gallery/README.md`).
+- **Share images follow the content.** After changing an event, an album, a member (or their photo) or
+  `scripts/share-card.html`, run `npm run share-images` and commit `public/og`. Skipping it is safe (the page
+  previews with the default image, and the build says which) but it should not be left that way.
 - **Don't invent content.** Events, achievements, figures and people come from the club. If something isn't
   known, leave the field out; the pages render what is present.
 - **Everything animated respects reduced motion** and must leave the page in its final state without it.

@@ -1,0 +1,210 @@
+<!doctype html>
+<!--
+  The template every share image is drawn from (1200x630, what WhatsApp, LinkedIn and the rest show beside a
+  link). scripts/render-share-images.js opens this file once and calls draw(card) for each page's card; what a
+  card says comes from scripts/share-cards.js. Run: npm run share-images (and npm run og-image for the default).
+
+  Three layouts, one frame: the chain's ticker across the top, the chain rail and the page's address along the
+  foot. In between: "home" is the wordmark, "text" is a title with a line under it, and "photo" puts a picture
+  on the left of the same.
+
+  Changing anything in this file gives every image a new name (the file's own hash is part of each image's key),
+  so the next npm run share-images redraws them all and nothing stale is left pointing at a page.
+-->
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>BIC/REC share card</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Archivo:wght@800;900&family=IBM+Plex+Mono:wght@500&display=block"
+      rel="stylesheet"
+    />
+    <style>
+      * { box-sizing: border-box; margin: 0; }
+      body {
+        width: 1200px;
+        height: 630px;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        background: #ede6d8;
+        color: #14110e;
+        font-family: Archivo, Arial, sans-serif;
+      }
+      .mono { font-family: 'IBM Plex Mono', monospace; font-weight: 500; }
+
+      .ticker {
+        flex: none;
+        background: #14110e;
+        color: #ede6d8;
+        font-size: 15px;
+        line-height: 1;
+        padding: 13px 56px;
+        white-space: nowrap;
+        overflow: hidden;
+      }
+      .ticker span { margin-right: 40px; }
+
+      .main { flex: 1; min-height: 0; display: flex; }
+
+      /* The picture is a card on its hard shadow, like every card on the site, rather than a panel bled to the
+         edges. It is also less than half the area, and the photograph is what an image's file size is made of:
+         these are committed to the repository, one per member. */
+      .photo {
+        display: none;
+        flex: none;
+        align-self: center;
+        width: 360px;
+        height: 360px;
+        margin-left: 56px;
+        border: 3px solid #14110e;
+        box-shadow: 12px 12px 0 #14110e;
+        background: #14110e;
+      }
+      .photo img { display: block; width: 100%; height: 100%; object-fit: cover; }
+      body.is-photo .photo { display: block; }
+      /* An album's photo is a landscape; a member's is a square. */
+      body.is-wide .photo { width: 450px; height: 300px; }
+
+      .text { flex: 1; min-width: 0; display: flex; flex-direction: column; justify-content: center; padding: 0 56px; }
+      body.is-photo .text { padding: 0 44px 0 60px; }
+
+      .meta { font-size: 18px; line-height: 1.3; color: #4a4238; text-transform: lowercase; }
+      .title {
+        margin-top: 20px;
+        font-weight: 900;
+        line-height: 0.88;
+        letter-spacing: -0.05em;
+        text-transform: uppercase;
+      }
+      .body { margin-top: 26px; font-size: 27px; font-weight: 800; line-height: 1.25; letter-spacing: -0.015em; }
+      /* A page's description is a sentence, not a fact: lighter, and held to two lines. */
+      .body.prose {
+        font-size: 25px;
+        font-weight: 800;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+        overflow: hidden;
+      }
+      .chips { display: none; margin-top: 26px; gap: 10px; }
+      .chips span { border: 2px solid #14110e; padding: 6px 12px; font-size: 15px; line-height: 1; text-transform: uppercase; }
+      .chips span.lit { background: #d9a441; }
+
+      /* Home: the wordmark, as the default image has always been. */
+      body.is-home .title { font-size: 230px; line-height: 0.8; letter-spacing: -0.055em; margin-top: 22px; }
+      body.is-home .body { font-size: 46px; font-weight: 900; line-height: 0.9; letter-spacing: -0.045em; text-transform: uppercase; margin-top: 30px; }
+
+      .foot { flex: none; display: grid; grid-template-columns: 1fr auto; border-top: 3px solid #14110e; }
+      .rail { padding: 0 44px 0 56px; }
+      .url {
+        display: flex;
+        align-items: center;
+        padding: 0 44px;
+        border-left: 3px solid #14110e;
+        background: #d9a441;
+        font-size: 22px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="ticker mono" id="ticker"></div>
+
+    <div class="main">
+      <div class="photo"><img id="photo" alt="" /></div>
+      <div class="text" id="text">
+        <div id="stack">
+          <p class="meta mono" id="eyebrow"></p>
+          <p class="title" id="title"></p>
+          <p class="body" id="body"></p>
+          <p class="chips mono" id="chips"></p>
+        </div>
+      </div>
+    </div>
+
+    <div class="foot">
+      <div class="rail"><svg id="rail" width="100%" height="96" overflow="visible"></svg></div>
+      <div class="url mono" id="url"></div>
+    </div>
+
+    <script>
+      const $ = (id) => document.getElementById(id)
+      const INK = '#14110E'
+
+      // The chain rail from the site: one line, a square per block with two branches, one of them amber.
+      function rail(nodes, lit) {
+        const node = (i) => {
+          const x = `${((i + 0.5) / nodes) * 100}%`
+          const fill = i === lit ? '#D9A441' : '#EDE6D8'
+          return `<svg x="${x}" overflow="visible">
+            <line x1="-8" y1="40" x2="-21" y2="27" stroke="${INK}" stroke-width="3" stroke-linecap="square" />
+            <line x1="-8" y1="56" x2="-21" y2="69" stroke="${INK}" stroke-width="3" stroke-linecap="square" />
+            <rect x="-8" y="40" width="16" height="16" fill="${fill}" stroke="${INK}" stroke-width="3" />
+          </svg>`
+        }
+        return `<line x1="0" y1="48" x2="100%" y2="48" stroke="${INK}" stroke-width="3" />${Array.from({ length: nodes }, (_, i) => node(i)).join('')}`
+      }
+
+      // The title is as large as it can be and still fit: every word whole on its line, and the whole stack
+      // of text inside its column with room above and below. Names and event titles vary too much for one
+      // size to suit them all.
+      const BREATHING = 56
+      function fit(title, stack, column, largest, smallest) {
+        for (let size = largest; size >= smallest; size -= 2) {
+          title.style.fontSize = `${size}px`
+          if (title.scrollWidth <= title.clientWidth && stack.offsetHeight <= column.clientHeight - BREATHING) return size
+        }
+        return smallest
+      }
+
+      // Draws one card. Resolves once it is ready to be photographed, and rejects rather than draw a card
+      // in a fallback font: an image is committed and published, so a wrong one is worse than none.
+      const FONTS = ['900 40px Archivo', '800 40px Archivo', '500 40px "IBM Plex Mono"']
+
+      window.draw = async (card) => {
+        // A web font is only fetched once something uses it, so on a page with no text yet they are asked for.
+        await Promise.all(FONTS.map((font) => document.fonts.load(font)))
+        for (const font of FONTS) {
+          if (!document.fonts.check(font)) throw new Error(`the font did not load: ${font}`)
+        }
+
+        document.body.className = `is-${card.layout}${card.wide ? ' is-wide' : ''}`
+        $('ticker').replaceChildren(...card.ticker.map((entry) => Object.assign(document.createElement('span'), { textContent: entry })))
+        $('eyebrow').textContent = card.eyebrow
+        $('title').textContent = card.title
+        $('body').textContent = card.body
+        $('body').className = `body${card.prose ? ' prose' : ''}`
+        $('chips').style.display = card.chips?.length ? 'flex' : 'none'
+        $('chips').replaceChildren(
+          ...(card.chips ?? []).map(([label, lit]) =>
+            Object.assign(document.createElement('span'), { textContent: label, className: lit ? 'lit' : '' }),
+          ),
+        )
+        $('url').textContent = card.url
+        $('rail').innerHTML = rail(card.rail.nodes, card.rail.lit)
+
+        const photo = $('photo')
+        if (card.photo) {
+          photo.src = card.photo
+          await photo.decode()
+        } else {
+          photo.removeAttribute('src')
+        }
+
+        // The text may need a part of a font that hasn't been fetched yet (a Tamil name, a curly quote): laying
+        // the page out starts that, and the sizes below are only right once it has arrived.
+        void document.body.offsetHeight
+        await document.fonts.ready
+
+        if (card.layout !== 'home') {
+          // Words must not be broken to fit while the size is being found; a size that needs that is too big.
+          $('title').style.overflowWrap = 'normal'
+          const size = fit($('title'), $('stack'), $('text'), card.layout === 'photo' ? 104 : 150, 40)
+          if (size === 40) $('title').style.overflowWrap = 'anywhere'
+        } else {
+          $('title').style.fontSize = ''
+        }
+      }
+    </script>
+  </body>
+</html>

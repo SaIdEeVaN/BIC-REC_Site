@@ -101,7 +101,8 @@ npm run lint      # ESLint
 npm run test:unit # Node's test runner: date parsing, the data files' integrity, the hosting config, SHA-256 and the chain
 npm run test:e2e  # Playwright: every page at five widths (360–1280px) — no sideways scroll, correct title + share tags,
                   #   accessibility (axe, both themes), nothing the Content-Security-Policy blocks
-npm run og-image  # Re-render public/og-image.png from scripts/og-image.html
+npm run share-images # Draw the share image for every page that is missing one (public/og) — run after changing events, albums or members
+npm run og-image  # Re-render public/og-image.png, the default share image
 npm run photos    # Make newly added member photos web-sized (WebP + a thumbnail for the roster cells)
 ```
 
@@ -163,6 +164,10 @@ Other hashes on the site (a member's page, a drafted message) are still decorati
 
 Titles and descriptions for every route live in [`src/seo.js`](src/seo.js). The app updates the tab title as you navigate, and `npm run build` writes a separate HTML file per route (e.g. `dist/events/2.html`) so link previews on WhatsApp, LinkedIn, etc. show the right page. Firebase serves those files via `cleanUrls` in `firebase.json`. The same route list is written out as `dist/sitemap.xml`, with a `dist/robots.txt` pointing crawlers at it. New events and members in `src/data/` are picked up by all three automatically.
 
+**Every page has its own share image.** A link to a member's page previews with their name, role and photo; an event's with its title, date and block; an album's with its first photo. They are drawn by `npm run share-images` from [`scripts/share-card.html`](scripts/share-card.html) and committed under `public/og`, and what each one says is in [`scripts/share-cards.js`](scripts/share-cards.js).
+
+An image's file name carries a hash of everything drawn on it (the words, the photo, the template). So after an event, album or member changes, the old image no longer matches and that page previews with the default image until `npm run share-images` is run again and its output committed. Forgetting to run it never shows a wrong preview, only a generic one, and the build prints which pages are affected.
+
 The home page and each event's page also carry structured data (schema.org JSON-LD, `structuredDataFor` in `src/seo.js`): the club as an organisation, and the event with its date and venue. It is built from the same data the page shows.
 
 ### Hosting: 404s, redirects and security headers
@@ -194,11 +199,12 @@ BIC-REC_Site/
 │   ├── dependabot.yml            # Weekly dependency update pull requests
 │   └── workflows/
 │       └── firebase-deploy.yml   # Lint + tests on every PR and push; deploys pushes to main
-├── public/                       # favicon.svg, og-image.png
+├── public/                       # favicon.svg, og-image.png (the default share image), og/ (one per page)
 ├── scripts/
 │   ├── prerender-meta.js         # Post-build: a file per route with its share tags, 404.html, sitemap.xml, robots.txt
-│   ├── og-image.html             # Source for public/og-image.png
-│   ├── render-og-image.js        # `npm run og-image`
+│   ├── share-card.html           # The template every share image is drawn from
+│   ├── share-cards.js            # What each page's share image says, and which file it is
+│   ├── render-share-images.js    # `npm run share-images` and `npm run og-image`
 │   └── optimize-member-photos.js # `npm run photos`
 ├── src/
 │   ├── assets/

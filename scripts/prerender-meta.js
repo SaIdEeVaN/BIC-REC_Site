@@ -8,6 +8,7 @@ import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { coreTeamMembers, memberPath } from '../src/data/members.js'
 import { SITE_URL, metaFor, renderSeoTags, renderStructuredData, staticRoutes, structuredDataFor } from '../src/seo.js'
+import { cardFor, imageFor, metaWithImage } from './share-cards.js'
 
 const dist = fileURLToPath(new URL('../dist/', import.meta.url))
 const SEO_BLOCK = /<!-- seo:start -->[\s\S]*?<!-- seo:end -->/
@@ -39,7 +40,7 @@ for (const [, attributes, body] of template.matchAll(/<script([^>]*)>([\s\S]*?)<
 
 // `extra` goes inside the seo block, after the share tags.
 const pageFor = (route, extra = []) => {
-  const tags = [renderSeoTags(metaFor(route)), ...extra].join('\n    ')
+  const tags = [renderSeoTags(metaWithImage(route)), ...extra].join('\n    ')
   return template.replace(SEO_BLOCK, () => `<!-- seo:start -->\n    ${tags}\n    <!-- seo:end -->`)
 }
 
@@ -57,6 +58,18 @@ for (const route of staticRoutes) {
 }
 
 console.log(`prerender-meta: wrote share tags for ${staticRoutes.length} routes`)
+
+// A page whose card has changed since the share images were last drawn previews with the default image until
+// they are drawn again. That is safe, and easy not to notice, so the build says so.
+const undrawn = staticRoutes.filter((route) => cardFor(route) && !imageFor(route))
+if (undrawn.length) {
+  console.log(
+    `prerender-meta: ${undrawn.length} ${undrawn.length === 1 ? 'page uses' : 'pages use'} the default share image ` +
+      `because ${undrawn.length === 1 ? 'its' : 'their'} own hasn't been drawn (run: npm run share-images)\n  ` +
+      undrawn.slice(0, 8).join('\n  ') +
+      (undrawn.length > 8 ? `\n  … and ${undrawn.length - 8} more` : ''),
+  )
+}
 
 // Core members' pages used to live under /team/board. The app sends an old link on to /team/core/<slug>, but it
 // can only do that once it has loaded, so each old address still needs a file: the member's real page, whose
