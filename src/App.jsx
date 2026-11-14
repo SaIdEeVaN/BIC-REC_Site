@@ -20,6 +20,7 @@ const CoreTeam = lazy(() => import('./pages/CoreTeam'))
 const Associates = lazy(() => import('./pages/Associates'))
 const Chain = lazy(() => import('./pages/Chain'))
 const MineBlock = lazy(() => import('./pages/MineBlock'))
+const Terminal = lazy(() => import('./pages/Terminal'))
 const Projects = lazy(() => import('./pages/Projects'))
 const Achievements = lazy(() => import('./pages/Achievements'))
 const Resources = lazy(() => import('./pages/Resources'))
@@ -101,6 +102,7 @@ export default function App() {
               <Route path="/team/associates/:slug" element={<MemberDetail team="associates" />} />
               <Route path="/chain" element={<Chain />} />
               <Route path="/mine" element={<MineBlock />} />
+              <Route path="/terminal" element={<Terminal />} />
               <Route path="/projects" element={<Projects />} />
               <Route path="/achievements" element={<Achievements />} />
               <Route path="/resources" element={<Resources />} />

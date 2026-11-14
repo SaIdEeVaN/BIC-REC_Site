@@ -56,6 +56,11 @@ const PAGES = {
     description:
       'Proof of work, for real: pick a difficulty and your browser searches for a hash that starts with enough zeros.',
   },
+  '/terminal': {
+    title: 'Terminal',
+    description:
+      'The club’s site, by typing: list the events, read a block byte for byte, look someone up, verify the chain and mine a block.',
+  },
   '/projects': {
     title: 'Projects',
     description: "The club's first blockchain projects are in progress — each will be published here as it ships.",

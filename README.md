@@ -43,6 +43,7 @@ The UI follows a **neo-brutalist design system** — hard geometry, 3px ink rule
 - 🏠 **Home** — Stacked hero, chain rail, stat bar and event ledger
 - 📅 **Events** — The club's real events as a ledger, each with its own page and its gallery album
 - ⛓️ **The chain** — Every event is a block with a real SHA-256 hash covering the block before it. `/chain` verifies it with the browser's own crypto and lets you break it by editing a record; `/mine` runs real proof of work (see [The chain](#the-chain))
+- ⌨️ **Terminal** — `/terminal`: the whole site by typing (`ls events`, `cat block 3`, `whois <name>`, `verify`, `mine`), with tab completion and history, and every command tappable for phones
 - 🏆 **Achievements** — Club milestones and accomplishments
 - 👥 **Meet us** — The club's three teams, each with its own page: board members, core members and associates (grouped by domain), every member with a profile page; the Associates page also leads to the recruitment results at [bicrec-results.web.app](https://bicrec-results.web.app)
 - 🖼️ **Gallery** — Albums of the club's events, each with its own page and a full-screen viewer
@@ -98,7 +99,7 @@ npm run dev       # Start dev server with hot reload
 npm run build     # Build for production (outputs to /dist) + a file per page with its share tags, 404.html, sitemap.xml, robots.txt
 npm run preview   # Preview the production build locally
 npm run lint      # ESLint
-npm run test:unit # Node's test runner: date parsing, the data files' integrity, the hosting config, SHA-256 and the chain
+npm run test:unit # Node's test runner: date parsing, the data files' integrity, the hosting config, SHA-256, the chain, the terminal's commands
 npm run test:e2e  # Playwright: every page at five widths (360–1280px) — no sideways scroll, correct title + share tags,
                   #   accessibility (axe, both themes), nothing the Content-Security-Policy blocks
 npm run share-images # Draw the share image for every page that is missing one (public/og) — the deploy also does this itself
@@ -226,7 +227,8 @@ BIC-REC_Site/
 │   │   ├── chain.js              # Block numbers, decorative display hashes, sealed dates
 │   │   ├── ledger.js             # The real chain: one block per event, each hash covering the one before
 │   │   ├── sha256.js             # SHA-256, synchronous: what seals the blocks and what the miner runs
-│   │   ├── miner.worker.js       # The proof-of-work search behind /mine, on its own thread
+│   │   ├── miner.worker.js       # The proof-of-work search behind /mine and the terminal's `mine`, on its own thread
+│   │   ├── terminal.js           # The commands behind /terminal: input in, lines out (no side effects)
 │   │   ├── contact.js            # Sends the contact form's message, when the form has a key
 │   │   ├── initials.js           # Initials for members without a photo
 │   │   ├── memberPhotos.js       # Resolves a member's photo (and its thumbnail) from their slug

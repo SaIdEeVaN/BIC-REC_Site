@@ -14,6 +14,7 @@ const quickLinks = [
 const moreLinks = [
   { name: 'The Chain', path: '/chain' },
   { name: 'Mine a Block', path: '/mine' },
+  { name: 'Terminal', path: '/terminal' },
   { name: 'Projects', path: '/projects' },
   { name: 'Board Members', path: '/team/board' },
   { name: 'Core Members', path: '/team/core' },

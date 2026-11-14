@@ -35,6 +35,9 @@ Run lint, the unit tests and the relevant e2e specs before pushing. The e2e suit
 - `src/lib/ledger.js` is the real chain: each event is a block whose SHA-256 hash covers the block before it.
   `/chain` verifies and tampers with it, `/mine` does proof of work in a worker. `src/lib/sha256.js` is the
   hash itself, held to Node's by the unit tests.
+- `src/lib/terminal.js` is the commands behind `/terminal`, as pure functions (input in, lines out); the page
+  (`src/pages/Terminal.jsx`) carries out what they ask for. A new command goes in both `HELP` and `COMMANDS`,
+  and whatever it prints is held to the same privacy rule as the pages: no member's email.
 
 ## Rules that are easy to break
 

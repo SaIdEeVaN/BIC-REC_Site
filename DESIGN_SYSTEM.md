@@ -113,6 +113,9 @@ Offset direction is always down-right. Shadow color is ink on bone, amber or bon
 - SVG drawn at more than one size uses `vector-effect="non-scaling-stroke"`. A 3px rule in a `600`-unit
   viewBox is 1.6px once that viewBox is squeezed onto a phone, and the system has no rule below 2px.
 
+- The terminal (`/terminal`) is an ink panel on an amber shadow, like the empty state: mono throughout, amber
+  for the prompt, headings and anything tappable, bone for everything else. No colour beyond those two.
+
 ## States
 
 | State | Treatment |
