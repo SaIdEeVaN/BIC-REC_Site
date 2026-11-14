@@ -1,9 +1,10 @@
 import { useEffect, useRef, useState } from 'react'
-import { Button, Chip, PageHeader, Tabs } from '../components/kit'
+import { Button, Chip, PageHeader, SectionHeading, Tabs } from '../components/kit'
 import { Reveal, Slam, SplitText, Stamp, useCanAnimate } from '../components/motion'
 import ProveIt from '../components/ProveIt'
 import { blockNo } from '../lib/chain'
 import { head, minerName, miningPrefix, nextHeight, short } from '../lib/ledger'
+import { sha256 } from '../lib/sha256'
 
 // Proof of work, actually done. The visitor's block sits on the head of the club's chain: its height, the
 // head's hash, their name, and a nonce. A worker (lib/miner.worker.js) hashes it with nonce 0, 1, 2… until the
@@ -64,6 +65,72 @@ function MinedHash({ hash, zeros }) {
       <span className="bg-amber text-coal">{hash.slice(0, zeros)}</span>
       {hash.slice(zeros)}
     </span>
+  )
+}
+
+// Finding a block takes a million tries; checking one takes a single hash. Someone says they mined a block:
+// their name and their nonce are the whole claim, and anyone can settle it. Nothing is stored or sent, so this
+// is how two people compare blocks — at a stall, over a message — without the site keeping a leaderboard.
+function CheckBlock() {
+  const [name, setName] = useState('')
+  const [nonce, setNonce] = useState('')
+
+  // A nonce is a whole number; commas and spaces are how people copy one ("179,936").
+  const digits = nonce.replace(/[\s,]/g, '')
+  const claimed = name.trim() !== '' && /^\d{1,15}$/.test(digits)
+  const hash = claimed ? sha256(`${miningPrefix(minerName(name))}${Number(digits)}`) : null
+  const zeros = hash ? hash.match(/^0*/)[0].length : 0
+
+  return (
+    <section className="border-b-3 border-ink">
+      <div className="wrap section">
+        <SectionHeading
+          eyebrow="finding is hard, checking is one hash"
+          title="Check someone’s block"
+          lead="A friend says they mined a block? Their name and their nonce are the whole claim. Type them in and one hash settles it."
+        />
+        <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:items-start">
+          <div className="grid gap-5 sm:grid-cols-2">
+            <label className="block">
+              <span className="field-label">the miner’s name, as they typed it</span>
+              <input className="field" type="text" maxLength={40} autoComplete="off" value={name} onChange={(e) => setName(e.target.value)} />
+            </label>
+            <label className="block">
+              <span className="field-label">their nonce</span>
+              <input className="field" type="text" inputMode="numeric" autoComplete="off" value={nonce} onChange={(e) => setNonce(e.target.value)} />
+            </label>
+            <p className="meta sm:col-span-2">
+              a block sits on the head of the chain ({short(head.hash)}), so one mined before the club’s latest event
+              no longer checks out
+            </p>
+          </div>
+
+          <div aria-live="polite" data-check-result className="border-3 border-ink p-5 md:p-6">
+            {hash ? (
+              <>
+                <p className="meta">sha-256 of {minerName(name)}’s block with nonce {count.format(Number(digits))}</p>
+                <p className="mt-3">
+                  <MinedHash hash={hash} zeros={zeros} />
+                </p>
+                <p className="t-card mt-5">
+                  {zeros === 0 ? 'No zeros' : `${zeros} ${zeros === 1 ? 'zero' : 'zeros'}`}
+                </p>
+                <p className="t-small mt-3">
+                  {zeros === 0
+                    ? 'This hash starts with no zeros, so the nonce proves no work at all. Any number does this well.'
+                    : `A real block at difficulty ${zeros}: about ${roughly(expectedTries(zeros))} tries stand behind it, on average.`}
+                </p>
+              </>
+            ) : (
+              <>
+                <p className="meta">nothing to check yet</p>
+                <p className="t-small mt-3">The hash appears here as soon as there is a name and a nonce.</p>
+              </>
+            )}
+          </div>
+        </div>
+      </div>
+    </section>
   )
 }
 
@@ -339,6 +406,8 @@ export default function MineBlock() {
           </Slam>
         </div>
       </section>
+
+      <CheckBlock />
 
       <ProveIt
         current="mine"

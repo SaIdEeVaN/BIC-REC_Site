@@ -27,8 +27,8 @@ The photo appears on the member's cell on their team's page (`/team/board`, `/te
 ([`src/lib/memberPhotos.js`](../../lib/memberPhotos.js)). A photo that hasn't been through `npm run photos`
 yet still shows — the cells just load the full-size file until it has.
 
-Then run `npm run share-images` and commit `public/og` too: the picture a link to the member's page previews
-with includes their photo, and until it is redrawn their page previews with the site's default image.
+The picture a link to the member's page previews with includes their photo. The deploy redraws it on its own
+(or run `npm run share-images` and commit `public/og` to have it in the same push).
 
 The faculty coordinators work the same way, by the `slug` on their entry in `facultyCoordinators`.
 Theirs appears in the coordinators panel at the top of `/team/board`; they have no page of their own.

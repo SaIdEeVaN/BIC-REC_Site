@@ -48,9 +48,10 @@ Run lint, the unit tests and the relevant e2e specs before pushing. The e2e suit
 - **The repo and the site are public.** No roll numbers, phone numbers or personal emails in data files.
   Members' college emails appear only on their own page, never in a list. Photos are published with all
   metadata stripped (`npm run photos` does this for member photos; see `src/assets/gallery/README.md`).
-- **Share images follow the content.** After changing an event, an album, a member (or their photo) or
-  `scripts/share-card.html`, run `npm run share-images` and commit `public/og`. Skipping it is safe (the page
-  previews with the default image, and the build says which) but it should not be left that way.
+- **Share images follow the content.** Changing an event, an album, a member (or their photo) or
+  `scripts/share-card.html` puts `public/og` out of step. The deploy redraws what is missing and commits it
+  back to `main` (as `github-actions[bot]`), so pull before the next push. `npm run share-images` does the same
+  locally. Don't hand-edit or rename files in `public/og`: the name is a hash of what is drawn.
 - **Don't invent content.** Events, achievements, figures and people come from the club. If something isn't
   known, leave the field out; the pages render what is present.
 - **Everything animated respects reduced motion** and must leave the page in its final state without it.

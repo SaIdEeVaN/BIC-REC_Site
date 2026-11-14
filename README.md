@@ -101,7 +101,7 @@ npm run lint      # ESLint
 npm run test:unit # Node's test runner: date parsing, the data files' integrity, the hosting config, SHA-256 and the chain
 npm run test:e2e  # Playwright: every page at five widths (360–1280px) — no sideways scroll, correct title + share tags,
                   #   accessibility (axe, both themes), nothing the Content-Security-Policy blocks
-npm run share-images # Draw the share image for every page that is missing one (public/og) — run after changing events, albums or members
+npm run share-images # Draw the share image for every page that is missing one (public/og) — the deploy also does this itself
 npm run og-image  # Re-render public/og-image.png, the default share image
 npm run photos    # Make newly added member photos web-sized (WebP + a thumbnail for the roster cells)
 ```
@@ -155,7 +155,7 @@ The site has always talked like a blockchain (blocks, hashes, sealed dates). For
 - **Every event is a block** ([`src/lib/ledger.js`](src/lib/ledger.js)). A block's hash is the SHA-256 of its record: its height, the hash of the block before it, and the event's title, date, venue, type and summary, written out as plain text. That hash is what the ledger, the ticker and the event's page show.
 - **Nothing is stored.** The chain is derived from `src/data/events.js`, so adding an event extends it and editing one changes every hash after it. The page says what that does and doesn't prove.
 - **`/chain`** re-derives every hash with the browser's own SHA-256 (`crypto.subtle`) and holds it against the block's seal. Open a block, change its record, and that block and every block after it stop matching.
-- **`/mine`** is proof of work, actually done: a Web Worker ([`src/lib/miner.worker.js`](src/lib/miner.worker.js)) tries nonce 0, 1, 2… until the block's hash starts with the zeros asked for. The search starts at 0, so the same name at the same difficulty always needs the same nonce. The mined block is not saved or sent anywhere.
+- **`/mine`** is proof of work, actually done: a Web Worker ([`src/lib/miner.worker.js`](src/lib/miner.worker.js)) tries nonce 0, 1, 2… until the block's hash starts with the zeros asked for. The search starts at 0, so the same name at the same difficulty always needs the same nonce. The mined block is not saved or sent anywhere; a box on the same page checks anyone's block from their name and nonce, with one hash.
 - **The SHA-256 is the site's own** ([`src/lib/sha256.js`](src/lib/sha256.js)): a synchronous implementation, because the browser's is async-only and too slow per call to mine with. The unit tests hold it to Node's, byte for byte.
 
 Other hashes on the site (a member's page, a drafted message) are still decorative: `shortHash` in `src/lib/chain.js`.
@@ -166,7 +166,7 @@ Titles and descriptions for every route live in [`src/seo.js`](src/seo.js). The 
 
 **Every page has its own share image.** A link to a member's page previews with their name, role and photo; an event's with its title, date and block; an album's with its first photo. They are drawn by `npm run share-images` from [`scripts/share-card.html`](scripts/share-card.html) and committed under `public/og`, and what each one says is in [`scripts/share-cards.js`](scripts/share-cards.js).
 
-An image's file name carries a hash of everything drawn on it (the words, the photo, the template). So after an event, album or member changes, the old image no longer matches and that page previews with the default image until `npm run share-images` is run again and its output committed. Forgetting to run it never shows a wrong preview, only a generic one, and the build prints which pages are affected.
+An image's file name carries a hash of everything drawn on it (the words, the photo, the template). So after an event, album or member changes, the old image no longer matches, and that page previews with the default image until its own is drawn again. Nobody has to remember to: the deploy checks for images that are out of step, draws them before it builds, and commits them back to `main`. Running `npm run share-images` before pushing does the same thing sooner.
 
 The home page and each event's page also carry structured data (schema.org JSON-LD, `structuredDataFor` in `src/seo.js`): the club as an organisation, and the event with its date and venue. It is built from the same data the page shows.
 
@@ -271,7 +271,7 @@ firebase deploy --only hosting
 
 1. **Lint** — `npm run lint`
 2. **Test** — the unit tests, then the full Playwright suite, split across four runners
-3. **Deploy** — on a push to `main`, or a manual run from the Actions tab: build, then publish to Firebase Hosting's live channel
+3. **Deploy** — on a push to `main`, or a manual run from the Actions tab: draw any share images the push left out of step, build, publish to Firebase Hosting's live channel, then commit those images back to `main`
 
 A pull request runs lint and test as a check on the PR and never deploys. On `main`, a failure in either stops the deploy. A manual run deploys whichever branch it is started on, so start it on `main`.
 

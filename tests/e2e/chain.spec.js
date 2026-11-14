@@ -130,6 +130,29 @@ test('mining finds the first nonce that works, and the block it shows hashes to 
   expect(blocked, 'the miner loads something the Content-Security-Policy blocks').toEqual([])
 })
 
+test("anyone can check a block from its miner's name and nonce, and a wrong nonce shows for what it is", async ({ page }, testInfo) => {
+  once(testInfo)
+  const block = firstBlock('Asha', 3)
+  const zerosOf = (hash) => hash.match(/^0*/)[0].length
+  const result = page.locator('main [data-check-result]')
+
+  await page.goto('/mine')
+  await page.getByLabel('the miner’s name, as they typed it').fill('Asha')
+  // Typed the way the page prints it, with a comma.
+  await page.getByLabel('their nonce').fill(block.nonce.toLocaleString('en-US'))
+  await expect(result).toContainText(block.hash)
+  await expect(result).toContainText(`${zerosOf(block.hash)} zeros`)
+
+  // Any other number is just a number: its hash is shown too, with however few zeros it has.
+  const other = hexOf(createMiner(miningPrefix(minerName('Asha')))(block.nonce + 1))
+  await page.getByLabel('their nonce').fill(String(block.nonce + 1))
+  await expect(result).toContainText(other)
+  await expect(result).not.toContainText(block.hash)
+
+  await page.getByLabel('their nonce').fill('not a number')
+  await expect(result).toContainText('nothing to check yet')
+})
+
 test('a search can be stopped, and leaves nothing running or claimed', async ({ page }, testInfo) => {
   once(testInfo)
 
