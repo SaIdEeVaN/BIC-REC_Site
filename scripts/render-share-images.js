@@ -3,9 +3,12 @@
 //   npm run share-images   one per page, into public/og (only the ones that are missing)
 //   npm run og-image       the default, public/og-image.png, for pages without one of their own
 //
-// Run share-images after adding or changing an event, an album or a member, and commit what it writes. If it
-// isn't run, nothing breaks: a page whose card has changed falls back to the default image (see
-// scripts/share-cards.js for how an image is tied to exactly the content it was drawn from).
+// Nobody has to remember to run it: the deploy (.github/workflows/firebase-deploy.yml) draws whatever is
+// missing before it builds, and commits the result back to main. Running it by hand before pushing does the
+// same thing sooner. Either way an image is only ever used for the exact content it was drawn from (see
+// scripts/share-cards.js), so a page waiting for its image shows the default one, never a wrong one.
+//
+//   --check   print how many images are out of step with the content, and stop
 //
 // It draws with the browser Playwright installs for the tests, from scripts/share-card.html.
 import { chromium } from '@playwright/test'
@@ -30,6 +33,13 @@ const missing = wanted.filter(([file]) => onlyDefault || !existsSync(`${PUBLIC}$
 // Images whose page has changed or gone: no page points at them any more.
 const current = new Set(wanted.map(([file]) => file.replace(/^og\//, '')))
 const stale = onlyDefault || !existsSync(`${PUBLIC}og`) ? [] : (await readdir(`${PUBLIC}og`)).filter((name) => !current.has(name))
+
+// --check: how many images are out of step with the content (to draw, or to remove), and nothing else. The
+// deploy asks this first, so that it only installs a browser on the rare push that changed a card.
+if (process.argv.includes('--check')) {
+  console.log(missing.length + stale.length)
+  process.exit(0)
+}
 
 if (missing.length) {
   await mkdir(`${PUBLIC}og`, { recursive: true })

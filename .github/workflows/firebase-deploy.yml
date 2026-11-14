@@ -105,6 +105,9 @@ jobs:
     # Pushes to main deploy; pull requests only run the gate above. Without this the same workflow
     # would publish a PR's build straight to the live channel.
     if: github.event_name != 'pull_request'
+    # To commit redrawn share images back (the last step). Nothing else in the workflow can write.
+    permissions:
+      contents: write
 
     steps:
       - name: Checkout repository
@@ -119,6 +122,36 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      # Share images (public/og) are tied to the content they were drawn from: change an event, an album, a
+      # member or a photo and that page's image no longer matches, so the page falls back to the default one.
+      # Redrawing used to be a command someone had to remember. Now the deploy does it — but only when a card
+      # actually changed, which this asks without a browser. On every other push the three steps after it are
+      # skipped and the deploy is no slower.
+      - name: Share images out of step
+        id: share
+        run: echo "count=$(node scripts/render-share-images.js --check)" >> "$GITHUB_OUTPUT"
+
+      - name: Playwright version
+        if: steps.share.outputs.count != '0'
+        id: playwright
+        run: echo "version=$(node -p "require('@playwright/test/package.json').version")" >> "$GITHUB_OUTPUT"
+
+      - name: Cache Playwright browser
+        if: steps.share.outputs.count != '0'
+        id: playwright-cache
+        uses: actions/cache@v6
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ steps.playwright.outputs.version }}
+
+      - name: Install Playwright browser
+        if: steps.share.outputs.count != '0' && steps.playwright-cache.outputs.cache-hit != 'true'
+        run: npx playwright install --with-deps chromium
+
+      - name: Draw share images
+        if: steps.share.outputs.count != '0'
+        run: npm run share-images
+
       # Rebuilt here rather than carried from a shard: the build takes ~2s, and uploading and
       # downloading dist/ as an artifact would cost more than that in both directions.
       - name: Build
@@ -132,3 +165,18 @@ jobs:
           firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
           channelId: live
           projectId: bicrec
+
+      # The images just drawn are live; this puts them in the repository too, so the next deploy doesn't draw
+      # them again. Only from main (a manual run on another branch must not push there), and never fatal: if
+      # main has moved on, that push's own deploy draws and commits them instead. A push made with the
+      # workflow's own token does not start another run, so this cannot loop.
+      - name: Commit share images
+        if: steps.share.outputs.count != '0' && github.ref == 'refs/heads/main'
+        continue-on-error: true
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A public/og
+          git diff --cached --quiet && exit 0
+          git commit -m "Share images: redraw for changed content"
+          git push origin HEAD:main
